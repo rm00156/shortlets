@@ -50,7 +50,7 @@ exports.checkout = async function(req,res)
     var nights = req.body.nights;
     var url = req.body.url;
 
-    if(url.includes('http'))
+    if(!url.includes('localhost')
     {
         url = 'https://' + url;
     }
