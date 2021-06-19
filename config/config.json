@@ -43,11 +43,11 @@
  
     "production": {
  
-        "username": "b5768bab4af161",
+        "username": "b956f4647e3fad",
  
-        "password": "a34e94fa",
+        "password": "bd649270",
  
-        "database": "heroku_952dd57c8a20043",
+        "database": "heroku_717c423df49b84e",
  
         "host": "eu-cdbr-west-03.cleardb.net",
  
