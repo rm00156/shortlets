@@ -1,0 +1,316 @@
+doctype html
+html(lang='en')
+  
+  include common/header.pug 
+  +head("Booking")
+  link(rel='stylesheet' href='https://unpkg.com/leaflet@1.5.1/dist/leaflet.css' integrity='sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==' crossorigin='')
+    
+  body(style='padding-top: 72px;')
+    include common/navbar.pug 
+    +navbar(user)
+    .container-fluid
+      .row
+        .col-lg-7.col-xl-5.px-4.pb-4.ps-xl-5.pe-xl-5
+          section.mx-n4.mx-xl-n5.mb-4.mb-xl-5
+            // Slider main container
+            .swiper-container.booking-detail-slider
+              // Additional required wrapper
+              .swiper-wrapper
+                // Slides
+                .swiper-slide
+                  img.img-fluid(src=booking.displayImage1 alt='Our street')
+                if(booking.displayImage2 != null)
+                    .swiper-slide
+                        img.img-fluid(src=booking.displayImage2 alt='Outside')
+                if(booking.displayImage3 != null)
+                    .swiper-slide
+                        img.img-fluid(src=booking.displayImage3 alt='Outside')
+                if(booking.displayImage4 != null)
+                    .swiper-slide
+                        img.img-fluid(src=booking.displayImage4 alt='Outside')
+              .swiper-pagination.swiper-pagination-white
+              .swiper-button-prev.swiper-button-white
+              .swiper-button-next.swiper-button-white    
+          // Breadcrumbs
+          ol.breadcrumb.ps-0.justify-content-start
+            li.breadcrumb-item
+              a(href='/adminDashboard') Dashboard
+            //- li.breadcrumb-item
+            //-   a(href='/bookingHistory') Bookings
+            //- li.breadcrumb-item.active #{booking.propertyName}  
+          .text-block
+            p.subtitle #{booking.formatFromDt} - #{booking.formatToDt}
+            h1.hero-heading.mb-3 #{booking.propertyName}
+            if(booking.propertySyncFk == null)
+              if(dayDiff == 0)
+                h6.mb-4 Arrives Today
+              else if(dayDiff > 0)
+                h6.mb-4 Arrives in #{dayDiff} days
+              else if(dayDiff < 0)
+                if(currentlyStaying)
+                    h6.mb-4 Currently Staying
+                else
+                    h6.mb-4 Past Guest
+          .text-block
+            h6.mb-4 #{dayDiff} night(s) in London
+            .row.mb-3
+              .col-md-6.d-flex.align-items-center.mb-3.mb-md-0
+                .date-tile.me-3
+                  .text-uppercase
+                    span.text-sm #{booking.fromMonth}
+                    br
+                    strong.text-lg #{booking.fromDate}
+                p.text-sm.mb-0
+                  | #{booking.fromDay} check-in
+                  br
+                  | 3PM
+              .col-md-6.d-flex.align-items-center
+                .date-tile.me-3
+                  .text-uppercase
+                    span.text-sm #{booking.toMonth}
+                    br
+                    strong.text-lg #{booking.toDate}
+                p.text-sm.mb-0
+                  | #{booking.toDay} check-out
+                  br
+                  | 11AM
+          if(booking.propertySyncFk == null)        
+            .text-block
+              .row
+                .col-sm
+                  h6 Customer
+                  a.text-muted(href="/adminAccount?id=" + booking.accountId) #{booking.customerName}
+              .row.mb-3
+                .col-md-6.d-flex.align-items-center.mb-3.mb-md-0
+                  .date-tile.me-3
+                    .text-uppercase
+                      strong.text-lg #{booking.guests}
+                      //- br
+                      //- strong.text-lg #{booking.fromDate}
+                  p.text-sm.mb-0
+                    |  Guests
+                  //-   br
+                  //-   | 3PM
+                .col-md-6.d-flex.align-items-center.mb-3.mb-md-0
+                  .date-tile.me-3
+                    .text-uppercase
+                      span.text-lg #{booking.bookingMonth}
+                      br
+                      strong.text-lg #{booking.bookingDate}
+                  p.text-sm.mb-0
+                    |  Booked
+                    br
+                    | #{booking.bookingTime}
+            
+          .text-block
+            .row
+              .col-sm
+                h6 Address
+                p.text-muted #{booking.addressLine1}, #{booking.town}, #{booking.cityName}, #{booking.postCode}
+              
+          if(booking.propertySyncFk == null)
+            .text-block
+              .row
+                .col
+                  h6  Total cost
+                  p.text-muted £#{(parseFloat(booking.cost)).toFixed(2)}
+                .col.align-self-center
+                  p.text-end.d-print-none
+                    a.btn.btn-link.text-muted(href='user-invoice.html')
+                      i.far.fa-file.me-2
+                      | Invoice
+            .text-block
+              h6.mb-4 Confirmation Code
+              p.text-muted #{booking.confirmationCode}  
+            .text-block
+              h6.mb-4 Refund
+          else
+            .text-block
+              h6.mb-4 Calendar Sync 
+              if(booking.status == 'Successful')
+                p.text-muted #{propertySync.name} - Reserved
+              else
+                p.text-muted #{propertySync.name} - #{booking.status}
+
+            //- ul.list-unstyled
+            //-   li.mb-2
+            //-     .d-flex.align-items-center.mb-3
+            //-       .icon-rounded.icon-rounded-sm.bg-secondary-light.flex-shrink-0.me-4
+            //-         i.fa.fas.fa-glass-cheers.text-secondary.fa-fw.text-center
+            //-       div
+            //-         span.text-sm No parties or events
+            //-   li.mb-2
+            //-     .d-flex.align-items-center.mb-3
+            //-       .icon-rounded.icon-rounded-sm.bg-secondary-light.flex-shrink-0.me-4
+            //-         i.fa.fa-smoking-ban.text-secondary.fa-fw.text-center
+            //-       div
+            //-         span.text-sm No smoking
+            //-   li.mb-2
+            //-     .d-flex.align-items-center.mb-3
+            //-       .icon-rounded.icon-rounded-sm.bg-secondary-light.flex-shrink-0.me-4
+            //-         i.fa.fa-cat.text-secondary.fa-fw.text-center
+            //-       div
+            //-         span.text-sm No pets
+            //- #moreRules.collapse
+              ul.list-unstyled
+                li.mb-2
+                  .d-flex.align-items-center.mb-3
+                    .icon-rounded.icon-rounded-sm.bg-secondary-light.flex-shrink-0.me-4
+                      i.fa.fas.fa-child.text-secondary.fa-fw.text-center
+                    div
+                      span.text-sm
+                        | Not suitable for children and infants - The entrance staircase doesn't have handrails
+                li.mb-2
+                  .d-flex.align-items-center.mb-3
+                    .icon-rounded.icon-rounded-sm.bg-secondary-light.flex-shrink-0.me-4
+                      i.fa.fas.fa-glass-cheers.text-secondary.fa-fw.text-center
+                    div
+                      span.text-sm No parties or events
+                li.mb-2
+                  .d-flex.align-items-center.mb-3
+                    .icon-rounded.icon-rounded-sm.bg-secondary-light.flex-shrink-0.me-4
+                      i.fa.fa-smoking-ban.text-secondary.fa-fw.text-center
+                    div
+                      span.text-sm No smoking
+                li.mb-2
+                  .d-flex.align-items-center.mb-3
+                    .icon-rounded.icon-rounded-sm.bg-secondary-light.flex-shrink-0.me-4
+                      i.fa.fa-cat.text-secondary.fa-fw.text-center
+                    div
+                      span.text-sm No pets
+            //- button.btn.btn-link.btn-collapse.ps-0.text-muted(type='button' data-bs-toggle='collapse' data-bs-target='#moreRules' aria-expanded='false' aria-controls='moreRules' data-expanded-text='Show less' data-collapsed-text='Show more') Show more
+          .text-block.d-print-none
+            button.btn.btn-link.ps-0(onclick='window.print()')
+              i.fa.fa-print.me-2
+              | Print
+        .col-lg-5.col-xl-7.map-side-lg.px-lg-0
+          #detailSideMap.map-full.shadow-left
+    // Footer
+    footer.position-relative.z-index-10.d-print-none
+      // Main block - menus, subscribe form
+      .py-6.bg-gray-200.text-muted
+        .container
+          .row
+            .col-lg-4.mb-5.mb-lg-0
+              .fw-bold.text-uppercase.text-dark.mb-3 Directory
+              p Lorem ipsum dolor sit amet, consectetur adipisicing.
+              ul.list-inline
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='twitter')
+                    i.fab.fa-twitter
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='facebook')
+                    i.fab.fa-facebook
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='instagram')
+                    i.fab.fa-instagram
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='pinterest')
+                    i.fab.fa-pinterest
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='vimeo')
+                    i.fab.fa-vimeo
+            .col-lg-2.col-md-6.mb-5.mb-lg-0
+              h6.text-uppercase.text-dark.mb-3 Rentals
+              ul.list-unstyled
+                li
+                  a.text-muted(href='index.html') Rooms
+                li
+                  a.text-muted(href='category-rooms.html') Map on top
+                li
+                  a.text-muted(href='category-2-rooms.html') Side map
+                li
+                  a.text-muted(href='category-3-rooms.html') No map
+                li
+                  a.text-muted(href='detail-rooms.html') Room detail
+            .col-lg-2.col-md-6.mb-5.mb-lg-0
+              h6.text-uppercase.text-dark.mb-3 Pages
+              ul.list-unstyled
+                li
+                  a.text-muted(href='compare.html') Comparison                                   
+                li
+                  a.text-muted(href='team.html') Team                                   
+                li
+                  a.text-muted(href='contact.html') Contact                                   
+            .col-lg-4
+              h6.text-uppercase.text-dark.mb-3 Daily Offers & Discounts
+              p.mb-3  Lorem ipsum dolor sit amet, consectetur adipisicing elit. At itaque temporibus.
+              form#newsletter-form(action='#')
+                .input-group.mb-3
+                  input.form-control.bg-transparent.border-dark.border-end-0(type='email' placeholder='Your Email Address' aria-label='Your Email Address')
+                  button.btn.btn-outline-dark.border-start-0(type='submit')
+                    i.fa.fa-paper-plane.text-lg
+      // Copyright section of the footer
+      .py-4.fw-light.bg-gray-800.text-gray-300
+        .container
+          .row.align-items-center
+            .col-md-6.text-center.text-md-start
+              p.text-sm.mb-md-0 © 2021, Your company.  All rights reserved.
+            .col-md-6
+              ul.list-inline.mb-0.mt-2.mt-md-0.text-center.text-md-end
+                li.list-inline-item
+                  img.w-2rem(src='img/visa.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/mastercard.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/paypal.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/western-union.svg' alt='...')
+    // JavaScript files
+    script.
+      // ------------------------------------------------------- //
+      //   Inject SVG Sprite -
+      //   see more here
+      //   https://css-tricks.com/ajaxing-svg-sprite/
+      // ------------------------------------------------------ //
+      function injectSvgSprite(path) {
+      var ajax = new XMLHttpRequest();
+      ajax.open("GET", path, true);
+      ajax.send();
+      ajax.onload = function(e) {
+      var div = document.createElement("div");
+      div.className = 'd-none';
+      div.innerHTML = ajax.responseText;
+      document.body.insertBefore(div, document.body.childNodes[0]);
+      }
+      }
+      // to avoid CORS issues when viewing using file:// protocol, using the demo URL for the SVG sprite
+      // use your own URL in production, please :)
+      // https://demo.bootstrapious.com/directory/1-0/icons/orion-svg-sprite.svg
+      //- injectSvgSprite('${path}icons/orion-svg-sprite.svg');
+      injectSvgSprite('https://demo.bootstrapious.com/directory/1-4/icons/orion-svg-sprite.svg');
+    // jQuery
+    script(src='vendor/jquery/jquery.min.js')
+    // Bootstrap JS bundle - Bootstrap + PopperJS
+    script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')
+    // Magnific Popup - Lightbox for the gallery
+    script(src='vendor/magnific-popup/jquery.magnific-popup.min.js')
+    // Smooth scroll
+    script(src='vendor/smooth-scroll/smooth-scroll.polyfills.min.js')
+    // Bootstrap Select
+    script(src='vendor/bootstrap-select/js/bootstrap-select.min.js')
+    // Object Fit Images - Fallback for browsers that don't support object-fit
+    script(src='vendor/object-fit-images/ofi.min.js')
+    // Swiper Carousel
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/js/swiper.min.js')
+    script.
+      var basePath = ''
+    // Main Theme JS file
+    script(src='js/theme.js')
+    // Map
+    script(src='https://unpkg.com/leaflet@1.5.1/dist/leaflet.js' integrity='sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==' crossorigin='')
+    // Available tile layers
+    script(src='js/map-layers.js')
+    script(src='js/map-detail.js')
+    input#longitude(style="display:none" value=longitude)
+    input#latitude(style="display:none" value=latitude)
+    script(src="js/map.js")
+    //- script.
+    //-   createDetailMap({
+    //-   mapId: 'detailSideMap',
+    //-   mapZoom: 18,
+    //-   mapCenter: [51.34318,-0.05779],
+    //-   markerShow: true,
+    //-   markerPosition: [51.34318,-0.05779],
+    //-   markerPath: 'img/marker.svg',
+    //-   })

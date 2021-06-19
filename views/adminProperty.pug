@@ -1,0 +1,316 @@
+doctype html
+html(lang='en')
+    include common/header.pug 
+    +head("Admin Property")
+    body(style='padding-top: 72px;')
+        include common/navbar.pug 
+        +navbar(user)
+        section.py-5
+            input(id="property" style="display:none" value=property)
+                      
+            .container
+                // Breadcrumbs
+                ol.breadcrumb.ps-0.justify-content-start
+                    li.breadcrumb-item
+                        a(href='/adminDashboard') Dashboard
+                    li.breadcrumb-item
+                        a(href='/adminSearchProperty') Properties
+                    li.breadcrumb-item.active #{property.name} 
+                h1.hero-heading.mb-0 #{property.name}
+                //- p.text-muted.mb-5 Manage your Personal info and settings here.
+                .row
+                    .col-lg-6.mb-5.mb-lg-0
+                        .text-block
+                            .row.mb-3
+                                .col-sm-12
+                                    h5 Property Details
+                        
+                                    #personalDetails
+                                        .row
+                                            .mb-4
+                                                .form-check.form-switch
+                                                    input#hide.form-check-input(type='checkbox')
+                                                    label.form-check-label(for='formSwitch') Property Hidden from Public
+                                        .row.pt-4
+                                            .mb-4.col-md-6
+                                                label.form-label(for='propertyName') Property Name
+                                                input#propertyName.form-control(type='text' name='propertyName' value=property.name)
+                                            .mb-4.col-md-6
+                                                label.form-label(for='pricePerDay') £ Price Per Day
+                                                input#pricePerDay.form-control(type='text' name='pricePerDay' value=property.pricePerDay)
+                                            
+                                    .text-block
+                                        .row
+                                            .col-lg-4
+                                                h4 Bedrooms, Bathrooms, Guests
+                                                p.text-muted.text-sm
+                                                    | The number of bedrooms and bathrooms the property has
+                                            .col-lg-7.ms-auto
+                                                .row
+                                                    .col-lg-4
+                                                        label.form-label Bedrooms
+                                                        .d-flex.align-items-center
+                                                            .btn.btn-items.btn-items-decrease -
+                                                            input#bedrooms.form-control.input-items(type='text' value=property.bedrooms disabled='')
+                                                            .btn.btn-items.btn-items-increase +
+                                                    .col-lg-4
+                                                        label.form-label Bathrooms
+                                                        .d-flex.align-items-center
+                                                            .btn.btn-items.btn-items-decrease -
+                                                            input#bathrooms.form-control.input-items(type='text' value=property.bathrooms disabled='')
+                                                            .btn.btn-items.btn-items-increase +
+                                                    .col-lg-4
+                                                        label.form-label Guests
+                                                        .d-flex.align-items-center
+                                                            .btn.btn-items.btn-items-decrease -
+                                                            input#guests.form-control.input-items(type='text' value=property.bathrooms disabled='')
+                                                            .btn.btn-items.btn-items-increase +
+                                    .text-block
+                                        .row.mb-3
+                                            .col-sm-12
+                                                h5 Address
+                                                .row.pt-4
+                                                    .mb-4.col-md-6
+                                                        label.form-label(for='addressLine1') Address Line 1
+                                                        input#addressLine1.form-control(type='text' name='addressLine1' value=property.addressLine1)
+                                                    .mb-4.col-md-6
+                                                        label.form-label(for='addressLine2') Address Line 2
+                                                        input#addressLine2.form-control(type='text' name='addressLine2' value=(property.addressLine2 != null ? property.addressLine2 : ""))
+                                                    .mb-4.col-md-6
+                                                        label.form-label(for='city') City
+                                                        input(style="display:none" id="currentCityId" value=property.cityId)
+                                                        select#city.selectpicker.form-control(type='text' name='city' value=property.city)
+                                                            each city in cities
+                                                                option(value=city.id) #{city.name}
+                                                        p.small.text-danger(id="cityError")
+                                                    .mb-4.col-md-6
+                                                        label.form-label(for='town') Town
+                                                        select#town.selectpicker.form-control(type='text' name='town' value=property.town)
+                                                        p.small.text-danger(id="townError")
+                                                    .mb-4.col-md-6
+                                                        label.form-label(for='postCode') Post Code
+                                                        input#postCode.form-control(type='text' name='postCode' value=property.postCode)
+
+                                        .text-block
+                                            .row.mb-3
+                                                .col-sm-12
+                                                    h5 Description
+                                                    .row.pt-4
+                                                        .mb-5
+                                                            label.form-label(for='description') Describe your place to guests
+                                                            textarea#description.form-control(name='name' rows='5' aria-describedby='descriptionHelp') #{property.description}
+                                                            p.small.text-danger(id="descriptionError")
+              
+                    
+                    .col-lg-5.ms-lg-auto
+                        row.form-block
+                            .col-lg-12
+                                h5.mb-4 Gallery
+                                .row.gallery.mb-3.ms-n1.me-n1
+
+                                    .col-lg-3.col-6.px-1.mb-2
+                                        div.dropzone
+                                            a(href=property.displayImage1 data-fancybox='gallery' title='Our street')
+                                                img#displayImage1.img-fluid(src=property.displayImage1 alt='...')
+                                        label.btn.btn-primary(for="picture1" style="margin-top:10px;width:100%;font-size:8pt !important;cursor:pointer;") Main Picture
+                                        input(id="picture1" type='file' style="opacity:0;width:-webkit-fill-available" accept="image/x-png,image/jpeg" data-index=1)
+                                        p.small.text-danger(id="picture1Error" style="text-align:center")
+                                    .col-lg-3.col-6.px-1.mb-2
+                                        div#picArea2.dropzone
+                                            if(property.displayImage2 != null)
+                                                a(href=property.displayImage2 data-fancybox='gallery' title='Outside')
+                                                    img#displayImage2.img-fluid(src=property.displayImage2  alt='...')
+                                            else
+                                                p Add Image 2
+                                        label.btn.btn-primary(for="picture2" style="margin-top:10px;width:100%;font-size:8pt !important;cursor:pointer;") Picture 2
+                                        input(id="picture2" type='file' style="opacity:0;width:-webkit-fill-available" accept="image/x-png,image/jpeg" data-index=2)
+                                        if(property.displayImage2)
+                                            button.btn.btn-outline-primary(id="removeDisplayImage2" style="width:100%;font-size:8pt !important;" data-index=2) Remove Picture
+                                        p.small.text-danger(id="picture2Error" style="text-align:center")
+                                    .col-lg-3.col-6.px-1.mb-2
+                                        div#picArea3.dropzone
+                                            if(property.displayImage3 != null)
+                                                a(href=property.displayImage3 data-fancybox='gallery' title='Outside')
+                                                    img#displayImage3.img-fluid(src=property.displayImage3  alt='...')
+                                            else
+                                                p Add Image 3
+                                        label.btn.btn-primary(for="picture3" style="margin-top:10px;width:100%;font-size:8pt !important;cursor:pointer;") Picture 3
+                                        input(id="picture3" type='file' style="opacity:0;width:-webkit-fill-available" accept="image/x-png,image/jpeg" data-index=3)
+                                        if(property.displayImage3)
+                                            button.btn.btn-outline-primary(id="removeDisplayImage3" style="width:100%;font-size:8pt !important;" data-index=3) Remove Picture
+                                        p.small.text-danger(id="picture3Error" style="text-align:center")
+                                    .col-lg-3.col-6.px-1.mb-2#picParent4
+                                        div#picArea4.dropzone
+                                            //- if(property.displayImage4 != null)
+                                            a(href=property.displayImage4 style=(property.displayImage4 != null ? "" : "display:none") data-fancybox='gallery' title='Outside')
+                                                img#displayImage4.img-fluid(src=property.displayImage4  alt='...')
+                                            //- else
+                                            .dz-message.text-muted(style=(property.displayImage4 == null ? "" : "display:none"))
+                                                p Add Image 4
+                                        label.btn.btn-primary(for="picture4" style="margin-top:10px;width:100%;font-size:8pt !important;cursor:pointer;") Picture 4
+                                        input(id="picture4" type='file' style="opacity:0;width:-webkit-fill-available" accept="image/x-png,image/jpeg" data-index=4)
+                                        //- if(property.displayImage4)
+                                        button.btn.btn-outline-primary(id="removeDisplayImage4" style=( property.displayImage ? "width:100%;font-size:8pt !important;" : "width:100%;font-size:8pt !important;display:none") data-index=4) Remove Picture
+                                        p.small.text-danger(id="picture4Error" style="text-align:center")
+                        .row.form-block
+                            .col-lg-12
+                                h5.mb-4 Calendar Sync
+                                .row
+                                    .col-sm-12( id="calendarSyncRows")
+                                        if(propertySyncs)
+                                            each calendarSync in propertySyncs
+                                                .row
+                                                    .col-sm-7
+                                                        p.text-muted(style="width:100% !important;text-align:left;") #{calendarSync.name}
+                                                    .col-sm-5
+                                                        button.btn.btn-outline-primary.remove(data-remove-id=calendarSync.id) Remove  
+
+                                .row(style="margin-top:10px")
+                                    .col-lg-6
+                                        button.btn.btn-primary#newRow Add New Row
+                                    //- hr.my-3.hr-text.letter-spacing-2(data-content="OR")
+                                    //- .d-grid.gap-2
+                                    //-     button.btn.btn.btn-outline-muted#exportCalendar Export Calendar
+                                    
+                                    .col-lg-6
+                                        button.btn.btn-link.ps-0.text-primary.collapsed(type='button' data-bs-toggle='collapse' data-bs-target='#updatePassword' aria-expanded='false' aria-controls='updatePassword') Export Calendar
+                                    #updatePassword.collapse
+                                        .row.mt-4
+                                            .mb-4.col-12
+                                                label.form-label(for='password-current')  Copy and paste the link into other ICAL applications
+                                                p.form-control(type='text' name='password-current') #{ical}
+
+
+                        .row.form-block
+                            .col-lg-12
+                                h5.mb-4 Calendar Availability
+                                .row
+                                    .mb-4
+                                        button.btn.btn-primary#availability See Availability           
+                                    //- .col-sm-6
+                                    //-     button.primary-btn#newRow Add New Row
+                                    //- .col-sm-6
+                                    //-     button.primary-btn#exportCalendar Export Calendar
+
+                                
+                        .row.form-block
+                            .col-lg-12
+                                button.btn.btn-primary#editProperty Update Property
+                                p.small.text-danger(id="noChangeError")
+                   
+    // Footer
+    footer.position-relative.z-index-10.d-print-none
+      // Main block - menus, subscribe form
+      .py-6.bg-gray-200.text-muted
+        .container
+          .row
+            .col-lg-4.mb-5.mb-lg-0
+              .fw-bold.text-uppercase.text-dark.mb-3 Directory
+              p Lorem ipsum dolor sit amet, consectetur adipisicing.
+              ul.list-inline
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='twitter')
+                    i.fab.fa-twitter
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='facebook')
+                    i.fab.fa-facebook
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='instagram')
+                    i.fab.fa-instagram
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='pinterest')
+                    i.fab.fa-pinterest
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='vimeo')
+                    i.fab.fa-vimeo
+            .col-lg-2.col-md-6.mb-5.mb-lg-0
+              h6.text-uppercase.text-dark.mb-3 Rentals
+              ul.list-unstyled
+                li
+                  a.text-muted(href='index.html') Rooms
+                li
+                  a.text-muted(href='category-rooms.html') Map on top
+                li
+                  a.text-muted(href='category-2-rooms.html') Side map
+                li
+                  a.text-muted(href='category-3-rooms.html') No map
+                li
+                  a.text-muted(href='detail-rooms.html') Room detail
+            .col-lg-2.col-md-6.mb-5.mb-lg-0
+              h6.text-uppercase.text-dark.mb-3 Pages
+              ul.list-unstyled
+                li
+                  a.text-muted(href='compare.html') Comparison                                   
+                li
+                  a.text-muted(href='team.html') Team                                   
+                li
+                  a.text-muted(href='contact.html') Contact                                   
+            .col-lg-4
+              h6.text-uppercase.text-dark.mb-3 Daily Offers & Discounts
+              p.mb-3  Lorem ipsum dolor sit amet, consectetur adipisicing elit. At itaque temporibus.
+              form#newsletter-form(action='#')
+                .input-group.mb-3
+                  input.form-control.bg-transparent.border-dark.border-end-0(type='email' placeholder='Your Email Address' aria-label='Your Email Address')
+                  button.btn.btn-outline-dark.border-start-0(type='submit')
+                    i.fa.fa-paper-plane.text-lg
+      // Copyright section of the footer
+      .py-4.fw-light.bg-gray-800.text-gray-300
+        .container
+          .row.align-items-center
+            .col-md-6.text-center.text-md-start
+              p.text-sm.mb-md-0 © 2021, Your company.  All rights reserved.
+            .col-md-6
+              ul.list-inline.mb-0.mt-2.mt-md-0.text-center.text-md-end
+                li.list-inline-item
+                  img.w-2rem(src='img/visa.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/mastercard.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/paypal.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/western-union.svg' alt='...')
+    // JavaScript files
+    script.
+      // ------------------------------------------------------- //
+      //   Inject SVG Sprite -
+      //   see more here
+      //   https://css-tricks.com/ajaxing-svg-sprite/
+      // ------------------------------------------------------ //
+      function injectSvgSprite(path) {
+      var ajax = new XMLHttpRequest();
+      ajax.open("GET", path, true);
+      ajax.send();
+      ajax.onload = function(e) {
+      var div = document.createElement("div");
+      div.className = 'd-none';
+      div.innerHTML = ajax.responseText;
+      document.body.insertBefore(div, document.body.childNodes[0]);
+      }
+      }
+      // to avoid CORS issues when viewing using file:// protocol, using the demo URL for the SVG sprite
+      // use your own URL in production, please :)
+      // https://demo.bootstrapious.com/directory/1-0/icons/orion-svg-sprite.svg
+      //- injectSvgSprite('${path}icons/orion-svg-sprite.svg');
+      injectSvgSprite('https://demo.bootstrapious.com/directory/1-4/icons/orion-svg-sprite.svg');
+    // jQuery
+    script(src='vendor/jquery/jquery.min.js')
+    // Bootstrap JS bundle - Bootstrap + PopperJS
+    script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')
+    // Magnific Popup - Lightbox for the gallery
+    script(src='vendor/magnific-popup/jquery.magnific-popup.min.js')
+    // Smooth scroll
+    script(src='vendor/smooth-scroll/smooth-scroll.polyfills.min.js')
+    // Bootstrap Select
+    script(src='vendor/bootstrap-select/js/bootstrap-select.min.js')
+    // Object Fit Images - Fallback for browsers that don't support object-fit
+    script(src='vendor/object-fit-images/ofi.min.js')
+    // Swiper Carousel
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/js/swiper.min.js')
+    script.
+      var basePath = ''
+    // Main Theme JS file
+    script(src='js/theme.js')
+    // Dropzone.js
+    //- script(src='vendor/dropzone/dropzone.js')
+    // Dropzone Init
+    script(src="js/adminProperty.js")

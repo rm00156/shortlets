@@ -1,0 +1,500 @@
+doctype html
+html(lang='en')
+  include common/header.pug 
+  +head("Places")
+  body(style='padding-top: 72px;')
+    include common/navbar.pug 
+    +navbar(user)
+    .container-fluid.pt-5.pb-3.border-bottom.px-lg-5
+      input#cityId(style="display:none" value=cityId)
+      .row
+        .col-xl-8
+            if(town != null)
+                h1 Stays in #{town.name}
+            else if(city != null)
+                h1 Stays in #{city.name}
+            //- p.lead.text-muted
+                | Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.
+    .container-fluid.py-5.px-lg-5
+      .row
+        .col-lg-3.pt-3
+        
+            .mb-4
+              label.form-label(for='bookingDate') Dates
+              .datepicker-container.datepicker-container-left
+                input#bookingDate.form-control(type='text' name='bookingDate' placeholder='Choose your dates')
+            .mb-4
+              label.form-label(for='form_guests') Guests
+              select#guests.selectpicker.form-control(name='guests' data-style='btn-selectpicker' title=' ')
+                option(value='1') 1+
+                option(value='2') 2+
+                option(value='3') 3+
+                option(value='4') 4+ 
+                option(value='5') 5+ 
+            .mb-4
+                label.form-label(for='city') City
+                select#city.selectpicker.form-control(name='city' multiple=''  title='')
+                    each city in cities
+                        option(value=city.id) #{city.name}
+            .mb-4
+                label.form-label(for='town') Town
+                select#town.selectpicker.form-control(name='town' multiple='' data-style='btn-selectpicker' title='')
+
+            
+            //- .mb-4
+              label.form-label Price range
+              #slider-snap.text-primary
+              .nouislider-values
+                .min
+                  | From $
+                  span#slider-snap-value-from
+                .max
+                  | To $
+                  span#slider-snap-value-to
+              input#slider-snap-input-from(type='hidden' name='pricefrom' value='40')
+              input#slider-snap-input-to(type='hidden' name='priceto' value='110')
+            //- .mb-4
+              label.form-label Host and booking
+              ul.list-inline.mb-0.mt-1
+                li.list-inline-item.mb-2
+                  .form-check.form-switch
+                    input#instantBook.form-check-input(type='checkbox')
+                    label.form-check-label(for='instantBook')
+                      span.text-sm Instant book
+                li.list-inline-item
+                  .form-check.form-switch
+                    input#superhost.form-check-input(type='checkbox')
+                    label.form-check-label(for='superhost')
+                      span.text-sm Superhost
+            .pb-4
+              #moreFilters.collapse
+                //- .filter-block
+                //-   h6.mb-3 Location
+                //-   .mb-4
+                    label.form-label(for='form_neighbourhood') Neighbourhood
+                    select#form_neighbourhood.selectpicker.form-control(name='neighbourhood' multiple='' data-style='btn-selectpicker' data-live-search='true' data-selected-text-format='count > 1' title='')
+                      option(value='neighbourhood_0') Battery Park City 
+                      option(value='neighbourhood_1') Bowery 
+                      option(value='neighbourhood_2') Carnegie Hill 
+                      option(value='neighbourhood_3') Central Park 
+                      option(value='neighbourhood_4') Chelsea 
+                      option(value='neighbourhood_5') Chinatown 
+                      option(value='neighbourhood_6') Civic Center 
+                      option(value='neighbourhood_7') East Harlem 
+                      option(value='neighbourhood_8') Financial District 
+                      option(value='neighbourhood_9') Flatiron 
+                      option(value='neighbourhood_10') Garment District 
+                      option(value='neighbourhood_11') Gramercy Park 
+                      option(value='neighbourhood_12') Greenwich Village 
+                      option(value='neighbourhood_13') East Village 
+                      option(value='neighbourhood_14') West Village 
+                      option(value='neighbourhood_15') Hamilton Heights 
+                      option(value='neighbourhood_16') Harlem 
+                      option(value='neighbourhood_17') Hell's Kitchen / Clinton 
+                      option(value='neighbourhood_18') Inwood 
+                      option(value='neighbourhood_19') Kips Bay 
+                      option(value='neighbourhood_20') Lenox Hill 
+                      option(value='neighbourhood_21') Little Italy 
+                      option(value='neighbourhood_22') Lower Eastside 
+                      option(value='neighbourhood_23') Madison Square 
+                      option(value='neighbourhood_24') Manhattan Valley 
+                      option(value='neighbourhood_25') Meatpacking District 
+                      option(value='neighbourhood_26') Midtown 
+                      option(value='neighbourhood_27') Morningside Heights 
+                      option(value='neighbourhood_28') Murray Hill 
+                      option(value='neighbourhood_29') NoHo 
+                      option(value='neighbourhood_30') NoLita 
+                      option(value='neighbourhood_31') Roosevelt Island 
+                      option(value='neighbourhood_32') SoHo 
+                      option(value='neighbourhood_33') Stuyvesant Town (Stuyvesant Square) 
+                      option(value='neighbourhood_34') Sutton Place 
+                      option(value='neighbourhood_35') Times Square 
+                      option(value='neighbourhood_36') Tribeca 
+                      option(value='neighbourhood_37') Turtle Bay 
+                      option(value='neighbourhood_38') Upper Eastside 
+                      option(value='neighbourhood_39') Upper Westside 
+                      option(value='neighbourhood_40') Washington Heights 
+                      option(value='neighbourhood_41') Yorkville 
+                  .mb-0
+                    label.form-label Neighbourhood Tag
+                    ul.list-inline.mt-xl-1.mb-0
+                      li.list-inline-item
+                        .form-check
+                          input#type_0.form-check-input(type='checkbox' name='type[]')
+                          label.form-check-label(for='type_0') Hipster 
+                      li.list-inline-item
+                        .form-check
+                          input#type_1.form-check-input(type='checkbox' name='type[]')
+                          label.form-check-label(for='type_1') Business 
+                      li.list-inline-item
+                        .form-check
+                          input#type_2.form-check-input(type='checkbox' name='type[]')
+                          label.form-check-label(for='type_2') Family 
+                      li.list-inline-item
+                        .form-check
+                          input#type_3.form-check-input(type='checkbox' name='type[]')
+                          label.form-check-label(for='type_3') Green 
+                //- .filter-block
+                  h6.mb-3 Rooms and beds
+                  .mb-2
+                    label.form-label Beds
+                    .d-flex.align-items-center
+                      .btn.btn-items.btn-items-decrease -
+                      input.form-control.input-items.input-items-greaterthan(type='text' value='1+' disabled='')
+                      .btn.btn-items.btn-items-increase +
+                  .mb-2
+                    label.form-label Bedrooms
+                    .d-flex.align-items-center
+                      .btn.btn-items.btn-items-decrease -
+                      input.form-control.input-items.input-items-greaterthan(type='text' value='1+' disabled='')
+                      .btn.btn-items.btn-items-increase +
+                  .mb-0
+                    label.form-label Bathrooms
+                    .d-flex.align-items-center
+                      .btn.btn-items.btn-items-decrease -
+                      input.form-control.input-items.input-items-greaterthan(type='text' value='1+' disabled='')
+                      .btn.btn-items.btn-items-increase +
+                //- .filter-block
+                  h6.mb-3 Trip type
+                  .mb-0
+                    .form-check.form-switch.mb-2
+                      input#forfamilies.form-check-input(type='checkbox' name='forfamilies' aria-describedby='forfamiliesHelp')
+                      label.form-check-label(for='forfamilies')
+                        span.text-sm For Families
+                    small#forfamiliesHelp.text-muted.form-text
+                      | Explore entire homes with 5-star reviews from families and essentials like a kitchen and TV
+                  .mb-0
+                    .form-check.form-switch.mb-2
+                      input#forwork.form-check-input(type='checkbox' name='forwork' aria-describedby='forworkHelp')
+                      label.form-check-label(for='forwork')
+                        span.text-sm For work
+                    small#forworkHelp.text-muted.form-text
+                      | Explore top-rated homes with essentials like a workspace, wifi, and self check-in
+                .filter-block
+                    h6.mb-3 Rooms and beds
+                    //- .mb-2
+                        label.form-label Beds
+                        .d-flex.align-items-center
+                            .btn.btn-items.btn-items-decrease -
+                            input.form-control.input-items.input-items-greaterthan(type='text' value='1+' disabled='')
+                            .btn.btn-items.btn-items-increase +
+                    .mb-2
+                        label.form-label Bedrooms
+                        .d-flex.align-items-center
+                            .btn.btn-items.btn-items-decrease -
+                            input#bedrooms.form-control.input-items.input-items-greaterthan(type='text' value=(bedrooms == undefined ? '1+' : bedrooms +'+')  disabled='')
+                            .btn.btn-items.btn-items-increase +
+                    .mb-0
+                        label.form-label Bathrooms
+                        .d-flex.align-items-center
+                            .btn.btn-items.btn-items-decrease -
+                            input#bathrooms.form-control.input-items.input-items-greaterthan(type='text' value=(bathrooms == undefined ? '1+' : bathrooms +'+') disabled='')
+                            .btn.btn-items.btn-items-increase +  
+                .filter-block
+                  h6.mb-3 Amenities
+                  ul.list-unstyled.mb-0
+                    li
+                      .form-check
+                        input#amenities_0.form-check-input(type='checkbox' name='amenities[]')
+                        label.form-check-label(for='amenities_0') Kitchen 
+                    li
+                      .form-check
+                        input#amenities_1.form-check-input(type='checkbox' name='amenities[]')
+                        label.form-check-label(for='amenities_1') Shampoo 
+                    li
+                      .form-check
+                        input#amenities_2.form-check-input(type='checkbox' name='amenities[]')
+                        label.form-check-label(for='amenities_2') Heating 
+                    li
+                      .form-check
+                        input#amenities_3.form-check-input(type='checkbox' name='amenities[]')
+                        label.form-check-label(for='amenities_3') Air conditioning 
+                    li
+                      .form-check
+                        input#amenities_4.form-check-input(type='checkbox' name='amenities[]')
+                        label.form-check-label(for='amenities_4') Washer 
+                    li
+                      .form-check
+                        input#amenities_5.form-check-input(type='checkbox' name='amenities[]')
+                        label.form-check-label(for='amenities_5') Dryer 
+                    li
+                      .form-check
+                        input#amenities_6.form-check-input(type='checkbox' name='amenities[]')
+                        label.form-check-label(for='amenities_6') Wifi 
+                    li
+                      .form-check
+                        input#amenities_7.form-check-input(type='checkbox' name='amenities[]')
+                        label.form-check-label(for='amenities_7') Breakfast 
+                    li
+                      .form-check
+                        input#amenities_8.form-check-input(type='checkbox' name='amenities[]')
+                        label.form-check-label(for='amenities_8') Indoor fireplace 
+                    li
+                      .form-check
+                        input#amenities_9.form-check-input(type='checkbox' name='amenities[]')
+                        label.form-check-label(for='amenities_9') Buzzer/wireless intercom 
+                    li
+                      .form-check
+                        input#amenities_10.form-check-input(type='checkbox' name='amenities[]')
+                        label.form-check-label(for='amenities_10') Doorman 
+                    li
+                      .form-check
+                        input#amenities_11.form-check-input(type='checkbox' name='amenities[]')
+                        label.form-check-label(for='amenities_11') Hangers 
+                    li
+                      .form-check
+                        input#amenities_12.form-check-input(type='checkbox' name='amenities[]')
+                        label.form-check-label(for='amenities_12') Iron 
+                    li
+                      .form-check
+                        input#amenities_13.form-check-input(type='checkbox' name='amenities[]')
+                        label.form-check-label(for='amenities_13') Hair dryer 
+                    li
+                      .form-check
+                        input#amenities_14.form-check-input(type='checkbox' name='amenities[]')
+                        label.form-check-label(for='amenities_14') Laptop friendly workspace 
+                .filter-block
+                  h6.mb-3 Facilities
+                  ul.list-unstyled.mb-0
+                    li
+                      .form-check
+                        input#facilities_0.form-check-input(type='checkbox' name='facilities[]')
+                        label.form-check-label(for='facilities_0') Free parking on premises 
+                    li
+                      .form-check
+                        input#facilities_1.form-check-input(type='checkbox' name='facilities[]')
+                        label.form-check-label(for='facilities_1') Gym 
+                    li
+                      .form-check
+                        input#facilities_2.form-check-input(type='checkbox' name='facilities[]')
+                        label.form-check-label(for='facilities_2') Hot tub 
+                    li
+                      .form-check
+                        input#facilities_3.form-check-input(type='checkbox' name='facilities[]')
+                        label.form-check-label(for='facilities_3') Pool 
+              .mb-4
+                button.btn.btn-link.btn-collapse.ps-0.text-secondary(type='button' data-bs-toggle='collapse' data-bs-target='#moreFilters' aria-expanded='false' aria-controls='moreFilters' data-expanded-text='Less filters' data-collapsed-text='More filters') More filters
+              .mb-4
+                button#search.btn.btn-primary(type='submit')
+                  i.fas.fa-filter.me-1
+                  | Filter
+              //- .mb-4
+                button#clear.btn.btn-primary(type='submit')
+                  i.fas.fa-filter.me-1
+                  | Reset Filters
+        .col-lg-9
+          .d-flex.justify-content-between.align-items-center.flex-column.flex-md-row.mb-4
+            .me-3
+              p.mb-3.mb-md-0
+                strong #{properties.length}
+                |  results found
+            //- div
+              label.form-label.me-2(for='form_sort') Sort by
+              select#form_sort.selectpicker(name='sort' data-style='btn-selectpicker' title='')
+                option(value='sortBy_0') Most popular 
+                option(value='sortBy_1') Recommended 
+                option(value='sortBy_2') Newest 
+                option(value='sortBy_3') Oldest 
+                option(value='sortBy_4') Closest 
+          .row
+            // place item
+            each property in properties
+                .col-sm-6.col-xl-4.mb-5.hover-animate(data-marker-id='59c0c8e33b1527bfe2abaf92')
+                    .card.h-100.border-0.shadow
+                        .card-img-top.overflow-hidden.gradient-overlay
+                            img.img-fluid(src=property.displayImage1 alt=property.name)
+                            a.tile-link(href='/property?id=' + property.id)
+                            //- .card-img-overlay-bottom.z-index-20
+                            //-     .d-flex.text-white.text-sm.align-items-center
+                            //-         img.avatar.avatar-border-white.flex-shrink-0.me-2(src='img/avatar/avatar-0.jpg' alt='Pamela')
+                            //-         div Pamela
+                            //- .card-img-overlay-top.text-end
+                                a.card-fav-icon.position-relative.z-index-40(href='javascript: void();')
+                                    svg.svg-icon.text-white
+                                        use(xlink:href='#heart-1')  
+                        .card-body.d-flex.align-items-center
+                            .w-100
+                                h6.card-title
+                                    a.text-decoration-none.text-dark(href='/property?id=' + property.id) #{property.name} - #{property.town}
+                                .d-flex.card-subtitle.mb-3
+                                    p.flex-grow-1.mb-0.text-muted.text-sm #{property.bedrooms} bedrooms
+                                    //- p.flex-grow-1.mb-0.text-muted.text-sm #{property.guests} guests
+                                    //- p.flex-grow-1.mb-0.text-muted.text-sm #{property.bathrooms} bathrooms
+                                    p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
+                                        i.fa.fa-star.text-warning
+                                        i.fa.fa-star.text-warning
+                                        i.fa.fa-star.text-warning
+                                        i.fa.fa-star.text-warning
+                                        i.fa.fa-star.text-gray-300   
+                                .d-flex.card-subtitle.mb-3
+                                    p.flex-grow-1.mb-0.text-muted.text-sm #{property.guests} guests     
+                                .d-flex.card-subtitle.mb-3
+                                    p.flex-grow-1.mb-0.text-muted.text-sm #{property.bathrooms} bathrooms                             
+                                p.card-text.text-muted
+                                    span.h4.text-primary £#{(parseFloat(property.pricePerDay)).toFixed(2)}
+                                    |  per night
+            
+        //-   // Pagination
+          nav(aria-label='Page navigation example')
+            ul.pagination.pagination-template.d-flex.justify-content-center
+              li.page-item
+                a.page-link(href='#')
+                  i.fa.fa-angle-left
+              li.page-item.active
+                a.page-link(href='#') 1
+              li.page-item
+                a.page-link(href='#') 2
+              li.page-item
+                a.page-link(href='#') 3
+              li.page-item
+                a.page-link(href='#')
+                  i.fa.fa-angle-right
+    // Footer
+    footer.position-relative.z-index-10.d-print-none
+      // Main block - menus, subscribe form
+      .py-6.bg-gray-200.text-muted
+        .container
+          .row
+            .col-lg-4.mb-5.mb-lg-0
+              .fw-bold.text-uppercase.text-dark.mb-3 Directory
+              p Lorem ipsum dolor sit amet, consectetur adipisicing.
+              ul.list-inline
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='twitter')
+                    i.fab.fa-twitter
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='facebook')
+                    i.fab.fa-facebook
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='instagram')
+                    i.fab.fa-instagram
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='pinterest')
+                    i.fab.fa-pinterest
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='vimeo')
+                    i.fab.fa-vimeo
+            .col-lg-2.col-md-6.mb-5.mb-lg-0
+              h6.text-uppercase.text-dark.mb-3 Rentals
+              ul.list-unstyled
+                li
+                  a.text-muted(href='index.html') Rooms
+                li
+                  a.text-muted(href='category-rooms.html') Map on top
+                li
+                  a.text-muted(href='category-2-rooms.html') Side map
+                li
+                  a.text-muted(href='category-3-rooms.html') No map
+                li
+                  a.text-muted(href='detail-rooms.html') Room detail
+            .col-lg-2.col-md-6.mb-5.mb-lg-0
+              h6.text-uppercase.text-dark.mb-3 Pages
+              ul.list-unstyled
+                li
+                  a.text-muted(href='compare.html') Comparison 
+                li
+                  a.text-muted(href='team.html') Team 
+                li
+                  a.text-muted(href='contact.html') Contact 
+            .col-lg-4
+              h6.text-uppercase.text-dark.mb-3 Daily Offers & Discounts
+              p.mb-3  Lorem ipsum dolor sit amet, consectetur adipisicing elit. At itaque temporibus.
+              form#newsletter-form(action='#')
+                .input-group.mb-3
+                  input.form-control.bg-transparent.border-dark.border-end-0(type='email' placeholder='Your Email Address' aria-label='Your Email Address')
+                  button.btn.btn-outline-dark.border-start-0(type='submit')
+                    i.fa.fa-paper-plane.text-lg
+      // Copyright section of the footer
+      .py-4.fw-light.bg-gray-800.text-gray-300
+        .container
+          .row.align-items-center
+            .col-md-6.text-center.text-md-start
+              p.text-sm.mb-md-0 © 2021, Your company. All rights reserved.
+            .col-md-6
+              ul.list-inline.mb-0.mt-2.mt-md-0.text-center.text-md-end
+                li.list-inline-item
+                  img.w-2rem(src='img/visa.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/mastercard.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/paypal.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/western-union.svg' alt='...')
+    // JavaScript files
+    script.
+      // ------------------------------------------------------- //
+      //   Inject SVG Sprite -
+      //   see more here
+      //   https://css-tricks.com/ajaxing-svg-sprite/
+      // ------------------------------------------------------ //
+      function injectSvgSprite(path) {
+      var ajax = new XMLHttpRequest();
+      ajax.open("GET", path, true);
+      ajax.send();
+      ajax.onload = function(e) {
+      var div = document.createElement("div");
+      div.className = 'd-none';
+      div.innerHTML = ajax.responseText;
+      document.body.insertBefore(div, document.body.childNodes[0]);
+      }
+      }
+      // to avoid CORS issues when viewing using file:// protocol, using the demo URL for the SVG sprite
+      // use your own URL in production, please :)
+      // https://demo.bootstrapious.com/directory/1-0/icons/orion-svg-sprite.svg
+      //- injectSvgSprite('${path}icons/orion-svg-sprite.svg');
+      injectSvgSprite('https://demo.bootstrapious.com/directory/1-4/icons/orion-svg-sprite.svg');
+    // jQuery
+    script(src='vendor/jquery/jquery.min.js')
+    // Bootstrap JS bundle - Bootstrap + PopperJS
+    script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')
+    // Magnific Popup - Lightbox for the gallery
+    script(src='vendor/magnific-popup/jquery.magnific-popup.min.js')
+    // Smooth scroll
+    script(src='vendor/smooth-scroll/smooth-scroll.polyfills.min.js')
+    // Bootstrap Select
+    script(src='vendor/bootstrap-select/js/bootstrap-select.min.js')
+    // Object Fit Images - Fallback for browsers that don't support object-fit
+    script(src='vendor/object-fit-images/ofi.min.js')
+    // Swiper Carousel
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/js/swiper.min.js')
+    script.
+      var basePath = ''
+    // Main Theme JS file
+    script(src='js/theme.js')
+    // Daterange picker
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery-date-range-picker/0.19.0/jquery.daterangepicker.min.js')
+    script(src='js/datepicker-category.js')
+    // Price Slider
+    //- script(src='vendor/nouislider/nouislider.min.js')
+    script(src="js/properties.js")
+    script.
+        $(document).ready(function(){
+            $('#guests').on('change', function(){
+                console.log($('#guests').val())
+            })
+        })
+    //- script.
+      var snapSlider = document.getElementById('slider-snap');
+      noUiSlider.create(snapSlider, {
+      start: [40, 110],
+      snap: false,
+      connect: true,
+      step: 1,
+      range: {
+      'min': 40,
+      'max': 110
+      }
+      });
+      var snapValues = [
+      document.getElementById('slider-snap-value-from'),
+      document.getElementById('slider-snap-value-to')
+      ];
+      var inputValues = [
+      document.getElementById('slider-snap-input-from'),
+      document.getElementById('slider-snap-input-to')
+      ];
+      snapSlider.noUiSlider.on('update', function(values, handle) {
+      snapValues[handle].innerHTML = values[handle];
+      inputValues[handle].value = values[handle];
+      })

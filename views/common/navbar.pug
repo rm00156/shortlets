@@ -1,0 +1,66 @@
+mixin navbar()
+    header.header
+      // Navbar
+      nav.navbar.navbar-expand-lg.fixed-top.shadow.navbar-light.bg-white
+        .container-fluid
+          .d-flex.align-items-center
+            a.navbar-brand.py-1(href='/')
+              img(src='img/logo.svg' alt='Directory logo')
+          button.navbar-toggler.navbar-toggler-right(type='button' data-bs-toggle='collapse' data-bs-target='#navbarCollapse' aria-controls='navbarCollapse' aria-expanded='false' aria-label='Toggle navigation')
+            i.fa.fa-bars
+          // Navbar Collapse
+          #navbarCollapse.collapse.navbar-collapse
+            //- form#searchcollapsed.form-inline.mt-4.mb-2.d-sm-none(action='#')
+              .input-label-absolute.input-label-absolute-left.w-100
+                label.label-absolute(for='searchcollapsed_search')
+                  i.fa.fa-search
+                  span.sr-only What are you looking for?
+                input#searchcollapsed_search.form-control.form-control-sm.border-0.shadow-0.bg-gray-200(placeholder='Search' aria-label='Search' type='search')
+            ul.navbar-nav.ms-auto
+              
+              if(user == null)
+                li.nav-item
+                  a.nav-link(href='/') Home
+                li.nav-item
+                  a.nav-link(href='/properties?cityId=1') Places
+                li.nav-item
+                    a.nav-link(href='/register') Register
+                li.nav-item
+                    a.nav-link(href='/login') Login
+              else 
+                if(user.accountTypeFk == 1)
+                  li.nav-item
+                    a.nav-link(href='/adminDashboard') Dashboard
+                  li.nav-item.dropdown
+                    a#accountsDropdownMenuLink.nav-link.dropdown-toggle(href='#' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                      | Accounts
+                    .dropdown-menu(aria-labelledby='accountsDropdownMenuLink')
+                      a.dropdown-item(href='/adminSearchAccount') Search Accounts
+                      a.dropdown-item(href='/addAdmin') Add New Admin
+                      
+                  li.nav-item.dropdown
+                    a#propertiesDropdownMenuLink.nav-link.dropdown-toggle(href='#' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                      | Properties
+                    .dropdown-menu(aria-labelledby='propertiesDropdownMenuLink')
+                      a.dropdown-item(href='/adminSearchProperty') Search Properties
+                      a.dropdown-item(href='/addProperty1') Add New Property
+                  li.nav-item
+                    a.nav-link(href='/adminSearchBooking') Bookings
+                if(user.accountTypeFk == 2)
+                  li.nav-item
+                    a.nav-link(href='/myAccount') Account
+                  li.nav-item
+                    a.nav-link(href='/properties?cityId=1') Places
+                li.nav-item.dropdown.ms-lg-3
+                  a#userDropdownMenuLink(href='#' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                      img.avatar.avatar-sm.avatar-border-white.me-2(src='img/avatar/avatar-10.jpg' alt='Jack London')
+                  .dropdown-menu.dropdown-menu-end(aria-labelledby='userDropdownMenuLink')
+                      a.dropdown-item(href='/myAccount') My Account
+                      .dropdown-divider
+                      a.dropdown-item(href='#myProfile') My Profile
+                      .dropdown-divider
+                      a.dropdown-item(href='/logout')
+                          i.fas.fa-sign-out-alt.me-2.text-muted
+                          |  Log out
+              
+      // /Navbar

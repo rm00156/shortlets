@@ -1,0 +1,89 @@
+doctype html
+html(lang='en')
+  include common/adminHeader.pug
+  +head("Admin Search Property")
+  body#page-top
+    // Page Wrapper
+    script( type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js")
+    script( type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js")
+    script(src="js/searchProperty.js")
+    #wrapper
+      // Sidebar
+      include common/adminNavbar.pug
+      +navbar(user)
+      // Content Wrapper
+      #content-wrapper.d-flex.flex-column
+        // Main Content
+        #content
+          // Topbar
+          include common/adminHorizontalNavbar.pug
+          +navbar(user)
+          // Begin Page Content
+          .container-fluid
+            // Page Heading
+            .d-sm-flex.align-items-center.justify-content-between.mb-4
+              h1.h3.mb-0.text-gray-800 Search Product
+    
+            .row
+              .col-lg-10.offset-lg-1
+                .card.shadow.mb-4
+                    .card-body(style="text-align:left")
+                        .row
+                            .col-sm-3
+                                label(for="propertyName" style="text-align:left") Property Name
+                                input.form-control(style="width:100% !important;text-align:left;" id="propertyName" required=true, name='propertyName', type='text')
+                            .col-sm-3
+                                label(for="addressLine1" style="text-align:left") Address Line 1
+                                input.form-control(style="width:100% !important;text-align:left;" id="addressLine1" required=true, name='addressLine1', type='text')
+                            .col-sm-3
+                                label(for="city" style="text-align:left") City
+                                select.form-control(id="city" style="width:100%")
+                                    option(value=0)
+                                    each city in cities
+                                        option(value=city.id) #{city.name} 
+                            .col-sm-3
+                                label(for="town" style="text-align:left") Town
+                                select.form-control(id="town" style="width:100%")
+                            
+                        .row(style="margin-top:10px")
+                            .col-sm-3
+                                label(for="postCode" style="text-align:left") Post code
+                                input.form-control(style="width:100% !important;text-align:left;" id="postCode" required=true, name='postCode', type='text')
+                            
+                            .col-sm-3
+                                label(for="minPricePerDay" style="text-align:left") Price Per Day Min
+                                input.form-control(style="width:100% !important;text-align:left;" id="minPricePerDay" min=0 required=true, name='minminPricePerDayPrice', type='number')
+                            .col-sm-3
+                                label(for="maxPricePerDay" style="text-align:left") Price Per Day Max
+                                input.form-control(style="width:100% !important;text-align:left;" id="maxPricePerDay" min=0 required=true, name='maxPricePerDay', type='number')
+                            
+                        .row(style="margin-top:10px")
+                            .col-sm-3
+                                
+                            .col-sm-3
+                               
+                            .col-sm-3
+                                input.primary-btn(type="submit" id="search" value="Search")
+                            .col-sm-3
+                                input.primary-btn(type="submit" id="clear" value="Clear")
+            
+            section.category-section.spad(style="padding-top:50px")
+                .container
+                    .row
+                        .col-sm-12
+                            .card.shadow.mb-12
+                                .card-body(style="text-align:center")
+                                    .row
+                                        .col-sm-12
+                                            table.table.shadow.mb-12.table-striped.table-sm.dataTable.no-footer( id="searchResultTable"  role="grid" aria-describedby="classes_info")
+                                                thead(style="text-align:center")
+                                                    tr.titleBar(role="row")
+                                                        th(class="sorting_asc smallerTextSize" style="width:16.67%") Picture
+                                                        th(class="sorting_asc smallerTextSize" style="width:16.67%") Name
+                                                        th(class="sorting_asc smallerTextSize" style="width:16.67%") £ Price Per Day
+                                                        th(class="sorting_asc smallerTextSize" style="width:16.67%") City
+                                                        th(class="sorting_asc smallerTextSize" style="width:16.67%") Town
+                                                        th(class="sorting_asc smallerTextSize" style="width:16.67%") Post Code
+                                                tbody
+        include common/adminFooter.pug
+        +footer()

@@ -1,0 +1,136 @@
+doctype html
+html(lang='en')
+    include common/adminHeader.pug
+    +head("Admin Dashboard")
+    body#page-top
+        // Page Wrapper
+        #wrapper
+            // Sidebar
+            include common/adminNavbar.pug
+            +navbar(user)
+            script(src="js/addProperty.js")
+            #content-wrapper.d-flex.flex-column
+                // Main Content
+                #content
+                    // Topbar
+                    include common/adminHorizontalNavbar.pug
+                    +navbar(user)
+                    .container-fluid
+                        // Page Heading
+                        .d-sm-flex.align-items-center.justify-content-between.mb-4
+                            h1.h3.mb-0.text-gray-800 Add Property
+                        
+                        .row
+                            .col-lg-10.offset-lg-1
+                                .card.shadow.mb-4
+                                    .card-body(style="text-align:left")
+                                        .row
+                                            //- iframe( width="450" height="250" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBMihzvNQrb51dsZyWN8TudfYQqkTkhfc0&q=CR28RW" allowfullscreen )
+
+                                            .col-sm-6
+                                                p.small.text-danger #{success}
+                                        .row
+                                            //- p.small.text-danger #{success}
+                                            .col-sm-6
+                                            
+                                                label(for="propertyName" style="text-align:left") Property Name
+                                                input.form-control(style="width:100% !important;text-align:left;" id="propertyName" required=true, name='propertyName', type='text')
+                                                p.small.text-danger(id="propertyNameError")
+                                            .col-sm-6
+                                                label(for="pricePerDay" style="text-align:left") Price Per Day (£)
+                                                input.form-control(style="width:100% !important;text-align:left;" id="pricePerDay" required=true, name='pricePerDay', type='text')
+                                                p.small.text-danger(id="pricePerDayError")
+                                        
+                                        .row(style="margin-top:10px;")
+                                            .col-sm-4(style="text-align:center")
+                                                label(for="bedrooms" style="text-align:center") Bedrooms
+                                                input.form-control(type="number" id="bedrooms" min=0 style="text-align:center" value=0)
+                                                p.small.text-danger(id="bedroomError")
+                                            .col-sm-4(style="text-align:center")
+                                                label(for="bathrooms" style="text-align:center") Bathrooms
+                                                input.form-control(type="number" id="bathrooms" min=0 style="text-align:center" value=0)
+                                                p.small.text-danger(id="bathroomError")
+                                            .col-sm-4(style="text-align:center")
+                                                label(for="guests" style="text-align:center") Guests
+                                                input.form-control(type="number" id="guests" min=0 style="text-align:center" value=0)
+                                                p.small.text-danger(id="guestError")
+                                        .row(style="margin-top:10px;" id="picturesSection")
+                                            .col-sm-12(style="text-align:center")
+                                                label Pictures
+                                            .row
+                                                .col-sm-3
+                                                    label.primary-btn(for="picture1" style="width:100%;font-size:8pt !important;cursor:pointer;") Main Picture
+                                                    input(id="picture1" type='file' style="opacity:0" accept="image/x-png,image/jpeg" data-index=1)
+                                                    p.small.text-danger(id="picture1Error" style="text-align:center")
+                                                .col-sm-3
+                                                    label.primary-btn(for="picture2" style="width:100%;font-size:8pt !important;cursor:pointer;") Picture 2
+                                                    input(id="picture2" type='file' style="opacity:0" accept="image/x-png,image/jpeg" data-index=2)
+                                                    p.small.text-danger(id="picture2Error" style="text-align:center")
+                                                .col-sm-3
+                                                    label.primary-btn(for="picture3" style="width:100%;font-size:8pt !important;cursor:pointer;") Picture 3
+                                                    input(id='picture3' type='file' style="opacity:0" accept="image/x-png,image/jpeg" data-index=3)
+                                                    p.small.text-danger(id="picture3Error" style="text-align:center")
+                                                .col-sm-3
+                                                    label.primary-btn(for="picture4" style="width:100%;font-size:8pt !important;cursor:pointer;") Picture 4
+                                                    input(id='picture4' type='file' style="opacity:0" accept="image/x-png,image/jpeg" data-index=4)
+                                                    p.small.text-danger(id="picture4Error" style="text-align:center")
+
+                                        .row(style="margin-top:10px;" id="locationSection")
+                                            .col-sm-12(style="text-align:center")
+                                                label Property Address
+                                                .row
+                                                    .col-sm-6
+                                                        label(for="addressLine1" style="text-align:left") Address Line 1
+                                                        input.form-control(style="width:100% !important;text-align:left;" id="addressLine1" required=true, name='addressLine1', type='text')
+                                                        p.small.text-danger(id="addressLine1Error")
+                                                    .col-sm-6
+                                                        label(for="addressLine2" style="text-align:left") Address Line 2
+                                                        input.form-control(style="width:100% !important;text-align:left;" id="addressLine2" required=true, name='addressLine2', type='text')
+                                                .row
+                                                    
+                                                    .col-sm-4
+                                                        label(for="city" style="text-align:left") City
+                                                        select.form-control(style="width:100% !important;text-align:left;" id="city")
+                                                            option(value=0)
+                                                            each city in cities
+                                                                option(value=city.id) #{city.name}
+                                                        p.small.text-danger(id="cityError")
+                                                    .col-sm-4
+                                                        label(for="town" style="text-align:left") Town
+                                                        select.form-control(style="width:100% !important;text-align:left;" id="town")
+
+                                                        p.small.text-danger(id="townError")
+                                                    .col-sm-4
+                                                        label(for="postCode" style="text-align:left") Post Code
+                                                        input.form-control(style="width:100% !important;text-align:left;" id="postCode" required=true, name='postCode', type='text')
+                                                        p.small.text-danger(id="postCodeError")
+
+                                        .row(style="margin-top:10px;" id="descriptionSection")
+                                            .col-sm-12
+                                                label(for="description") Description
+                                                textarea.form-control(id="description" style="width:100%;margin-bottom:20px" maxlength=255 name="", cols="30", rows="10")
+                                                p.small.text-danger(id="descriptionError")
+                                        .row(style="margin-top:10px;" id="calendarSyncSection")
+                                            .col-sm-12(id="calendarSyncRows")
+                                                h5(for="description") Calendar Sync
+                                                //- .row
+                                                    .col-sm-6
+                                                        label Name
+                                                        input.form-control(style="width:100% !important;text-align:left;" id="syncName" required=true, name='syncName', type='text' value="")
+                                                    .col-sm-6
+                                                        label Url
+                                                        input.form-control(style="width:100% !important;text-align:left;" id="syncUrl" required=true, name='syncName', type='text' value="")
+                                                    p.small.text-danger(id="calendarSync1Error")
+                                        .row(style="margin-top:20px;text-align:center")
+                                            .col-sm-6
+                                                button.primary-btn#newRow Add New Row
+                                                    
+                                                    
+                                        .row(style="margin-top:20px;text-align:center")
+                                            .col-sm-12
+                                                input.primary-btn(type="submit" id="addProperty" value="Add Property")     
+
+
+
+        include common/adminFooter.pug
+        +footer()

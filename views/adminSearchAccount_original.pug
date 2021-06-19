@@ -1,0 +1,82 @@
+doctype html
+html(lang='en')
+  include common/adminHeader.pug
+  +head("Admin Search Account")
+  body#page-top
+    // Page Wrapper
+    script( type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js")
+    script( type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js")
+    script(src="js/searchAccount.js")
+    #wrapper
+      // Sidebar
+      include common/adminNavbar.pug
+      +navbar(user)
+      // Content Wrapper
+      #content-wrapper.d-flex.flex-column
+        // Main Content
+        #content
+          // Topbar
+          include common/adminHorizontalNavbar.pug
+          +navbar(user)
+          // Begin Page Content
+          .container-fluid
+            // Page Heading
+            .d-sm-flex.align-items-center.justify-content-between.mb-4
+              h1.h3.mb-0.text-gray-800 Search Account
+    
+            .row
+              .col-lg-10.offset-lg-1
+                .card.shadow.mb-4
+                    .card-body(style="text-align:left")
+                        .row
+                            .col-sm-4
+                                label(for="email" style="text-align:left") Email
+                                input.form-control(style="width:100% !important;text-align:left;" id="email" required=true, name='email', type='email')
+
+                            .col-sm-4
+                                label(for="accountType" style="text-align:left") Account Type
+                                select.form-control(id="accountType" style="width:100%")
+                                    option(value = 0)
+                                    each accountType in accountTypes
+                                        option(value=accountType.id) #{accountType.type} 
+                        .row(style="margin-top:10px")
+                            .col-sm-4
+                                label(for="fromDt" style="text-align:left") Created From
+                                input.form-control(style="width:100% !important;text-align:left;" id="fromDt" min=0 required=true, name='fromDt', type='date')
+                            .col-sm-4
+                                label(for="toDt" style="text-align:left") Created To
+                                input.form-control(style="width:100% !important;text-align:left;" id="toDt" min=0 required=true, name='toDt', type='date')
+                            //- .col-sm-4
+                            //-     label(style="font-size:12pt") Country
+                            //-     select.form-control(id="country")
+                            //-         option(value=0)
+                            //-         each country in countries
+                            //-             option(value=country.id) #{country.name}
+                        .row(style="margin-top:10px")
+                            .col-sm-3
+                               
+                            .col-sm-3
+                                
+                            .col-sm-3
+                                input.primary-btn(type="submit" id="search" value="Search")
+                            .col-sm-3
+                                input.primary-btn(type="submit" id="clear" value="Clear")
+            
+            section.category-section.spad(style="padding-top:50px")
+                .container
+                    .row
+                        .col-sm-12
+                            .card.shadow.mb-12
+                                .card-body(style="text-align:center")
+                                    .row
+                                        .col-sm-12
+                                            table.table.shadow.mb-12.table-striped.table-sm.dataTable.no-footer( id="searchResultTable"  role="grid" aria-describedby="classes_info")
+                                                thead(style="text-align:center")
+                                                    tr.titleBar(role="row")
+                                                        th(class="sorting_asc smallerTextSize" style="width:25%") Email
+                                                        th(class="sorting_asc smallerTextSize" style="width:25%") Account Type
+                                                        th(class="sorting_asc smallerTextSize" style="width:25%") Created Date
+                                                        th(class="sorting_asc smallerTextSize" style="width:25%") Status
+                                                tbody
+        include common/adminFooter.pug
+        +footer()

@@ -1,0 +1,259 @@
+doctype html
+html(lang='en')
+  include common/header.pug 
+  +head("Admin Search Accounts")
+  body(style='padding-top: 72px;')
+    include common/navbar.pug 
+    +navbar(user)
+    .container-fluid.pt-5.pb-3.border-bottom.px-lg-5
+      .row
+        .col-xl-8
+            h1 Properties
+            
+    .container-fluid.py-5.px-lg-5
+        .row
+            
+            .col-lg-3.pt-3
+                form(action='/adminSearchProperty' method="GET")
+                    .mb-4
+                        label.form-label(for='propertyName') Property Name
+                        input#propertyName.form-control(type='text' name='propertyName' placeholder='Enter Property Name')
+                    
+                    .mb-4
+                        label.form-label(for='addressLine1') Address Line 1
+                        input#addressLine1.form-control(type='text' name='addressLine1' placeholder='Enter Address Line 1')
+                    
+                    .mb-4
+                        label.form-label(for='city') City
+                        select#city.selectpicker.form-control(name='city' data-style='btn-selectpicker' title=' ')
+                            each city in cities
+                                option(value=city.id) #{city.name} 
+                    
+                    .mb-4
+                        label.form-label(for='town') Town
+                        select#town.selectpicker.form-control(name='town' data-style='btn-selectpicker' title=' ')
+                            //- each city in cities
+                            //-     option(value=city.id) #{city.name} 
+                    
+                    .mb-4
+                        label.form-label(for='postCode') Post code
+                        input#postCode.form-control(type='text' name='postCode' placeholder='Enter Post code')
+                    
+
+                    //- .mb-4
+                        label.form-label(for='fromDate') Created From
+                        .datepicker-container.datepicker-container-left
+                            input#fromDate.form-control(type='text' name='fromDate' placeholder='Choose your dates')
+                    
+                    //- .mb-4
+                        label.form-label Price range
+                        #slider-snap.text-primary
+                            .nouislider-values
+                                .min
+                                    | From $
+                                    span#slider-snap-value-from
+                                .max
+                                    | To $
+                                    span#slider-snap-value-to
+                        input#slider-snap-input-from(type='hidden' name='pricefrom' value='40')
+                        input#slider-snap-input-to(type='hidden' name='priceto' value='110')
+
+                    .mb-4
+                        button#search.btn.btn-primary(type='submit')
+                            i.fas.fa-filter.me-1
+                            | Search
+                .mb-4
+                    button#reset.btn.btn-primary
+                        i.fas.fa-filter.me-1
+                        | Reset Filters
+            .col-lg-9
+                .d-flex.justify-content-between.align-items-center.flex-column.flex-md-row.mb-4
+                    .me-3
+                        p.mb-3.mb-md-0
+                            strong #{results.length}
+                            |  results found
+                .list-group.shadow.mb-5
+                    each result in results
+                        a.list-group-item.list-group-item-action.p-4(href='/adminProperty?id=' + result.id)
+                            .row
+                                .col-lg-4.align-self-center.mb-4.mb-lg-0
+                                    .d-flex.align-items-center.mb-3
+                                        h2.h5.mb-0 #{result.name}
+                                        img.avatar.avatar-sm.avatar-border-white.ms-3(src=result.displayImage1 alt=result.name)
+                                    
+                                .col-lg-8
+                                    .row
+                                        .col-6.col-md-4.col-lg-3.py-3.mb-3.mb-lg-0
+                                            h6.label-heading Address Line 1
+                                            p.text-sm.fw-bold #{result.addressLine1}
+                                            h6.label-heading Address Line 2
+                                            if(result.addressLine2 != null)
+                                                p.text-sm.fw-bold.mb-0 #{result.addressLine2}
+                                        
+                                        .col-6.col-md-4.col-lg-3.py-3
+                                            h6.label-heading City
+                                            p.text-sm.fw-bold #{result.city}
+                                            h6.label-heading Town 
+                                            p.text-sm.fw-bold.mb-0 #{result.town}
+                                        .col-6.col-md-4.col-lg-3.py-3
+                                            h6.label-heading Post Code
+                                            p.text-sm.fw-bold #{result.postCode} 
+                                            h6.label-heading Guests 
+                                            p.text-sm.fw-bold.mb-0 #{result.guests}                                    
+                                            
+                                        .col-12.col-lg-3.align-self-center
+                                            h6.label-heading Bathrooms
+                                            p.text-sm.fw-bold #{result.bathrooms} 
+                                            h6.label-heading Bedrooms 
+                                            p.text-sm.fw-bold.mb-0 #{result.bedrooms}
+            
+    // Footer
+    footer.position-relative.z-index-10.d-print-none
+      // Main block - menus, subscribe form
+      .py-6.bg-gray-200.text-muted
+        .container
+          .row
+            .col-lg-4.mb-5.mb-lg-0
+              .fw-bold.text-uppercase.text-dark.mb-3 Directory
+              p Lorem ipsum dolor sit amet, consectetur adipisicing.
+              ul.list-inline
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='twitter')
+                    i.fab.fa-twitter
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='facebook')
+                    i.fab.fa-facebook
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='instagram')
+                    i.fab.fa-instagram
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='pinterest')
+                    i.fab.fa-pinterest
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='vimeo')
+                    i.fab.fa-vimeo
+            .col-lg-2.col-md-6.mb-5.mb-lg-0
+              h6.text-uppercase.text-dark.mb-3 Rentals
+              ul.list-unstyled
+                li
+                  a.text-muted(href='index.html') Rooms
+                li
+                  a.text-muted(href='category-rooms.html') Map on top
+                li
+                  a.text-muted(href='category-2-rooms.html') Side map
+                li
+                  a.text-muted(href='category-3-rooms.html') No map
+                li
+                  a.text-muted(href='detail-rooms.html') Room detail
+            .col-lg-2.col-md-6.mb-5.mb-lg-0
+              h6.text-uppercase.text-dark.mb-3 Pages
+              ul.list-unstyled
+                li
+                  a.text-muted(href='compare.html') Comparison 
+                li
+                  a.text-muted(href='team.html') Team 
+                li
+                  a.text-muted(href='contact.html') Contact 
+            .col-lg-4
+              h6.text-uppercase.text-dark.mb-3 Daily Offers & Discounts
+              p.mb-3  Lorem ipsum dolor sit amet, consectetur adipisicing elit. At itaque temporibus.
+              form#newsletter-form(action='#')
+                .input-group.mb-3
+                  input.form-control.bg-transparent.border-dark.border-end-0(type='email' placeholder='Your Email Address' aria-label='Your Email Address')
+                  button.btn.btn-outline-dark.border-start-0(type='submit')
+                    i.fa.fa-paper-plane.text-lg
+      // Copyright section of the footer
+      .py-4.fw-light.bg-gray-800.text-gray-300
+        .container
+          .row.align-items-center
+            .col-md-6.text-center.text-md-start
+              p.text-sm.mb-md-0 © 2021, Your company. All rights reserved.
+            .col-md-6
+              ul.list-inline.mb-0.mt-2.mt-md-0.text-center.text-md-end
+                li.list-inline-item
+                  img.w-2rem(src='img/visa.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/mastercard.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/paypal.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/western-union.svg' alt='...')
+    // JavaScript files
+    script.
+      // ------------------------------------------------------- //
+      //   Inject SVG Sprite -
+      //   see more here
+      //   https://css-tricks.com/ajaxing-svg-sprite/
+      // ------------------------------------------------------ //
+      function injectSvgSprite(path) {
+      var ajax = new XMLHttpRequest();
+      ajax.open("GET", path, true);
+      ajax.send();
+      ajax.onload = function(e) {
+      var div = document.createElement("div");
+      div.className = 'd-none';
+      div.innerHTML = ajax.responseText;
+      document.body.insertBefore(div, document.body.childNodes[0]);
+      }
+      }
+      // to avoid CORS issues when viewing using file:// protocol, using the demo URL for the SVG sprite
+      // use your own URL in production, please :)
+      // https://demo.bootstrapious.com/directory/1-0/icons/orion-svg-sprite.svg
+      //- injectSvgSprite('${path}icons/orion-svg-sprite.svg');
+      injectSvgSprite('https://demo.bootstrapious.com/directory/1-4/icons/orion-svg-sprite.svg');
+    // jQuery
+    script(src='vendor/jquery/jquery.min.js')
+    // Bootstrap JS bundle - Bootstrap + PopperJS
+    script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')
+    // Magnific Popup - Lightbox for the gallery
+    script(src='vendor/magnific-popup/jquery.magnific-popup.min.js')
+    // Smooth scroll
+    script(src='vendor/smooth-scroll/smooth-scroll.polyfills.min.js')
+    // Bootstrap Select
+    script(src='vendor/bootstrap-select/js/bootstrap-select.min.js')
+    // Object Fit Images - Fallback for browsers that don't support object-fit
+    script(src='vendor/object-fit-images/ofi.min.js')
+    // Swiper Carousel
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/js/swiper.min.js')
+    script.
+      var basePath = ''
+    // Main Theme JS file
+    script(src='js/theme.js')
+    // Daterange picker
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery-date-range-picker/0.19.0/jquery.daterangepicker.min.js')
+    script(src='js/datepicker-search-page.js')
+    script(src='js/propertySearch.js')
+    // Price Slider
+    //- script(src='vendor/nouislider/nouislider.min.js')
+    script(src="js/properties.js")
+    script.
+        $(document).ready(function(){
+            $('#guests').on('change', function(){
+                console.log($('#guests').val())
+            })
+        })
+    //- script.
+      var snapSlider = document.getElementById('slider-snap');
+      noUiSlider.create(snapSlider, {
+      start: [40, 110],
+      snap: false,
+      connect: true,
+      step: 1,
+      range: {
+      'min': 40,
+      'max': 110
+      }
+      });
+      var snapValues = [
+      document.getElementById('slider-snap-value-from'),
+      document.getElementById('slider-snap-value-to')
+      ];
+      var inputValues = [
+      document.getElementById('slider-snap-input-from'),
+      document.getElementById('slider-snap-input-to')
+      ];
+      snapSlider.noUiSlider.on('update', function(values, handle) {
+      snapValues[handle].innerHTML = values[handle];
+      inputValues[handle].value = values[handle];
+      })

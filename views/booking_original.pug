@@ -1,0 +1,90 @@
+doctype html
+html(lang='en')
+  include common/adminHeader.pug
+  +head("Booking")
+  #preloader2(style="display:none;z-index:999")
+    .loader2(style="display:none")
+  body#page-top
+
+    // Page Wrapper
+    #wrapper
+      // Sidebar
+      include common/adminNavbar.pug
+      +navbar(user)
+      script(src="js/booking.js")
+      // Content Wrapper
+      #content-wrapper.d-flex.flex-column
+        // Main Content
+        #content
+          // Topbar
+          include common/adminHorizontalNavbar.pug
+          +navbar(user)
+          // Begin Page Content
+          .container-fluid
+            // Page Heading
+            input#propertyId(style="display:none" value=booking.propertyFk)
+            .d-sm-flex.align-items-center.justify-content-between.mb-4
+              h1.h3.mb-0.text-gray-800 Booking - #{booking.propertyName}
+            .row
+              .col-lg-8.offset-lg-2
+                .card.shadow.mb-4
+                  .card-body(style="text-align:left")
+                    .row
+                      .col-sm-12
+                        if(success == true)
+                          p.small.text-danger Property Successfully update!
+                    .row
+                        .col-sm-12
+                            if(dayDiff == 0)
+                                h5 Arrives Today
+                            else if(dayDiff > 0)
+                                h5 Arrives in #{dayDiff} days
+                            else if(dayDiff < 0)
+                                if(currentlyStaying)
+                                    h5 Currently Staying
+                                else
+                                    h5 Past Guest
+                            h3 #{booking.customerName}
+                            h5 #{booking.guests} guests . #{booking.nights} nights . £#{(parseFloat(booking.cost)).toFixed(2)}
+
+                    .row(style="margin-top:20px;padding-top:20px;margin-left:10px;margin-right:10px;border-top: 1px solid rgb(235, 235, 235)")
+                        .col-sm-6
+                            h5 Guests
+                        .col-sm-6(style="text-align:right")
+                            h5 #{booking.guests} adults
+                    .row(style="margin-top:20px;padding-top:20px;margin-left:10px;margin-right:10px;border-top: 1px solid rgb(235, 235, 235)")
+                        .col-sm-6
+                            h5 Check-in
+                        .col-sm-6(style="text-align:right")
+                            h5 #{booking.fromDt}
+                    .row(style="margin-top:20px;padding-top:20px;margin-left:10px;margin-right:10px;border-top: 1px solid rgb(235, 235, 235)")
+                        .col-sm-6
+                            h5 Check-out
+                        .col-sm-6(style="text-align:right")
+                            h5 #{booking.toDt}
+                    .row(style="margin-top:20px;padding-top:20px;margin-left:10px;margin-right:10px;border-top: 1px solid rgb(235, 235, 235)")
+                        .col-sm-6
+                            h5 Booking Date
+                        .col-sm-6(style="text-align:right")
+                            h5 #{booking.bookingDttm}
+                    .row(style="margin-top:20px;padding-top:20px;margin-left:10px;margin-right:10px;border-top: 1px solid rgb(235, 235, 235)")
+                        .col-sm-6
+                            h5 Confirmation Code
+                        .col-sm-6(style="text-align:right")
+                            h5 #{booking.confirmationCode}
+                    .row(style="margin-top:20px;padding-top:20px;margin-left:10px;margin-right:10px;border-top: 1px solid rgb(235, 235, 235)")
+                        .col-sm-12
+                            h5 
+                                b Guest Paid
+                    .row(style="margin-top:10px;padding-top:20px;margin-left:10px;margin-right:10px;")
+                        .col-sm-6
+                            h5 £#{parseFloat((booking.price)).toFixed(2)} x #{booking.nights} nights
+                        .col-sm-6(style="text-align:right")
+                            h5  £#{parseFloat((booking.cost)).toFixed(2)}
+                    .row(style="margin-top:10px;padding-top:20px;margin-left:10px;margin-right:10px;text-align:center")
+                        .col-sm-6
+                            button.primary-btn#availabiliy Back To Availability
+                        .col-sm-6
+                            button.primary-btn#backProperty Back To Property
+        include common/adminFooter.pug
+        +footer()

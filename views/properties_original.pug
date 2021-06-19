@@ -1,0 +1,173 @@
+doctype html
+html.no-js(lang='en')
+  include common/header.pug
+  +head("My Account" )
+  body
+    //
+      [if lte IE 9]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade
+      your browser</a> to improve your experience and security.</p>
+      <![endif]
+    // main-menu Start
+    
+    include common/navbar.pug
+    +navbar(user)
+    section.spad
+      .container
+        .row
+            .col-lg-12
+                .product-show-option
+                    .row
+                        .col-lg-12.col-md-12
+                            if(town != null)
+                                h2 Stays in #{town.name}
+                            else if(city != null)
+                                h2 Stays in #{city.name}
+                    .row
+                        .tab-content(style="box-shadow:0 5px 20px rgb(14 15 18 / 20%);margin-top:20px")
+                            #tours.tab-pane.active.fade.in(role='tabpanel')
+                                .tab-para
+                                    .row
+                                        .col-lg-4.col-md-4.col-sm-12
+                                            .single-tab-select-box
+                                                h2 destination
+                                                .travel-select-icon
+                                                    select#city.form-control
+                                                        option(value=0) select your destination city
+                                                        each allCity in cities 
+                                                            option(value=allCity.id) #{allCity.name}
+                                                    p.small.text-danger(id='cityError')
+
+                                                    // /.option
+                                                // /.select
+                                                // /.travel-select-icon
+                                                .travel-select-icon
+                                                    select#town.form-control
+                                                        option(value=0) select your destination town
+
+                                        .col-lg-2.col-md-3.col-sm-4
+                                            .single-tab-select-box
+                                                h2 check in
+                                                .travel-check-icon
+                                                    form(action='#')
+                                                        input#fromDt.form-control(type='text' name='check_in' data-toggle='datepicker' )
+                                                // /.travel-check-icon
+                                            // /.single-tab-select-box
+                                            // /.col
+                                        .col-lg-2.col-md-3.col-sm-4
+                                            .single-tab-select-box
+                                                h2 check out
+                                                .travel-check-icon
+                                                    form(action='#')
+                                                        input#toDt.form-control(type='text' name='check_out' data-toggle='datepicker2' )
+                                                    // /.travel-check-icon
+                                                    // /.single-tab-select-box
+                                                    // /.col
+                                            
+                                        .col-lg-2.col-md-1.col-sm-4
+                                            .single-tab-select-box
+                                                h2 guests
+                                                input#guests.form-control(type="number" min=1 max=5 style="height:48px;width:60px")
+                                                    
+                                                // /.option
+                                                // /.select
+                                                // /.travel-select-icon
+                                            // /.single-tab-select-box
+                                            // /.col
+                                        // /.row
+                                    .row
+                                        .clo-sm-7
+                                            .about-btn.travel-mrt-0.pull-right
+                                                button#search.about-view.travel-btn
+                                                    | search
+                                                // /.travel-btn
+                                            // /.about-btn
+                                            // /.col
+                                        // /.row
+                                        // /.tab-para
+                                    // /.tabpannel
+                                    
+                                    // /.tab content
+                                // /.desc-tabs
+                                // /.single-travel-box
+                            // /.col
+                            // /.row
+                        // /.container
+                        // /.travel-box
+                        // travel-box end
+                        // service start
+                .product-list
+                    .row
+                        //- input(id="productsLength" style="display:none" value=products.length)
+                        //- input(id="category" style="display:none" value=category)
+                        //- input(id="countryValue" style="display:none" value=countryValue)
+                        //- input(id="orderValue" style="display:none" value=orderValue)
+                        
+                        each property, index in properties
+                            .col-md-4.col-sm-6
+                                a(href="#")
+                                    .single-package-item(style="text-align:center")
+                                        img(src=property.displayImage1 alt='package-place')
+                                        .single-package-item-txt
+                                            h3 #{property.name} 
+                                                span.pull-right £#{(parseFloat(property.pricePerDay)).toFixed(2)}
+                                            h3 #{property.town} 
+                                        .packages-para(style="text-align:center")
+                                            p
+                                            span
+                                                | #{property.guests} Guests
+                                            p
+                                            span
+                                                | #{property.bathrooms} Bathrooms
+                                            p
+                                            span
+                                                | #{property.bedrooms} Bedrooms
+                            //- .col-lg-3.col-sm-6
+                            //-     .product-item(id="property"+index data-id=property.id) 
+                            //-         .pi-pic(style="cursor:pointer;height:300px")
+                            //-             img(src=property.displayImage1 style="object-fit:scale-down" alt='')
+                            //-         .pi-text
+                                        
+                            //-             a(href='#')
+                            //-                 .row
+                            //-                     //- .col-sm-4
+                            //-                         .catagory-name #{property.guests} guest
+                            //-                     .col-sm-12
+                            //-                         .catagory-name #{property.bedrooms} bedrooms
+                            //-                     //- .col-sm-6
+                            //-                         .catagory-name #{property.bathrooms} bathrooms
+                            //-                 h5 #{property.name}
+                            //-             .product-price
+                            //-                 | £#{(parseFloat(property.pricePerDay)).toFixed(2)}
+                            //-                 .catagory-name Price Per Night
+                                                
+
+            // /.scroll-Top
+      // /.container
+    // /.footer-copyright
+    // footer-copyright end
+    script(src='assets/js/jquery.js')
+    // Include all compiled plugins (below), or include individual files as needed
+    // modernizr.min.js
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js')
+    // bootstrap.min.js
+    script(src='assets/js/bootstrap.min.js')
+    // bootsnav js
+    script(src='assets/js/bootsnav.js')
+    // jquery.filterizr.min.js
+    script(src='assets/js/jquery.filterizr.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js')
+    // jquery-ui.min.js
+    script(src='assets/js/jquery-ui.min.js')
+    // counter js
+    script(src='assets/js/jquery.counterup.min.js')
+    script(src='assets/js/waypoints.min.js')
+    // owl.carousel.js
+    script(src='assets/js/owl.carousel.min.js')
+    // jquery.sticky.js
+    script(src='assets/js/jquery.sticky.js')
+    // datepicker.js
+    script(src='assets/js/datepicker.js')
+    // Custom JS
+    script(src='assets/js/custom.js')
+    script(src="js/home.js")

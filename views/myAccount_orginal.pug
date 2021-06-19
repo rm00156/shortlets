@@ -1,0 +1,87 @@
+doctype html
+html(lang='zxx')
+    include common/header.pug
+    +head("My Account" )
+    body
+        include common/accountOverlay.pug
+        +accountOverlay()
+        include common/navbar.pug
+        +navbar(user)
+        section.shopping-cart.spad
+            .container
+                .row
+                    .col-lg-12
+                        .row
+                            .col-sm-3.account-nav 
+                                include common/accountNavbar.pug
+                                +accountNavbar()
+
+                            .col-sm-9.account-body
+                                .card-body(style="border: 1px solid rgba(0,0,0,.125);padding:10px")
+                                    div(style="padding-bottom:10px;border-bottom: 4px solid rgba(0,0,0,.125)")
+                                        h3(style="font-weight:700") My Account
+                                    .row(style="margin-top:20px;margin-bottom:20px;padding:10px")
+                                        
+                                        .col-sm-12
+                                            h3 Hello
+                                            p(style="font-size:14px") Welcome back! Quickly navigate to the page you’re looking for with these quick links.
+                                    .row
+                                        .col-sm-6
+                                            div(style="padding-top:10px;padding-left:5px;background-color:rgba(0,0,0,.125);")
+                                                h6(style="font-weight:700;") MY ACCOUNT
+                                                    span(style="float:right")
+                                                        a(href="/accountDetails" style="color:black;font-size:12px;padding-right:5px") <u>View details</u>     
+                                            div(style="background-color:white;margin-top:10px")
+                                                .row
+                                                    .col-sm-4
+                                                        i.flaticon-profile
+                                                    .col-sm-8
+                                                        p(style="color:black;font-size:12px;") #{user.email}
+                                        .col-sm-6
+                                            div(style="padding-top:10px;padding-left:5px;background-color:rgba(0,0,0,.125);")
+                                                h6(style="font-weight:700;") BOOKING HISTORY
+                                                    span(style="float:right")
+                                                        a(href="/OrderHistory" style="color:black;font-size:12px;padding-right:5px") <u>View All Orders</u>     
+                                            div(style="background-color:white;margin-top:10px")
+                                                .row
+                                                    .col-sm-4
+                                                        i.flaticon-stats
+                                                    .col-sm-8
+                                                        if(lastOrder == null)
+                                                            a.primary-btn(href="/" style="width:100%;font-size:12px;text-align:center" ) CONTINUE SHOPPING
+                                                        else
+                                                            h6(style="color:black;font-weight:700;font-size:13px;") Order Number:
+                                                                span  #{lastOrder.orderNumber}
+                                                            h6(style="color:black;font-weight:700;font-size:13px;") Date Ordered: 
+                                                                span  #{lastOrder.purchaseDttm}
+                                                            h6(style="color:black;font-weight:700;font-size:13px;") Order Total: 
+                                                                span  £#{(parseFloat(lastOrder.total)).toFixed(2)}
+                                                            a.primary-btn(href="/order?id=" + lastOrder.id style="width:100%;font-size:12px;text-align:center;margin-top:10px" ) View Order
+                                    //- .row(style="margin-top:20px")
+                                        .col-sm-6
+                                            div(style="padding-top:10px;padding-left:5px;background-color:rgba(0,0,0,.125);")
+                                                h6(style="font-weight:700;") DELIVERY ADDRESS
+                                                    span(style="float:right")
+                                                        a(href="/addresses" style="color:black;font-size:12px;padding-right:5px") <u>All Addresses</u>     
+                                            div(style="background-color:white;margin-top:10px")
+                                                .row
+                                                    .col-sm-4
+                                                        i.flaticon-home
+                                                    .col-sm-8
+                                                        if(shippingDetail)
+                                                            h6(style="color:black;font-size:12px;") #{shippingDetail.fullName}
+                                                            h6(style="color:black;font-size:12px;") #{shippingDetail.addressLine1}
+                                                            if(shippingDetail.addressLine2)
+                                                                h6(style="color:black;font-size:12px;") #{shippingDetail.addressLine2}
+                                                            h6(style="color:black;font-size:12px;") #{shippingDetail.city}
+                                                            h6(style="color:black;font-size:12px;") #{shippingDetail.country}
+                                                            h6(style="color:black;font-size:12px;") #{shippingDetail.postCode}
+                                                            h6(style="color:black;font-size:12px;") #{shippingDetail.phoneNumber}
+
+                                                            
+                                                        else
+                                                            button.site-btn SET DEFAULT ADDRESS
+
+        include common/footer.pug
+        +footer()
+        script(src='js/main.js')

@@ -1,0 +1,51 @@
+mixin navbar(user)
+  header.top-area
+    .header-area(style="background-color:black")
+      .container
+        .row
+          .col-sm-2
+            .logo
+              a(href='/')
+                | Short
+                span Lets
+            // /.logo
+          // /.col
+          .col-sm-10
+            .main-menu
+              // Brand and toggle get grouped for better mobile display
+              .navbar-header
+                button.navbar-toggle(type='button' data-toggle='collapse' data-target='.navbar-collapse')
+                  i.fa.fa-bars
+                // / button
+              // /.navbar-header
+              .collapse.navbar-collapse
+                ul.nav.navbar-nav
+                  li
+                    a(href='/') home
+                  li
+                    a(href='/properties?cityId=1') Places to Stay
+                ul.nav.navbar-nav.navbar-right
+                  if(user == null)
+                    li
+                      a(href='/register') register
+                    li
+                      a(href='/login') Login
+                  else if(user.accountTypeFk == 2)
+                    li
+                      a(href='/myAccount') my account
+                    li
+                      a(href='/logout') Logout
+
+                    
+                  // /.project-btn
+              // /.navbar-collapse
+            // /.main-menu
+          // /.col
+        // /.row
+        .home-border
+        // /.home-border
+      // /.container
+    // /.header-area
+  // /.top-area
+  // main-menu End
+  // about-us start

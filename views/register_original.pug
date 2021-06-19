@@ -1,0 +1,80 @@
+doctype html
+html(lang='zxx')
+    include common/header.pug
+    +head("Register" )
+    body
+        include common/navbar.pug
+        +navbar(user)
+        section.shopping-cart.spad
+            //- script(src="https://www.google.com/recaptcha/api.js")
+            //- script(src="js/captcha.js")
+            .container
+                .row
+                    .col-lg-8.offset-lg-2.single-package-item(style="padding:10px")
+                        h3(style="text-align:center;margin-bottom:20px;font-weight:700") Register
+                        .row
+                            .col-sm-12
+                                form(id="form" action="/register", method ="POST")
+                                    
+                                    .card-body
+                                        .row(style="margin-top:30px")
+                                            .col-sm-12
+                                                label(for="name" style="text-align:left;font-weight:700;font-size:14px") Name:*
+                                                input.form-control(style="width:100% !important;text-align:left;", required=true, name='name', type='text', value=(formData != undefined) ? formData.name : '')
+                                                if(errors && errors.name)
+                                                    p.error(id="error").small.text-danger #{errors.name}
+                                        .row(style="margin-top:30px")
+                                            .col-sm-12
+                                                label(for="email" style="text-align:left;font-weight:700;font-size:14px") Email:*
+                                                input.form-control(style="width:100% !important;text-align:left;", required=true, name='email', type='email', value=(formData != undefined) ? formData.email : '')
+                                                if(errors && errors.email)
+                                                    p.error(id="error").small.text-danger #{errors.email}
+                                        .row(style="margin-top:30px")
+                                            .col-sm-12
+                                                label(for="confirmEmail" style="text-align:left;font-weight:700;font-size:14px") Confirm Email:*
+                                                input.form-control(style="width:100% !important;text-align:left;", required=true, name='confirmEmail', type='email', value=(formData != undefined) ? formData.confirmEmail : '')
+                                        .row(style="margin-top:20px")
+                                            .col-sm-12
+                                                label(for="password" style="text-align:left;font-weight:700;font-size:14px") Password:*
+                                                input.form-control(style="width:100% !important;text-align:left;"  required=true , name='password', type='password', value=(formData != undefined) ? formData.password : '')
+                                                if(errors && errors.password)
+                                                    p.error(id="error").small.text-danger #{errors.password}
+                                        .row(style="margin-top:20px")
+                                            .col-sm-12
+                                                label(for="confirmPassword" style="text-align:left;font-weight:700;font-size:14px") Confirm Password:*
+                                                input.form-control(style="width:100% !important;text-align:left;"  required=true , name='confirmPassword', type='password', value=(formData != undefined) ? formData.confirmPassword : '')
+                                        .row(style="margin-top:20px;")
+                                            .col-sm-12
+                                                p(style=";color:black;font-size:12px") I'd like to receive exclusive news from ShortLets by:
+                                                input(type="checkbox" id="emailRegister" name="emailRegister" style="text-align:center;")
+                                                label(style="text-align:center;color:black;font-size:12px;margin-left:5px;") Email
+                                        //- .row(style="margin-top:20px;text-align:right")
+                                            .col-sm-12
+                                                div(style="text-align:center")
+                                                    .g-recaptcha(data-sitekey="6Lejxd4ZAAAAAB0TI1_D79_23lrv8tA2PpF_-358")
+                                                    p.small.text-danger(id="captchaError" style="text-align:left;margin-top:5px")
+                                                p(style=";color:black;font-size:12px") By creating your account you agree to our <a href="#" style=";color:black;font-size:12px"><u>Terms & Conditions.</u></a>
+                                                p(style=";color:black;font-size:12px") Find out more, please read our <a href="#" style=";color:black;font-size:12px"><u>Privacy Notice.</u></a>     
+                                        .row(style="margin-top:20px;text-align:center")
+                                            .col-sm-12
+                                                input.about-view.packages-btn(style="width:50%;text-align:center;display:unset" type="submit" value="Register")
+
+                            //- .col-sm-6
+                                .card-body
+                                    div(style="padding-bottom:10px;border-bottom: 4px solid rgba(0,0,0,.125)")
+                                        h6(style="font-weight:700") GUEST CHECKOUT
+                                    .row(style="margin-top:20px;")
+                                        .col-sm-12
+                                            p(style="font-size:12px") Checkout quickly as a guest (you can choose to create an account later if you wish).
+                                    .row(style="margin-top:20px;text-align:center")
+                                        .col-sm-12
+                                            a.primary-btn(href="/checkout?continueAsGuest=true" style="width:100%" ) CONTINUE AS GUEST
+                //- .row(style="margin-top:20px;")
+                    .col-lg-10.offset-lg-1
+                        .row
+                            .col-sm-12(style="text-align:center")
+                                p(style="font-size:12px") By continuing you agree to our <a href="#" style=";color:black;font-size:12px"><u>Terms & Conditions</u></a>. See our <a href="#" style=";color:black;font-size:12px"><u>Privacy Notice</u></a>
+        include common/footer.pug
+        +footer()
+        //- script(src='js/main.js')
+        //- script(src='js/basket2.js')

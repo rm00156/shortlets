@@ -1,0 +1,92 @@
+doctype html
+html(lang='en')
+  include common/adminHeader.pug
+  +head("Admin Search Bookings")
+  body#page-top
+    // Page Wrapper
+    script( type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js")
+    script( type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js")
+    script(src="js/searchBooking.js")
+    #wrapper
+      // Sidebar
+      include common/adminNavbar.pug
+      +navbar(user)
+      // Content Wrapper
+      #content-wrapper.d-flex.flex-column
+        // Main Content
+        #content
+          // Topbar
+          include common/adminHorizontalNavbar.pug
+          +navbar(user)
+          // Begin Page Content
+          .container-fluid
+            // Page Heading
+            .d-sm-flex.align-items-center.justify-content-between.mb-4
+              h1.h3.mb-0.text-gray-800 Search Bookings
+    
+            .row
+              .col-lg-10.offset-lg-1
+                .card.shadow.mb-4
+                    .card-body(style="text-align:left")
+                        .row
+                            .col-sm-4
+                                label(for="bookingNumber" style="text-align:left") Booking Number
+                                input.form-control(style="width:100% !important;text-align:left;" id="bookingNumber" required=true, type='text')
+                            .col-sm-4
+                                label(for="bookedFromDt" style="text-align:left") Booked From
+                                input.form-control(style="width:100% !important;text-align:left;" id="bookedFromDt" required=true, name='bookedFromDt', type='date')
+                            .col-sm-4
+                                label(for="bookedToDt" style="text-align:left") Booked To
+                                input.form-control(style="width:100% !important;text-align:left;" id="bookedToDt" required=true, name='bookedToDt', type='date')
+                           
+                        .row(style="margin-top:10px")
+                            .col-sm-3
+                                label(for="checkinFromDt" style="text-align:left") Check In From
+                                input.form-control(style="width:100% !important;text-align:left;" id="checkinFromDt" min=0 required=true, name='checkinFromDt', type='date')
+                            
+                            .col-sm-3
+                                label(for="checkinToDt" style="text-align:left") Check In To
+                                input.form-control(style="width:100% !important;text-align:left;" id="checkinToDt" min=0 required=true, name='checkinToDt', type='date')
+                            
+                            .col-sm-3
+                                label(for="checkoutFromDt" style="text-align:left") Check Out From
+                                input.form-control(style="width:100% !important;text-align:left;" id="checkoutFromDt" min=0 required=true, name='checkoutFromDt', type='date')
+                            
+                            .col-sm-3
+                                label(for="checkoutToDt" style="text-align:left") Check Out To
+                                input.form-control(style="width:100% !important;text-align:left;" id="checkoutToDt" min=0 required=true, name='checkoutToDt', type='date')
+                            
+                        .row(style="margin-top:10px")
+                            .col-sm-3
+                                label(for="Status" style="text-align:left") Status
+                                select.form-control(id="status" style="width:100%")
+                                    option(value = 0)
+                                    option(value = 1) Successful
+                                    option(value = 2) Cancelled   
+                            .col-sm-3  
+                            .col-sm-3
+                                input.primary-btn(style="margin-top:10px" type="submit" id="search" value="Search")
+                            .col-sm-3
+                                input.primary-btn(style="margin-top:10px" type="submit" id="clear" value="Clear")
+            
+            section.category-section.spad(style="padding-top:50px")
+                .container
+                    .row
+                        .col-sm-12
+                            .card.shadow.mb-12
+                                .card-body(style="text-align:center")
+                                    .row
+                                        .col-sm-12
+                                            table.table.shadow.mb-12.table-striped.table-sm.dataTable.no-footer( id="searchResultTable"  role="grid" aria-describedby="classes_info")
+                                                thead(style="text-align:center")
+                                                    tr.titleBar(role="row")
+                                                        th(class="sorting_asc smallerTextSize" style="width:14.286%") Booking Number
+                                                        th(class="sorting_asc smallerTextSize" style="width:14.286%") Guest
+                                                        th(class="sorting_asc smallerTextSize" style="width:14.286%") Check in
+                                                        th(class="sorting_asc smallerTextSize" style="width:14.286%") Checkout
+                                                        th(class="sorting_asc smallerTextSize" style="width:14.286%") Booked
+                                                        th(class="sorting_asc smallerTextSize" style="width:14.286%") Property
+                                                        th(class="sorting_asc smallerTextSize" style="width:14.286%") Total Cost
+                                                tbody
+        include common/adminFooter.pug
+        +footer()

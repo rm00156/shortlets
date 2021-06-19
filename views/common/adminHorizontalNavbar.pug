@@ -1,0 +1,53 @@
+mixin navbar(user)
+    nav.navbar.navbar-expand.navbar-light.bg-white.topbar.mb-4.static-top.shadow
+        // Sidebar Toggle (Topbar)
+
+        // Topbar Search
+        
+        // Topbar Navbar
+        ul.navbar-nav.ml-auto
+            //- li.nav-item.dropdown.no-arrow.mx-1
+                a#alertsDropdown.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                    i.fas.fa-bell.fa-fw
+                    // Counter - Alerts
+                    span.badge.badge-danger.badge-counter 3+
+                // Dropdown - Alerts
+                .dropdown-list.dropdown-menu.dropdown-menu-right.shadow.animated--grow-in(aria-labelledby='alertsDropdown')
+                    h6.dropdown-header
+                    | Alerts Center
+                    a.dropdown-item.d-flex.align-items-center(href='#')
+                    .mr-3
+                        .icon-circle.bg-primary
+                        i.fas.fa-file-alt.text-white
+                    div
+                        .small.text-gray-500 December 12, 2019
+                        span.font-weight-bold A new monthly report is ready to download!
+                    a.dropdown-item.d-flex.align-items-center(href='#')
+                    .mr-3
+                        .icon-circle.bg-success
+                        i.fas.fa-donate.text-white
+                    div
+                        .small.text-gray-500 December 7, 2019
+                        |                     $290.29 has been deposited into your account!
+                    a.dropdown-item.d-flex.align-items-center(href='#')
+                    .mr-3
+                        .icon-circle.bg-warning
+                        i.fas.fa-exclamation-triangle.text-white
+                    div
+                        .small.text-gray-500 December 2, 2019
+                        |                     Spending Alert: We've noticed unusually high spending for your account.
+                    a.dropdown-item.text-center.small.text-gray-500(href='#') Show All Alerts
+
+            li.nav-item.dropdown.no-arrow.mx-1.account-icon
+                a.nav-link.dropdown-toggle
+                    i.flaticon-profile
+                .account-hover(style="width:200px")
+                    .section
+                        ul(style="list-style:none")
+                            li
+                                a(href="/adminDashboard") Dashboard
+                            li
+                                a(href="/myAccount") My Account
+                            li
+                                a(href="/logout") Log Out
+    

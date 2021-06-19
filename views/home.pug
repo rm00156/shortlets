@@ -1,0 +1,430 @@
+doctype html
+html(lang='en')
+  include common/header.pug
+  +head("Home")
+ 
+  body(style='padding-top: 72px;')
+    include common/navbar.pug
+    +navbar(user)
+    section.hero-home
+      .swiper-container.hero-slider
+        .swiper-wrapper.dark-overlay
+          .swiper-slide(style='background-image:url(img/photo/photo-1501621965065-c6e1cf6b53e2.jpg)')
+          .swiper-slide(style='background-image:url(img/photo/photo-1519974719765-e6559eac2575.jpg)')
+          .swiper-slide(style='background-image:url(img/photo/photo-1490578474895-699cd4e2cf59.jpg)')
+          .swiper-slide(style='background-image:url(img/photo/photo-1534850336045-c6c6d287f89e.jpg)')
+      .container.py-6.py-md-7.text-white.z-index-20
+        .row
+          .col-xl-10
+            .text-center.text-lg-start
+              p.subtitle.letter-spacing-4.mb-2.text-secondary.text-shadow The best holiday experience
+              h1.display-3.fw-bold.text-shadow Stay like a local
+            .search-bar.mt-5.p-3.p-lg-1.ps-lg-4
+                .row
+                    .col-lg-3.d-flex.align-items-center.form-group.no-divider
+                        select#city.form-control.border-0.shadow-0
+                            option(value=0) Select City
+                                each city in cities 
+                                    option(value=city.id) #{city.name}
+                                p.small.text-danger(id='cityError')
+                    
+                    .col-lg-3.d-flex.align-items-center.form-group.no-divider
+                        .input-label-absolute.input-label-absolute-right.w-100
+                            select#town.form-control.border-0.shadow-0
+                                option(value=0) Select Town
+                    .col-lg-4.d-flex.align-items-center.form-group.no-divider
+                        
+                        .datepicker-container.datepicker-container-right
+                            input#bookingDate.form-control.border-0.shadow-0(type='text' name='bookingDate' placeholder='Choose your dates' required='required')
+        
+                    .col-lg-2.d-grid
+                        button#search.btn.btn-primary.rounded-pill.h-100(type='submit') Search 
+                
+    section.py-6.bg-gray-100
+      .container
+        .text-center.pb-lg-4
+          p.subtitle.text-secondary One-of-a-kind vacation rentals
+          h2.mb-5 Booking with us is easy
+        .row
+          .col-lg-4.mb-3.mb-lg-0.text-center
+            .px-0.px-lg-3
+              .icon-rounded.bg-primary-light.mb-3
+                svg.svg-icon.text-primary.w-2rem.h-2rem
+                  use(xlink:href='#destination-map-1')  
+              h3.h5 Find the perfect rental
+              p.text-muted
+                | One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed in
+          .col-lg-4.mb-3.mb-lg-0.text-center
+            .px-0.px-lg-3
+              .icon-rounded.bg-primary-light.mb-3
+                svg.svg-icon.text-primary.w-2rem.h-2rem
+                  use(xlink:href='#pay-by-card-1')  
+              h3.h5 Book with confidence
+              p.text-muted
+                | The bedding was hardly able to cover it and seemed ready to slide off any moment. His many legs, pit
+          .col-lg-4.mb-3.mb-lg-0.text-center
+            .px-0.px-lg-3
+              .icon-rounded.bg-primary-light.mb-3
+                svg.svg-icon.text-primary.w-2rem.h-2rem
+                  use(xlink:href='#heart-1')  
+              h3.h5 Enjoy your vacation
+              p.text-muted
+                | His room, a proper human room although a little too small, lay peacefully between its four familiar
+    section.py-6
+      .container
+        .row.mb-5
+          .col-md-8
+            p.subtitle.text-primary Stay and eat like a local
+            h2 Some Our Locations
+          .col-md-4.d-lg-flex.align-items-center.justify-content-end
+            a.text-muted.text-sm(href='/')
+              | See all locations
+              i.fas.fa-angle-double-right.ms-2
+        .swiper-container.guides-slider.mx-n2.pt-3
+          // Additional required wrapper
+          .swiper-wrapper.pb-5
+            // Slides
+            each town in towns
+                .swiper-slide.h-auto.px-2
+                    .card.card-poster.gradient-overlay.hover-animate.mb-4.mb-lg-0
+                        a.tile-link(href='/properties?townId='+town.id+'&cityId='+towns.cityFk)
+                        img.bg-image(src=town.imagePath alt='Card image')
+                        .card-body.overlay-content
+                            h6.card-title.text-shadow.text-uppercase #{town.name}
+                            p.card-text.text-sm The big apple
+            //- .swiper-slide.h-auto.px-2
+            //-   .card.card-poster.gradient-overlay.hover-animate.mb-4.mb-lg-0
+            //-     a.tile-link(href='category.html')
+            //-     img.bg-image(src='img/photo/paris.jpg' alt='Card image')
+            //-     .card-body.overlay-content
+            //-       h6.card-title.text-shadow.text-uppercase Paris
+            //-       p.card-text.text-sm Artist capital of Europe
+            //- .swiper-slide.h-auto.px-2
+            //-   .card.card-poster.gradient-overlay.hover-animate.mb-4.mb-lg-0
+            //-     a.tile-link(href='category.html')
+            //-     img.bg-image(src='img/photo/barcelona.jpg' alt='Card image')
+            //-     .card-body.overlay-content
+            //-       h6.card-title.text-shadow.text-uppercase Barcelona
+            //-       p.card-text.text-sm Dalí, Gaudí, Barrio Gotico
+            //- .swiper-slide.h-auto.px-2
+            //-   .card.card-poster.gradient-overlay.hover-animate.mb-4.mb-lg-0
+            //-     a.tile-link(href='category.html')
+            //-     img.bg-image(src='img/photo/prague.jpg' alt='Card image')
+            //-     .card-body.overlay-content
+            //-       h6.card-title.text-shadow.text-uppercase Prague
+            //-       p.card-text.text-sm City of hundred towers
+          .swiper-pagination.d-md-none  
+    section.py-6.bg-gray-100
+      .container
+        .row.mb-5
+          .col-md-8
+            p.subtitle.text-secondary Hurry up, these are expiring soon.        
+            h2 Last minute deals
+        //-   .col-md-4.d-lg-flex.align-items-center.justify-content-end
+            a.text-muted.text-sm(href='category.html')
+              | See all deals
+              i.fas.fa-angle-double-right.ms-2
+        // Slider main container
+        .swiper-container.swiper-container-mx-negative.swiper-init.pt-3(data-swiper='{"slidesPerView":4,"spaceBetween":20,"loop":true,"roundLengths":true,"breakpoints":{"1200":{"slidesPerView":3},"991":{"slidesPerView":2},"565":{"slidesPerView":1}},"pagination":{"el":".swiper-pagination","clickable":true,"dynamicBullets":true}}')
+            // Additional required wrapper
+            .swiper-wrapper.pb-5
+                // Slides
+                each property in properties
+            
+                    .swiper-slide.h-auto.px-2
+                        // place item
+                        .w-100.h-100.hover-animate(data-marker-id='59c0c8e322f3375db4d89128')
+                            .card.h-100.border-0.shadow
+                                .card-img-top.overflow-hidden.gradient-overlay
+                                    img.img-fluid(src=property.displayImage1 alt='Cute Quirky Garden apt, NYC adjacent')
+                                    a.tile-link(href='/property?id=' + property.id)
+                                    //- .card-img-overlay-bottom.z-index-20
+                                        .d-flex.text-white.text-sm.align-items-center
+                                            img.avatar.avatar-border-white.flex-shrink-0.me-2(src='img/avatar/avatar-7.jpg' alt='John')
+                                            div John
+                                        //- .card-img-overlay-top.text-end
+                                            a.card-fav-icon.position-relative.z-index-40(href='javascript: void();')
+                                                svg.svg-icon.text-white
+                                                    use(xlink:href='#heart-1')  
+                                .card-body.d-flex.align-items-center
+                                    .w-100
+                                        h6.card-title
+                                            a.text-decoration-none.text-dark(href='/property?id=' + property.id ) #{property.name}
+                                        .d-flex.card-subtitle.mb-3
+                                            p.flex-grow-1.mb-0.text-muted.text-sm #{property.bedrooms} bedrooms
+                                            //- p.flex-grow-1.mb-0.text-muted.text-sm #{property.guests} guests
+                                            //- p.flex-grow-1.mb-0.text-muted.text-sm #{property.bathrooms} bathrooms
+                                            p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
+                                                i.fa.fa-star.text-warning
+                                                i.fa.fa-star.text-warning
+                                                i.fa.fa-star.text-warning
+                                                i.fa.fa-star.text-warning
+                                                i.fa.fa-star.text-gray-300   
+                                        .d-flex.card-subtitle.mb-3
+                                            p.flex-grow-1.mb-0.text-muted.text-sm #{property.guests} guests     
+                                        .d-flex.card-subtitle.mb-3
+                                            p.flex-grow-1.mb-0.text-muted.text-sm #{property.bathrooms} bathrooms                             
+                                        p.card-text.text-muted
+                                            span.h4.text-primary £#{(parseFloat(property.pricePerDay)).toFixed(2)}
+                                            |  per night
+                
+            // If we need pagination
+            .swiper-pagination
+    // Divider Section
+    section.py-7.position-relative.dark-overlay
+      img.bg-image(src='img/photo/photo-1497436072909-60f360e1d4b1.jpg' alt='')
+      .container
+        .overlay-content.text-white.py-lg-5
+          h3.display-3.fw-bold.text-serif.text-shadow.mb-5 Ready for your next holidays?
+          a.btn.btn-light(href='/properties?cityId=1') Get started
+    section.py-7
+      .container
+        .text-center
+          p.subtitle.text-primary Testimonials
+          h2.mb-5 Our dear customers said about us
+        // Slider main container
+        .swiper-container.testimonials-slider.testimonials
+          // Additional required wrapper
+          .swiper-wrapper.pt-2.pb-5
+            // Slides
+            .swiper-slide.p-4
+              .testimonial.card.rounded-3.shadow.border-0
+                .testimonial-avatar
+                  img.avatar.avatar-lg.p-1(src='img/avatar/avatar-3.jpg' alt='...')
+                .text
+                  .testimonial-quote
+                    i.fas.fa-quote-right
+                  p.testimonial-text
+                    | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever
+                  strong Jessica Watson
+            .swiper-slide.p-4
+              .testimonial.card.rounded-3.shadow.border-0
+                .testimonial-avatar
+                  img.avatar.avatar-lg.p-1(src='img/avatar/avatar-3.jpg' alt='...')
+                .text
+                  .testimonial-quote
+                    i.fas.fa-quote-right
+                  p.testimonial-text
+                    | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever
+                  strong Jessica Watson
+            .swiper-slide.p-4
+              .testimonial.card.rounded-3.shadow.border-0
+                .testimonial-avatar
+                  img.avatar.avatar-lg.p-1(src='img/avatar/avatar-3.jpg' alt='...')
+                .text
+                  .testimonial-quote
+                    i.fas.fa-quote-right
+                  p.testimonial-text
+                    | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever
+                  strong Jessica Watson
+            .swiper-slide.p-4
+              .testimonial.card.rounded-3.shadow.border-0
+                .testimonial-avatar
+                  img.avatar.avatar-lg.p-1(src='img/avatar/avatar-3.jpg' alt='...')
+                .text
+                  .testimonial-quote
+                    i.fas.fa-quote-right
+                  p.testimonial-text
+                    | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever
+                  strong Jessica Watson
+            .swiper-slide.p-4
+              .testimonial.card.rounded-3.shadow.border-0
+                .testimonial-avatar
+                  img.avatar.avatar-lg.p-1(src='img/avatar/avatar-3.jpg' alt='...')
+                .text
+                  .testimonial-quote
+                    i.fas.fa-quote-right
+                  p.testimonial-text
+                    | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever
+                  strong Jessica Watson
+            .swiper-slide.p-4
+              .testimonial.card.rounded-3.shadow.border-0
+                .testimonial-avatar
+                  img.avatar.avatar-lg.p-1(src='img/avatar/avatar-3.jpg' alt='...')
+                .text
+                  .testimonial-quote
+                    i.fas.fa-quote-right
+                  p.testimonial-text
+                    | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever
+                  strong Jessica Watson
+          .swiper-pagination      
+    
+    // Instagram
+    section
+      .container-fluid.px-0
+        .swiper-container.instagram-slider
+          .swiper-wrapper
+            .swiper-slide.overflow-hidden
+              a(href='#')
+                img.img-fluid.hover-scale(src='img/instagram/instagram-1.jpg' alt=' ')
+            .swiper-slide.overflow-hidden
+              a(href='#')
+                img.img-fluid.hover-scale(src='img/instagram/instagram-2.jpg' alt=' ')
+            .swiper-slide.overflow-hidden
+              a(href='#')
+                img.img-fluid.hover-scale(src='img/instagram/instagram-3.jpg' alt=' ')
+            .swiper-slide.overflow-hidden
+              a(href='#')
+                img.img-fluid.hover-scale(src='img/instagram/instagram-4.jpg' alt=' ')
+            .swiper-slide.overflow-hidden
+              a(href='#')
+                img.img-fluid.hover-scale(src='img/instagram/instagram-5.jpg' alt=' ')
+            .swiper-slide.overflow-hidden
+              a(href='#')
+                img.img-fluid.hover-scale(src='img/instagram/instagram-6.jpg' alt=' ')
+            .swiper-slide.overflow-hidden
+              a(href='#')
+                img.img-fluid.hover-scale(src='img/instagram/instagram-7.jpg' alt=' ')
+            .swiper-slide.overflow-hidden
+              a(href='#')
+                img.img-fluid.hover-scale(src='img/instagram/instagram-8.jpg' alt=' ')
+            .swiper-slide.overflow-hidden
+              a(href='#')
+                img.img-fluid.hover-scale(src='img/instagram/instagram-9.jpg' alt=' ')
+            .swiper-slide.overflow-hidden
+              a(href='#')
+                img.img-fluid.hover-scale(src='img/instagram/instagram-10.jpg' alt=' ')
+            .swiper-slide.overflow-hidden
+              a(href='#')
+                img.img-fluid.hover-scale(src='img/instagram/instagram-11.jpg' alt=' ')
+            .swiper-slide.overflow-hidden
+              a(href='#')
+                img.img-fluid.hover-scale(src='img/instagram/instagram-12.jpg' alt=' ')
+            .swiper-slide.overflow-hidden
+              a(href='#')
+                img.img-fluid.hover-scale(src='img/instagram/instagram-13.jpg' alt=' ')
+            .swiper-slide.overflow-hidden
+              a(href='#')
+                img.img-fluid.hover-scale(src='img/instagram/instagram-14.jpg' alt=' ')
+            .swiper-slide.overflow-hidden
+              a(href='#')
+                img.img-fluid.hover-scale(src='img/instagram/instagram-10.jpg' alt=' ')
+            .swiper-slide.overflow-hidden
+              a(href='#')
+                img.img-fluid.hover-scale(src='img/instagram/instagram-11.jpg' alt=' ')
+            .swiper-slide.overflow-hidden
+              a(href='#')
+                img.img-fluid.hover-scale(src='img/instagram/instagram-12.jpg' alt=' ')
+            .swiper-slide.overflow-hidden
+              a(href='#')
+                img.img-fluid.hover-scale(src='img/instagram/instagram-13.jpg' alt=' ')
+            .swiper-slide.overflow-hidden
+              a(href='#')
+                img.img-fluid.hover-scale(src='img/instagram/instagram-14.jpg' alt=' ')
+    // Footer
+    footer.position-relative.z-index-10.d-print-none
+      // Main block - menus, subscribe form
+      .py-6.bg-gray-200.text-muted
+        .container
+          .row
+            .col-lg-4.mb-5.mb-lg-0
+              .fw-bold.text-uppercase.text-dark.mb-3 Directory
+              p Lorem ipsum dolor sit amet, consectetur adipisicing.
+              ul.list-inline
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='twitter')
+                    i.fab.fa-twitter
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='facebook')
+                    i.fab.fa-facebook
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='instagram')
+                    i.fab.fa-instagram
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='pinterest')
+                    i.fab.fa-pinterest
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='vimeo')
+                    i.fab.fa-vimeo
+            .col-lg-2.col-md-6.mb-5.mb-lg-0
+              h6.text-uppercase.text-dark.mb-3 Rentals
+              ul.list-unstyled
+                li
+                  a.text-muted(href='index.html') Rooms
+                li
+                  a.text-muted(href='category-rooms.html') Map on top
+                li
+                  a.text-muted(href='category-2-rooms.html') Side map
+                li
+                  a.text-muted(href='category-3-rooms.html') No map
+                li
+                  a.text-muted(href='detail-rooms.html') Room detail
+            .col-lg-2.col-md-6.mb-5.mb-lg-0
+              h6.text-uppercase.text-dark.mb-3 Pages
+              ul.list-unstyled
+                li
+                  a.text-muted(href='compare.html') Comparison                                   
+                li
+                  a.text-muted(href='team.html') Team                                   
+                li
+                  a.text-muted(href='contact.html') Contact                                   
+            .col-lg-4
+              h6.text-uppercase.text-dark.mb-3 Daily Offers & Discounts
+              p.mb-3  Lorem ipsum dolor sit amet, consectetur adipisicing elit. At itaque temporibus.
+              form#newsletter-form(action='#')
+                .input-group.mb-3
+                  input.form-control.bg-transparent.border-dark.border-end-0(type='email' placeholder='Your Email Address' aria-label='Your Email Address')
+                  button.btn.btn-outline-dark.border-start-0(type='submit')
+                    i.fa.fa-paper-plane.text-lg
+      // Copyright section of the footer
+      .py-4.fw-light.bg-gray-800.text-gray-300
+        .container
+          .row.align-items-center
+            .col-md-6.text-center.text-md-start
+              p.text-sm.mb-md-0 © 2021, Your company.  All rights reserved.
+            .col-md-6
+              ul.list-inline.mb-0.mt-2.mt-md-0.text-center.text-md-end
+                li.list-inline-item
+                  img.w-2rem(src='img/visa.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/mastercard.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/paypal.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/western-union.svg' alt='...')
+    // JavaScript files
+    script.
+      // ------------------------------------------------------- //
+      //   Inject SVG Sprite -
+      //   see more here
+      //   https://css-tricks.com/ajaxing-svg-sprite/
+      // ------------------------------------------------------ //
+      function injectSvgSprite(path) {
+      var ajax = new XMLHttpRequest();
+      ajax.open("GET", path, true);
+      ajax.send();
+      ajax.onload = function(e) {
+      var div = document.createElement("div");
+      div.className = 'd-none';
+      div.innerHTML = ajax.responseText;
+      document.body.insertBefore(div, document.body.childNodes[0]);
+      }
+      }
+      // to avoid CORS issues when viewing using file:// protocol, using the demo URL for the SVG sprite
+      // use your own URL in production, please :)
+      // https://demo.bootstrapious.com/directory/1-0/icons/orion-svg-sprite.svg
+      //- injectSvgSprite('${path}icons/orion-svg-sprite.svg');
+      injectSvgSprite('https://demo.bootstrapious.com/directory/1-4/icons/orion-svg-sprite.svg');
+    // jQuery
+    script(src='vendor/jquery/jquery.min.js')
+    // Bootstrap JS bundle - Bootstrap + PopperJS
+    script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')
+    // Magnific Popup - Lightbox for the gallery
+    script(src='vendor/magnific-popup/jquery.magnific-popup.min.js')
+    // Smooth scroll
+    script(src='vendor/smooth-scroll/smooth-scroll.polyfills.min.js')
+    // Bootstrap Select
+    script(src='vendor/bootstrap-select/js/bootstrap-select.min.js')
+    // Object Fit Images - Fallback for browsers that don't support object-fit
+    script(src='vendor/object-fit-images/ofi.min.js')
+    // Swiper Carousel
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/js/swiper.min.js')
+    script.
+      var basePath = ''
+    // Main Theme JS file
+    script(src='js/theme.js')
+    script(src="js/home.js")
+
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery-date-range-picker/0.19.0/jquery.daterangepicker.min.js")
+    script(src="js/datepicker-detail.js")

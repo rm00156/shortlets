@@ -1,0 +1,611 @@
+doctype html
+html(lang='en')
+  include common/header.pug 
+  +head('Property')
+  link(rel='stylesheet' href='https://unpkg.com/leaflet@1.5.1/dist/leaflet.css' integrity='sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==' crossorigin='')
+   
+  body(style='padding-top: 72px;')
+    include common/navbar.pug 
+    +navbar(user)
+    section
+      input#longitude(style="display:none" value=longitude)
+      input#latitude(style="display:none" value=latitude)
+      input#property(style="display:none" value=property.id)
+      input#propertyAvailabilityDates(style="display:none" value=propertyAvailabilityDates)
+      // Slider main container
+      .swiper-container.detail-slider.slider-gallery
+        // Additional required wrapper
+        .swiper-wrapper
+            // Slides
+            .swiper-slide
+                img.img-fluid(src=property.displayImage1 alt='Our street')
+            if(property.displayImage2 != null)
+                .swiper-slide
+                    img.img-fluid(src=property.displayImage2 alt='Outside')
+            if(property.displayImage3 != null)
+                .swiper-slide
+                    img.img-fluid(src=property.displayImage3 alt='Outside')
+            if(property.displayImage4 != null)
+                .swiper-slide
+                    img.img-fluid(src=property.displayImage4 alt='Outside')
+        .swiper-pagination.swiper-pagination-white
+        .swiper-button-prev.swiper-button-white
+        .swiper-button-next.swiper-button-white
+    .container.py-5
+      .row
+        .col-lg-8
+          .text-block
+            p.text-primary
+              i.fa-map-marker-alt.fa.me-1
+              |  #{property.town}, #{property.city}
+            h1 #{property.name}
+            //- p.text-muted.text-uppercase.mb-4 Entire Apartment 
+            ul.list-inline.text-sm.mb-4
+              li.list-inline-item.me-3
+                i.fa.fa-users.me-1.text-secondary
+                |  #{property.guests} guests
+              li.list-inline-item.me-3
+                i.fa.fa-door-open.me-1.text-secondary
+                |  #{property.bedrooms} bedrooms
+              li.list-inline-item.me-3
+                i.fa.fa-bed.me-1.text-secondary
+                |  3 beds
+              li.list-inline-item.me-3
+                i.fa.fa-bath.me-1.text-secondary
+                |  #{property.bathrooms} bath
+            p.text-muted.fw-light
+              | #{property.description} 
+            //-   | Our garden basement apartment is fully equipped with everything you need to enjoy your stay. Very comfortable for a couple but plenty of space for a small family. Close to many wonderful Brooklyn attractions and quick trip to Manhattan.
+            //- h6.mb-3 The space
+            //- p.text-muted.fw-light
+              | Welcome to Brooklyn! We are excited to share our wonderful neighborhood with you. Our modern apartment has a private entrance, fully equipped kitchen, and a very comfortable queen size bed. We are happy to accommodate additional guests with a single bed in the living room, another comfy mattress on the floor and can make arrangements for small children with a portable crib and highchair if requested.
+            p.text-muted.fw-light Also in the apartment:
+            ul.text-muted.fw-light
+              li TV with Netflix and DirectTVNow
+              li Free WiFi
+              li Gourmet Coffee/Tea making supplies
+              li Fresh Sheets and Towels
+              li
+                | Toaster, microwave, pots and pans and basic cooking needs like salt, pepper, sugar, and olive oil.
+              li Air Conditioning to keep you cool all summer!
+            p.text-muted.fw-light
+              | The apartment is surprisingly quiet for being in the heart of a vibrant, bustling neighborhood.
+            //- h6.mb-3 Interaction with guests
+            //- p.text-muted.fw-light
+            //-   | We live in the two floors above the garden apartment so we are usually available to answer questions. The garden apartment is separate from our living space. We are happy to provide advice on local attractions, restaurants and transportation around the city. If there's anything you need please don't hesitate to ask!
+          .text-block
+            h4.mb-4 Amenities
+            .row
+              .col-md-6
+                ul.list-unstyled.text-muted
+                  li.mb-2
+                    i.fa.fa-wifi.text-secondary.w-1rem.me-3.text-center
+                    span.text-sm Wifi
+                  li.mb-2
+                    i.fa.fa-tv.text-secondary.w-1rem.me-3.text-center
+                    span.text-sm Cable TV
+                  li.mb-2
+                    i.fa.fa-snowflake.text-secondary.w-1rem.me-3.text-center
+                    span.text-sm Air conditioning
+                  li.mb-2
+                    i.fa.fa-thermometer-three-quarters.text-secondary.w-1rem.me-3.text-center
+                    span.text-sm Heating
+              .col-md-6
+                ul.list-unstyled.text-muted
+                  li.mb-2
+                    i.fa.fa-bath.text-secondary.w-1rem.me-3.text-center
+                    span.text-sm Toiletteries
+                  li.mb-2
+                    i.fa.fa-utensils.text-secondary.w-1rem.me-3.text-center
+                    span.text-sm Equipped Kitchen
+                  li.mb-2
+                    i.fa.fa-laptop.text-secondary.w-1rem.me-3.text-center
+                    span.text-sm Desk for work
+                  li.mb-2
+                    i.fa.fa-tshirt.text-secondary.w-1rem.me-3.text-center
+                    span.text-sm Washing machine
+            //-   .text-block
+            //-     h4.mb-0 Amenities alternative
+            //-     p.subtitle.text-sm.text-primary.mb-4 Alternative amenities display
+            //-     ul.list-inline
+            //-       li.list-inline-item.mb-2
+            //-         span.badge.rounded-pill.bg-light.p-3.text-muted.fw-normal Wifi
+            //-       li.list-inline-item.mb-2
+            //-         span.badge.rounded-pill.bg-light.p-3.text-muted.fw-normal Cable TV
+            //-       li.list-inline-item.mb-2
+            //-         span.badge.rounded-pill.bg-light.p-3.text-muted.fw-normal Air conditioning
+            //-       li.list-inline-item.mb-2
+            //-         span.badge.rounded-pill.bg-light.p-3.text-muted.fw-normal Heating
+            //-       li.list-inline-item.mb-2
+            //-         span.badge.rounded-pill.bg-light.p-3.text-muted.fw-normal Toiletteries
+            //-       li.list-inline-item.mb-2
+            //-         span.badge.rounded-pill.bg-light.p-3.text-muted.fw-normal Equipped Kitchen
+            //-       li.list-inline-item.mb-2
+            //-         span.badge.rounded-pill.bg-light.p-3.text-muted.fw-normal Desk for work
+            //-       li.list-inline-item.mb-2
+            //-         span.badge.rounded-pill.bg-light.p-3.text-muted.fw-normal Washing machine
+            //-   .text-block
+            //-     .d-flex
+            //-       img.avatar.avatar-lg.p-1.flex-shrink-0.me-4(src='img/avatar/avatar-10.jpg' alt='Jack London')
+            //-       div
+            //-         p
+            //-           span.text-muted.text-uppercase.text-sm Hosted by 
+            //-           br
+            //-           strong Jack London
+            //-         p.text-muted.text-sm.mb-2
+            //-           | Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.
+            //-         p.text-muted.text-sm
+            //-           | Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            //-         p.text-sm
+            //-           a(href='user-profile.html')
+            //-             | See Jack's 3 other listings 
+            //-             i.fa.fa-long-arrow-alt-right.ms-2
+          .text-block
+            h5.mb-4 Listing location
+            .map-wrapper-300.mb-3
+              #detailMap.h-100
+          .text-block
+            h5.mb-4 Gallery
+            .row.gallery.mb-3.ms-n1.me-n1
+
+                .col-lg-4.col-6.px-1.mb-2
+                    a(href=property.displayImage1 data-fancybox='gallery' title='Our street')
+                        img.img-fluid(src=property.displayImage1 alt='...')
+                if(property.displayImage2 != null)
+                    .col-lg-4.col-6.px-1.mb-2
+                        a(href=property.displayImage2 data-fancybox='gallery' title='Outside')
+                            img.img-fluid(src=property.displayImage2  alt='...')
+                if(property.displayImage3 != null)
+                    .col-lg-4.col-6.px-1.mb-2
+                        a(href=property.displayImage3 data-fancybox='gallery' title='Outside')
+                            img.img-fluid(src=property.displayImage3  alt='...')
+                if(property.displayImage4 != null)
+                    .col-lg-4.col-6.px-1.mb-2
+                        a(href=property.displayImage4 data-fancybox='gallery' title='Outside')
+                            img.img-fluid(src=property.displayImage2  alt='...')
+              
+          .text-block
+            p.subtitle.text-sm.text-primary Reviews    
+            h5.mb-4 Listing Reviews 
+            .d-flex.d-block.d-sm-flex.review
+              .text-md-center.flex-shrink-0.me-4.me-xl-5
+                img.d-block.avatar.avatar-xl.p-2.mb-2(src='img/avatar/avatar-8.jpg' alt='Padmé Amidala')
+                span.text-uppercase.text-muted.text-sm Dec 2018
+              div
+                h6.mt-2.mb-1 Padmé Amidala
+                .mb-2
+                  i.fa.fa-xs.fa-star.text-primary
+                  i.fa.fa-xs.fa-star.text-primary
+                  i.fa.fa-xs.fa-star.text-primary
+                  i.fa.fa-xs.fa-star.text-primary
+                  i.fa.fa-xs.fa-star.text-primary
+                p.text-muted.text-sm
+                  | One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could see his brown belly, slightly domed and divided by arches into stiff sections
+            .d-flex.d-block.d-sm-flex.review
+              .text-md-center.flex-shrink-0.me-4.me-xl-5
+                img.d-block.avatar.avatar-xl.p-2.mb-2(src='img/avatar/avatar-2.jpg' alt='Luke Skywalker')
+                span.text-uppercase.text-muted.text-sm Dec 2018
+              div
+                h6.mt-2.mb-1 Luke Skywalker
+                .mb-2
+                  i.fa.fa-xs.fa-star.text-primary
+                  i.fa.fa-xs.fa-star.text-primary
+                  i.fa.fa-xs.fa-star.text-primary
+                  i.fa.fa-xs.fa-star.text-primary
+                  i.fa.fa-xs.fa-star.text-gray-200
+                p.text-muted.text-sm
+                  | The bedding was hardly able to cover it and seemed ready to slide off any moment. His many legs, pitifully thin compared with the size of the rest of him, waved about helplessly as he looked. "What's happened to me?" he thought. It wasn't a dream.
+            .d-flex.d-block.d-sm-flex.review
+              .text-md-center.flex-shrink-0.me-4.me-xl-5
+                img.d-block.avatar.avatar-xl.p-2.mb-2(src='img/avatar/avatar-3.jpg' alt='Princess Leia')
+                span.text-uppercase.text-muted.text-sm Dec 2018
+              div
+                h6.mt-2.mb-1 Princess Leia
+                .mb-2
+                  i.fa.fa-xs.fa-star.text-primary
+                  i.fa.fa-xs.fa-star.text-primary
+                  i.fa.fa-xs.fa-star.text-primary
+                  i.fa.fa-xs.fa-star.text-gray-200
+                  i.fa.fa-xs.fa-star.text-gray-200
+                p.text-muted.text-sm
+                  | His room, a proper human room although a little too small, lay peacefully between its four familiar walls. A collection of textile samples lay spread out on the table.
+            .d-flex.d-block.d-sm-flex.review
+              .text-md-center.flex-shrink-0.me-4.me-xl-5
+                img.d-block.avatar.avatar-xl.p-2.mb-2(src='img/avatar/avatar-4.jpg' alt='Jabba Hut')
+                span.text-uppercase.text-muted.text-sm Dec 2018
+              div
+                h6.mt-2.mb-1 Jabba Hut
+                .mb-2
+                  i.fa.fa-xs.fa-star.text-primary
+                  i.fa.fa-xs.fa-star.text-primary
+                  i.fa.fa-xs.fa-star.text-primary
+                  i.fa.fa-xs.fa-star.text-primary
+                  i.fa.fa-xs.fa-star.text-primary
+                p.text-muted.text-sm
+                  | Samsa was a travelling salesman - and above it there hung a picture that he had recently cut out of an illustrated magazine and housed in a nice, gilded frame.
+            .py-5
+              button.btn.btn-outline-primary(type='button' data-bs-toggle='collapse' data-bs-target='#leaveReview' aria-expanded='false' aria-controls='leaveReview') Leave a review
+              #leaveReview.collapse.mt-4
+                h5.mb-4 Leave a review
+                form#contact-form.form(method='get' action='#')
+                  .row
+                    .col-sm-6
+                      .mb-4
+                        label.form-label(for='name') Your name *
+                        input#name.form-control(type='text' name='name' placeholder='Enter your name' required='required')
+                    .col-sm-6
+                      .mb-4
+                        label.form-label(for='rating') Your rating *
+                        select#rating.form-select.focus-shadow-0(name='rating')
+                          option(value='5') ★★★★★ (5/5)
+                          option(value='4') ★★★★☆ (4/5)
+                          option(value='3') ★★★☆☆ (3/5)
+                          option(value='2') ★★☆☆☆ (2/5)
+                          option(value='1') ★☆☆☆☆ (1/5)
+                  .mb-4
+                    label.form-label(for='email') Your email *
+                    input#email.form-control(type='email' name='email' placeholder='Enter your  email' required='required')
+                  .mb-4
+                    label.form-label(for='review') Review text *
+                    textarea#review.form-control(rows='4' name='review' placeholder='Enter your review' required='required')
+                  button.btn.btn-primary(type='submit') Post review
+        .col-lg-4
+          
+          .p-4.shadow.ms-lg-4.rounded.sticky-top(style='top: 100px;')
+            if(error)
+              p.small.text-danger The availability of this property has changed, please revise your selected dates.
+
+            p.text-muted
+              span.text-primary.h2 £#{(parseFloat(property.pricePerDay)).toFixed(2)}
+              |  per night
+            hr.my-4
+            
+            .mb-4
+              label.form-label(for='bookingDate') Your stay *
+              .datepicker-container.datepicker-container-right
+                input#bookingDate.form-control(type='text' name='bookingDate' placeholder='Choose your dates' required='required')
+              p.small.text-danger(id="bookingDateError")
+            .mb-4
+              label.form-label(for='guests') Guests *
+              input#maxGuests(style="display:none" value=property.guests)
+              select#guests.form-control(name='guests')
+                  //- - for(var i = 1; i < property.guests; i++)
+                  //- - {
+                  //- -    option(value=i) #{i} Guest
+                  //- - }
+              //-   option(value='1') 1 Guest
+              //-   option(value='2') 2 Guests
+              //-   option(value='3') 3 Guests
+              //-   option(value='4') 4 Guests
+              //-   option(value='5') 5 Guests
+            .d-grid.mb-4
+              button#placeOrder.btn.btn-primary(type='submit') Book your stay
+            //- p.text-muted.text-sm.text-center Some additional text can be also placed here.
+            //- hr.my-4
+            //- .text-center
+              p
+                a.text-secondary.text-sm(href='#')
+                  i.fa.fa-heart
+                  |  Bookmark This Listing
+              p.text-muted.text-sm 79 people bookmarked this place 
+    .py-6.bg-gray-100
+      .container
+        h5.mb-0 Similar places
+        p.subtitle.text-sm.text-primary.mb-4 You may also like         
+        // Slider main container
+        .swiper-container.swiper-container-mx-negative.swiper-init.pt-3(data-swiper='{"slidesPerView":4,"spaceBetween":20,"loop":true,"roundLengths":true,"breakpoints":{"1200":{"slidesPerView":3},"991":{"slidesPerView":2},"565":{"slidesPerView":1}},"pagination":{"el":".swiper-pagination","clickable":true,"dynamicBullets":true}}')
+          // Additional required wrapper
+          .swiper-wrapper.pb-5
+            // Slides
+            .swiper-slide.h-auto.px-2
+              // place item
+              .w-100.h-100.hover-animate(data-marker-id='59c0c8e33b1527bfe2abaf92')
+                .card.h-100.border-0.shadow
+                  .card-img-top.overflow-hidden.gradient-overlay
+                    img.img-fluid(src='img/photo/photo-1484154218962-a197022b5858.jpg' alt='Modern, Well-Appointed Room')
+                    a.tile-link(href='detail-rooms.html')
+                    .card-img-overlay-bottom.z-index-20
+                      .d-flex.text-white.text-sm.align-items-center
+                        img.avatar.avatar-border-white.flex-shrink-0.me-2(src='img/avatar/avatar-0.jpg' alt='Pamela')
+                        div Pamela
+                    .card-img-overlay-top.text-end
+                      a.card-fav-icon.position-relative.z-index-40(href='javascript: void();')
+                        svg.svg-icon.text-white
+                          use(xlink:href='#heart-1')  
+                  .card-body.d-flex.align-items-center
+                    .w-100
+                      h6.card-title
+                        a.text-decoration-none.text-dark(href='detail-rooms.html') Modern, Well-Appointed Room
+                      .d-flex.card-subtitle.mb-3
+                        p.flex-grow-1.mb-0.text-muted.text-sm Private room
+                        p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-warning
+                      p.card-text.text-muted
+                        span.h4.text-primary $80
+                        |  per night
+            .swiper-slide.h-auto.px-2
+              // place item
+              .w-100.h-100.hover-animate(data-marker-id='59c0c8e322f3375db4d89128')
+                .card.h-100.border-0.shadow
+                  .card-img-top.overflow-hidden.gradient-overlay
+                    img.img-fluid(src='img/photo/photo-1426122402199-be02db90eb90.jpg' alt='Cute Quirky Garden apt, NYC adjacent')
+                    a.tile-link(href='detail-rooms.html')
+                    .card-img-overlay-bottom.z-index-20
+                      .d-flex.text-white.text-sm.align-items-center
+                        img.avatar.avatar-border-white.flex-shrink-0.me-2(src='img/avatar/avatar-7.jpg' alt='John')
+                        div John
+                    .card-img-overlay-top.text-end
+                      a.card-fav-icon.position-relative.z-index-40(href='javascript: void();')
+                        svg.svg-icon.text-white
+                          use(xlink:href='#heart-1')  
+                  .card-body.d-flex.align-items-center
+                    .w-100
+                      h6.card-title
+                        a.text-decoration-none.text-dark(href='detail-rooms.html') Cute Quirky Garden apt, NYC adjacent
+                      .d-flex.card-subtitle.mb-3
+                        p.flex-grow-1.mb-0.text-muted.text-sm Entire apartment
+                        p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-gray-300                                   
+                      p.card-text.text-muted
+                        span.h4.text-primary $121
+                        |  per night
+            .swiper-slide.h-auto.px-2
+              // place item
+              .w-100.h-100.hover-animate(data-marker-id='59c0c8e3a31e62979bf147c9')
+                .card.h-100.border-0.shadow
+                  .card-img-top.overflow-hidden.gradient-overlay
+                    img.img-fluid(src='img/photo/photo-1512917774080-9991f1c4c750.jpg' alt='Modern Apt - Vibrant Neighborhood!')
+                    a.tile-link(href='detail-rooms.html')
+                    .card-img-overlay-bottom.z-index-20
+                      .d-flex.text-white.text-sm.align-items-center
+                        img.avatar.avatar-border-white.flex-shrink-0.me-2(src='img/avatar/avatar-8.jpg' alt='Julie')
+                        div Julie
+                    .card-img-overlay-top.text-end
+                      a.card-fav-icon.position-relative.z-index-40(href='javascript: void();')
+                        svg.svg-icon.text-white
+                          use(xlink:href='#heart-1')  
+                  .card-body.d-flex.align-items-center
+                    .w-100
+                      h6.card-title
+                        a.text-decoration-none.text-dark(href='detail-rooms.html') Modern Apt - Vibrant Neighborhood!
+                      .d-flex.card-subtitle.mb-3
+                        p.flex-grow-1.mb-0.text-muted.text-sm Entire apartment
+                        p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-gray-300                                   
+                          i.fa.fa-star.text-gray-300                                   
+                      p.card-text.text-muted
+                        span.h4.text-primary $75
+                        |  per night
+            .swiper-slide.h-auto.px-2
+              // place item
+              .w-100.h-100.hover-animate(data-marker-id='59c0c8e3503eb77d487e8082')
+                .card.h-100.border-0.shadow
+                  .card-img-top.overflow-hidden.gradient-overlay
+                    img.img-fluid(src='img/photo/photo-1494526585095-c41746248156.jpg' alt='Sunny Private Studio-Apartment')
+                    a.tile-link(href='detail-rooms.html')
+                    .card-img-overlay-bottom.z-index-20
+                      .d-flex.text-white.text-sm.align-items-center
+                        img.avatar.avatar-border-white.flex-shrink-0.me-2(src='img/avatar/avatar-9.jpg' alt='Barbora')
+                        div Barbora
+                    .card-img-overlay-top.text-end
+                      a.card-fav-icon.position-relative.z-index-40(href='javascript: void();')
+                        svg.svg-icon.text-white
+                          use(xlink:href='#heart-1')  
+                  .card-body.d-flex.align-items-center
+                    .w-100
+                      h6.card-title
+                        a.text-decoration-none.text-dark(href='detail-rooms.html') Sunny Private Studio-Apartment
+                      .d-flex.card-subtitle.mb-3
+                        p.flex-grow-1.mb-0.text-muted.text-sm Shared room
+                        p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-gray-300                                   
+                      p.card-text.text-muted
+                        span.h4.text-primary $93
+                        |  per night
+            .swiper-slide.h-auto.px-2
+              // place item
+              .w-100.h-100.hover-animate(data-marker-id='59c0c8e39aa2eed0626e485d')
+                .card.h-100.border-0.shadow
+                  .card-img-top.overflow-hidden.gradient-overlay
+                    img.img-fluid(src='img/photo/photo-1522771739844-6a9f6d5f14af.jpg' alt='Mid-Century Modern Garden Paradise')
+                    a.tile-link(href='detail-rooms.html')
+                    .card-img-overlay-bottom.z-index-20
+                      .d-flex.text-white.text-sm.align-items-center
+                        img.avatar.avatar-border-white.flex-shrink-0.me-2(src='img/avatar/avatar-10.jpg' alt='Jack')
+                        div Jack
+                    .card-img-overlay-top.text-end
+                      a.card-fav-icon.position-relative.z-index-40(href='javascript: void();')
+                        svg.svg-icon.text-white
+                          use(xlink:href='#heart-1')  
+                  .card-body.d-flex.align-items-center
+                    .w-100
+                      h6.card-title
+                        a.text-decoration-none.text-dark(href='detail-rooms.html') Mid-Century Modern Garden Paradise
+                      .d-flex.card-subtitle.mb-3
+                        p.flex-grow-1.mb-0.text-muted.text-sm Entire house
+                        p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-warning
+                      p.card-text.text-muted
+                        span.h4.text-primary $115
+                        |  per night
+            .swiper-slide.h-auto.px-2
+              // place item
+              .w-100.h-100.hover-animate(data-marker-id='59c0c8e39aa2edasd626e485d')
+                .card.h-100.border-0.shadow
+                  .card-img-top.overflow-hidden.gradient-overlay
+                    img.img-fluid(src='img/photo/photo-1488805990569-3c9e1d76d51c.jpg' alt='Brooklyn Life, Easy to Manhattan')
+                    a.tile-link(href='detail-rooms.html')
+                    .card-img-overlay-bottom.z-index-20
+                      .d-flex.text-white.text-sm.align-items-center
+                        img.avatar.avatar-border-white.flex-shrink-0.me-2(src='img/avatar/avatar-11.jpg' alt='Stuart')
+                        div Stuart
+                    .card-img-overlay-top.text-end
+                      a.card-fav-icon.position-relative.z-index-40(href='javascript: void();')
+                        svg.svg-icon.text-white
+                          use(xlink:href='#heart-1')  
+                  .card-body.d-flex.align-items-center
+                    .w-100
+                      h6.card-title
+                        a.text-decoration-none.text-dark(href='detail-rooms.html') Brooklyn Life, Easy to Manhattan
+                      .d-flex.card-subtitle.mb-3
+                        p.flex-grow-1.mb-0.text-muted.text-sm Private room
+                        p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-warning
+                          i.fa.fa-star.text-gray-300                                   
+                      p.card-text.text-muted
+                        span.h4.text-primary $123
+                        |  per night
+          // If we need pagination
+          .swiper-pagination
+    // Footer
+    footer.position-relative.z-index-10.d-print-none
+      // Main block - menus, subscribe form
+      .py-6.bg-gray-200.text-muted
+        .container
+          .row
+            .col-lg-4.mb-5.mb-lg-0
+              .fw-bold.text-uppercase.text-dark.mb-3 Directory
+              p Lorem ipsum dolor sit amet, consectetur adipisicing.
+              ul.list-inline
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='twitter')
+                    i.fab.fa-twitter
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='facebook')
+                    i.fab.fa-facebook
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='instagram')
+                    i.fab.fa-instagram
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='pinterest')
+                    i.fab.fa-pinterest
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='vimeo')
+                    i.fab.fa-vimeo
+            .col-lg-2.col-md-6.mb-5.mb-lg-0
+              h6.text-uppercase.text-dark.mb-3 Rentals
+              ul.list-unstyled
+                li
+                  a.text-muted(href='index.html') Rooms
+                li
+                  a.text-muted(href='category-rooms.html') Map on top
+                li
+                  a.text-muted(href='category-2-rooms.html') Side map
+                li
+                  a.text-muted(href='category-3-rooms.html') No map
+                li
+                  a.text-muted(href='detail-rooms.html') Room detail
+            .col-lg-2.col-md-6.mb-5.mb-lg-0
+              h6.text-uppercase.text-dark.mb-3 Pages
+              ul.list-unstyled
+                li
+                  a.text-muted(href='compare.html') Comparison                                   
+                li
+                  a.text-muted(href='team.html') Team                                   
+                li
+                  a.text-muted(href='contact.html') Contact                                   
+            .col-lg-4
+              h6.text-uppercase.text-dark.mb-3 Daily Offers & Discounts
+              p.mb-3  Lorem ipsum dolor sit amet, consectetur adipisicing elit. At itaque temporibus.
+              form#newsletter-form(action='#')
+                .input-group.mb-3
+                  input.form-control.bg-transparent.border-dark.border-end-0(type='email' placeholder='Your Email Address' aria-label='Your Email Address')
+                  button.btn.btn-outline-dark.border-start-0(type='submit')
+                    i.fa.fa-paper-plane.text-lg
+      // Copyright section of the footer
+      .py-4.fw-light.bg-gray-800.text-gray-300
+        .container
+          .row.align-items-center
+            .col-md-6.text-center.text-md-start
+              p.text-sm.mb-md-0 © 2021, Your company.  All rights reserved.
+            .col-md-6
+              ul.list-inline.mb-0.mt-2.mt-md-0.text-center.text-md-end
+                li.list-inline-item
+                  img.w-2rem(src='img/visa.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/mastercard.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/paypal.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/western-union.svg' alt='...')
+    // JavaScript files
+    script.
+      // ------------------------------------------------------- //
+      //   Inject SVG Sprite -
+      //   see more here
+      //   https://css-tricks.com/ajaxing-svg-sprite/
+      // ------------------------------------------------------ //
+      function injectSvgSprite(path) {
+      var ajax = new XMLHttpRequest();
+      ajax.open("GET", path, true);
+      ajax.send();
+      ajax.onload = function(e) {
+      var div = document.createElement("div");
+      div.className = 'd-none';
+      div.innerHTML = ajax.responseText;
+      document.body.insertBefore(div, document.body.childNodes[0]);
+      }
+      }
+      // to avoid CORS issues when viewing using file:// protocol, using the demo URL for the SVG sprite
+      // use your own URL in production, please :)
+      // https://demo.bootstrapious.com/directory/1-0/icons/orion-svg-sprite.svg
+      //- injectSvgSprite('${path}icons/orion-svg-sprite.svg');
+      injectSvgSprite('https://demo.bootstrapious.com/directory/1-4/icons/orion-svg-sprite.svg');
+    // jQuery
+    script(src='vendor/jquery/jquery.min.js')
+    // Bootstrap JS bundle - Bootstrap + PopperJS
+    script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')
+    // Magnific Popup - Lightbox for the gallery
+    script(src='vendor/magnific-popup/jquery.magnific-popup.min.js')
+    // Smooth scroll
+    script(src='vendor/smooth-scroll/smooth-scroll.polyfills.min.js')
+    // Bootstrap Select
+    script(src='vendor/bootstrap-select/js/bootstrap-select.min.js')
+    // Object Fit Images - Fallback for browsers that don't support object-fit
+    script(src='vendor/object-fit-images/ofi.min.js')
+    // Swiper Carousel
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/js/swiper.min.js')
+    script.
+      var basePath = ''
+    // Main Theme JS file
+    script(src='js/theme.js')
+    // Map
+    script(src='https://unpkg.com/leaflet@1.5.1/dist/leaflet.js' integrity='sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==' crossorigin='')
+    // Available tile layers
+    script(src='js/map-layers.js')
+    script(src='js/map-detail.js')
+    script(src="js/map2.js")
+    //- script.
+      createDetailMap({
+      mapId: 'detailMap',
+      mapZoom: 14,
+      mapCenter: [40.732346, -74.0014247],
+      circleShow: true,
+      circlePosition: [40.732346, -74.0014247]
+      })
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery-date-range-picker/0.19.0/jquery.daterangepicker.min.js')
+    script(src='js/datepicker-detailPage.js')
+    script(src='js/property.js')

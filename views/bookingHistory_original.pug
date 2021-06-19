@@ -1,0 +1,47 @@
+doctype html
+html(lang='zxx')
+    include common/header.pug
+    +head("Booking History" )
+    body
+        include common/accountOverlay.pug
+        +accountOverlay()
+        include common/navbar.pug
+        +navbar(user)
+        script( type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js")
+        script( type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js")
+        section.shopping-cart.spad
+            .container
+                .row
+                    .col-lg-12
+                        .row
+                            .col-sm-3.account-nav
+                                include common/accountNavbar.pug
+                                +accountNavbar()                                
+                            .col-sm-9.account-body
+                                .card-body(style="border: 1px solid rgba(0,0,0,.125);padding:10px")
+                                    div(style="padding-bottom:10px;border-bottom: 4px solid rgba(0,0,0,.125)")
+                                        h3(style="font-weight:700") Booking History
+                                    .row(style="margin-top:20px;")
+                                        .col-sm-12(style="text-align:center")
+                                            if(bookingHistory.length == 0 )
+                                                p We have no order records for this account.    
+                                                button.primary-btn(style="width:50%;font-size:12px;text-align:center" ) START BOOKING
+                                            else
+                                                table.table.shadow.mb-12.table-striped.table-sm.dataTable.no-footer( id="searchResultTable"  role="grid" aria-describedby="classes_info")
+                                                    tbody
+                                                        each booking in bookingHistory
+                                                            tr
+                                                                td(style="text-align:left;padding:10px")
+                                                                    .row
+                                                                        .col-sm-6
+                                                                            h6(style="color:black;font-weight:700;font-size:13px;") Order Number:
+                                                                                span  short - #{booking.id}
+                                                                            h6(style="color:black;font-weight:700;font-size:13px;") Date Ordered: 
+                                                                                span  #{booking.bookingDttm}
+                                                                            h6(style="color:black;font-weight:700;font-size:13px;") Order Total: 
+                                                                                span  £#{(parseFloat(booking.cost)).toFixed(2)}
+                                                                        .col-sm-6(style="text-align:center")
+                                                                             a.primary-btn.bookingHistory(href="/booking?id=" + booking.id  style="width:75%;font-size:12px;text-align:center;" ) View Booking
+        include common/footer.pug
+        +footer()
+        script(src='js/main.js')

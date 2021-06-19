@@ -1,0 +1,240 @@
+doctype html
+html(lang='en')
+   include common/header.pug 
+   +head("Place Order")
+   body(style='padding-top: 72px;')
+    include common/navbar.pug 
+    +navbar(user)
+    script(src="https://js.stripe.com/v3/")
+    .progress.rounded-0.sticky-top(style='height: 8px; top: 72px;')
+      .progress-bar(role='progressbar' style='width: 50%' aria-valuenow='50' aria-valuemin='0' aria-valuemax='100')
+    section.py-5
+      .container
+        .row
+          .col-lg-7
+            input#propertyId(style="display:none" value=property.id)
+            input#fromDate(style="display:none" value=fromDate)
+            input#toDate(style="display:none" value=toDate)
+
+            p.subtitle.text-primary Book your holiday home
+            h1.h2.mb-5
+              | Review #{property.name} rules 
+            //-   span.text-muted.float-end Step 1
+            //- .text-block
+              .alert.alert-warning.text-sm.mb-3
+                .d-flex.align-items-center
+                  svg.svg-icon.svg-icon.svg-icon-light.w-2rem.h-2rem.me-3.text-reset.flex-shrink-0
+                    use(xlink:href='#heart-1')  
+                  div
+                    strong This home is on people’s minds.
+                    |  It’s been viewed 43 times in the past week.
+            .text-block
+              input#dayDiff(style="display:none" value=dayDiff)
+              h5.mb-4 #{dayDiff} night(s) in London
+              .row.mb-3
+                .col-md-6.d-flex.align-items-center.mb-3.mb-md-0
+                  .date-tile.me-3
+                    .text-uppercase
+                      span.text-sm #{fromMonth}
+                      br
+                      strong.text-lg #{fromNumber}
+                  p.text-sm.mb-0
+                    | #{fromDay} check-in
+                    br
+                    | 3PM
+                .col-md-6.d-flex.align-items-center
+                  .date-tile.me-3
+                    .text-uppercase
+                      span.text-sm #{toMonth}
+                      br
+                      strong.text-lg #{toNumber}
+                  p.text-sm.mb-0
+                    | #{toDay} check-out
+                    br
+                    | 11AM
+            .text-block
+              h5.mb-4 Things to keep in mind
+              ul.list-unstyled
+                li.mb-2
+                  .d-flex.align-items-center.mb-3
+                    .icon-rounded.icon-rounded-sm.bg-secondary-light.flex-shrink-0.me-4
+                      i.fa.fas.fa-child.text-secondary.fa-fw.text-center
+                    div
+                      span.text-sm
+                        | Not suitable for children and infants - The entrance staircase doesn't have handrails
+                li.mb-2
+                  .d-flex.align-items-center.mb-3
+                    .icon-rounded.icon-rounded-sm.bg-secondary-light.flex-shrink-0.me-4
+                      i.fa.fas.fa-glass-cheers.text-secondary.fa-fw.text-center
+                    div
+                      span.text-sm No parties or events
+                li.mb-2
+                  .d-flex.align-items-center.mb-3
+                    .icon-rounded.icon-rounded-sm.bg-secondary-light.flex-shrink-0.me-4
+                      i.fa.fa-smoking-ban.text-secondary.fa-fw.text-center
+                    div
+                      span.text-sm No smoking
+                li.mb-2
+                  .d-flex.align-items-center.mb-3
+                    .icon-rounded.icon-rounded-sm.bg-secondary-light.flex-shrink-0.me-4
+                      i.fa.fa-cat.text-secondary.fa-fw.text-center
+                    div
+                      span.text-sm No pets
+            //- .row.form-block.flex-column.flex-sm-row
+              .col.text-center.text-sm-start
+              .col.text-center.text-sm-end
+                a.btn.btn-primary.px-3(href='user-booking-2.html')
+                  | Next step
+                  i.fa-chevron-right.fa.ms-2
+          .col-lg-5.ps-xl-5
+            .card.border-0.shadow
+              .card-body.p-4
+                
+                .text-block.py-3
+                  ul.list-unstyled.mb-0
+                    li.mb-3
+                      i.fas.fa-users.fa-fw.text-muted.me-2
+                      | #{guests} guest(s)
+                    li.mb-0
+                      i.far.fa-calendar.fa-fw.text-muted.me-2
+                      | #{fromMonth} #{fromNumber}, #{fromYear} 
+                      i.fas.fa-arrow-right.fa-fw.text-muted.mx-3
+                      | #{toMonth} #{toNumber}, #{toYear} 
+                .text-block.pt-3.pb-0
+                  table.w-100
+                    tbody
+                      tr
+                        th.fw-normal.py-2 £#{(parseFloat(property.pricePerDay)).toFixed(2)} x #{dayDiff} night(s)
+                        td.text-end.py-2 £#{totalCost}
+                    //-   tr
+                        th.fw-normal.pt-2.pb-3 Service fee
+                        td.text-end.pt-2.pb-3 £67.48
+                    tfoot
+                      tr.border-top
+                        th.pt-3 Total
+                        td.fw-bold.text-end.pt-3 £#{totalCost}
+              .card-footer.bg-primary-light.py-4.border-0
+                .d-flex.align-items-center
+                  div
+                    h6.text-primary Flexible – free cancellation
+                    p.text-sm.text-primary.opacity-8.mb-0
+                      | Cancel within 48 hours of booking to get a full refund. 
+                      a.text-reset.ms-3(href='#') More details
+            .text-block
+                
+                button#checkout.btn.btn-primary.px-3(type="submit" data-total=totalCost data-guests=guests)
+                    | Make Booking
+                    i.fa-chevron-right.fa.ms-2
+    // Footer
+    footer.position-relative.z-index-10.d-print-none
+      // Main block - menus, subscribe form
+      .py-6.bg-gray-200.text-muted
+        .container
+          .row
+            .col-lg-4.mb-5.mb-lg-0
+              .fw-bold.text-uppercase.text-dark.mb-3 Directory
+              p Lorem ipsum dolor sit amet, consectetur adipisicing.
+              ul.list-inline
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='twitter')
+                    i.fab.fa-twitter
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='facebook')
+                    i.fab.fa-facebook
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='instagram')
+                    i.fab.fa-instagram
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='pinterest')
+                    i.fab.fa-pinterest
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='vimeo')
+                    i.fab.fa-vimeo
+            .col-lg-2.col-md-6.mb-5.mb-lg-0
+              h6.text-uppercase.text-dark.mb-3 Rentals
+              ul.list-unstyled
+                li
+                  a.text-muted(href='index.html') Rooms
+                li
+                  a.text-muted(href='category-rooms.html') Map on top
+                li
+                  a.text-muted(href='category-2-rooms.html') Side map
+                li
+                  a.text-muted(href='category-3-rooms.html') No map
+                li
+                  a.text-muted(href='detail-rooms.html') Room detail
+            .col-lg-2.col-md-6.mb-5.mb-lg-0
+              h6.text-uppercase.text-dark.mb-3 Pages
+              ul.list-unstyled
+                li
+                  a.text-muted(href='compare.html') Comparison                                   
+                li
+                  a.text-muted(href='team.html') Team                                   
+                li
+                  a.text-muted(href='contact.html') Contact                                   
+            .col-lg-4
+              h6.text-uppercase.text-dark.mb-3 Daily Offers & Discounts
+              p.mb-3  Lorem ipsum dolor sit amet, consectetur adipisicing elit. At itaque temporibus.
+              form#newsletter-form(action='#')
+                .input-group.mb-3
+                  input.form-control.bg-transparent.border-dark.border-end-0(type='email' placeholder='Your Email Address' aria-label='Your Email Address')
+                  button.btn.btn-outline-dark.border-start-0(type='submit')
+                    i.fa.fa-paper-plane.text-lg
+      // Copyright section of the footer
+      .py-4.fw-light.bg-gray-800.text-gray-300
+        .container
+          .row.align-items-center
+            .col-md-6.text-center.text-md-start
+              p.text-sm.mb-md-0 © 2021, Your company.  All rights reserved.
+            .col-md-6
+              ul.list-inline.mb-0.mt-2.mt-md-0.text-center.text-md-end
+                li.list-inline-item
+                  img.w-2rem(src='img/visa.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/mastercard.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/paypal.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/western-union.svg' alt='...')
+    // JavaScript files
+    script.
+      // ------------------------------------------------------- //
+      //   Inject SVG Sprite -
+      //   see more here
+      //   https://css-tricks.com/ajaxing-svg-sprite/
+      // ------------------------------------------------------ //
+      function injectSvgSprite(path) {
+      var ajax = new XMLHttpRequest();
+      ajax.open("GET", path, true);
+      ajax.send();
+      ajax.onload = function(e) {
+      var div = document.createElement("div");
+      div.className = 'd-none';
+      div.innerHTML = ajax.responseText;
+      document.body.insertBefore(div, document.body.childNodes[0]);
+      }
+      }
+      // to avoid CORS issues when viewing using file:// protocol, using the demo URL for the SVG sprite
+      // use your own URL in production, please :)
+      // https://demo.bootstrapious.com/directory/1-0/icons/orion-svg-sprite.svg
+      //- injectSvgSprite('${path}icons/orion-svg-sprite.svg');
+      injectSvgSprite('https://demo.bootstrapious.com/directory/1-4/icons/orion-svg-sprite.svg');
+    // jQuery
+    script(src='vendor/jquery/jquery.min.js')
+    // Bootstrap JS bundle - Bootstrap + PopperJS
+    script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')
+    // Magnific Popup - Lightbox for the gallery
+    script(src='vendor/magnific-popup/jquery.magnific-popup.min.js')
+    // Smooth scroll
+    script(src='vendor/smooth-scroll/smooth-scroll.polyfills.min.js')
+    // Bootstrap Select
+    script(src='vendor/bootstrap-select/js/bootstrap-select.min.js')
+    // Object Fit Images - Fallback for browsers that don't support object-fit
+    script(src='vendor/object-fit-images/ofi.min.js')
+    // Swiper Carousel
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/js/swiper.min.js')
+    script.
+      var basePath = ''
+    // Main Theme JS file
+    script(src='js/theme.js')
+    script(src="js/checkout.js")

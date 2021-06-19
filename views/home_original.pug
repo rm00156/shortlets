@@ -1,0 +1,692 @@
+doctype html
+html.no-js(lang='en')
+  include common/header_original.pug
+  +head("Home")
+  body
+    include common/homeNavbar.pug
+    +navbar(user)
+    
+    section#home.about-us
+      .container
+        .about-us-content
+          .row
+            .col-sm-12
+              .single-about-us
+                .about-us-txt
+                  h2
+                    | Explore the Beauty of the Beautiful World
+                //-   .about-btn
+                    button.about-view
+                      | explore now
+                  // /.about-btn
+                // /.about-us-txt
+              // /.single-about-us
+            // /.col
+            .col-sm-0
+              .single-about-us
+              // /.single-about-us
+            // /.col
+          // /.row
+        // /.about-us-content
+      // /.container
+    // /.about-us
+    // about-us end
+    // travel-box start
+    section.travel-box
+      .container
+        .row
+          .col-md-12
+            
+            .single-travel-boxes
+              #desc-tabs.desc-tabs
+                //- ul.nav.nav-tabs(role='tablist')
+                //-   li.active(role='presentation')
+                //-     a(href='#tours' aria-controls='tours' role='tab' data-toggle='tab')
+                //-       i.fa.fa-tree
+                //-       | tours
+                //-   li(role='presentation')
+                //-     a(href='#hotels' aria-controls='hotels' role='tab' data-toggle='tab')
+                //-       i.fa.fa-building
+                //-       | hotels
+                //-   li(role='presentation')
+                //-     a(href='#flights' aria-controls='flights' role='tab' data-toggle='tab')
+                //-       i.fa.fa-plane
+                //-       | flights
+                // Tab panes
+                .tab-content
+                  #tours.tab-pane.active.fade.in(role='tabpanel')
+                    .tab-para
+                      .row
+                        .col-lg-4.col-md-4.col-sm-12
+                          .single-tab-select-box
+                            h2 destination
+                            .travel-select-icon
+                              select#city.form-control
+                                option(value=0) select your destination city
+                                each city in cities 
+                                    option(value=city.id) #{city.name}
+                              p.small.text-danger(id='cityError')
+
+                                // /.option
+                              // /.select
+                            // /.travel-select-icon
+                            .travel-select-icon
+                              select#town.form-control
+                                option(value=0) select your destination town
+                                
+                                // /.option
+                              // /.select
+                            // /.travel-select-icon
+                          // /.single-tab-select-box
+                        // /.col
+                        .col-lg-2.col-md-3.col-sm-4
+                          .single-tab-select-box
+                            h2 check in
+                            .travel-check-icon
+                              form(action='#')
+                                input#fromDt.form-control(type='text' name='check_in' data-toggle='datepicker' )
+                            // /.travel-check-icon
+                          // /.single-tab-select-box
+                        // /.col
+                        .col-lg-2.col-md-3.col-sm-4
+                          .single-tab-select-box
+                            h2 check out
+                            .travel-check-icon
+                              form(action='#')
+                                input#toDt.form-control(type='text' name='check_out' data-toggle='datepicker2' )
+                            // /.travel-check-icon
+                          // /.single-tab-select-box
+                        // /.col
+                        
+                        .col-lg-2.col-md-1.col-sm-4
+                          .single-tab-select-box
+                            h2 guests
+                            input#guests.form-control(type="number" min=1 max=5 style="height:48px;width:60px")
+                                
+                            // /.option
+                            // /.select
+                            // /.travel-select-icon
+                          // /.single-tab-select-box
+                        // /.col
+                      // /.row
+                      .row
+                        
+                        .clo-sm-7
+                          .about-btn.travel-mrt-0.pull-right
+                            button#search.about-view.travel-btn
+                              | search
+                            // /.travel-btn
+                          // /.about-btn
+                        // /.col
+                      // /.row
+                    // /.tab-para
+                  // /.tabpannel
+                
+                // /.tab content
+              // /.desc-tabs
+            // /.single-travel-box
+          // /.col
+        // /.row
+      // /.container
+    // /.travel-box
+    // travel-box end
+    // service start
+    section#service.service
+      .container
+        .service-counter.text-center
+          .col-md-4.col-sm-4
+            .single-service-box
+              .service-img
+                img(src='assets/images/service/s1.png' alt='service-icon')
+              // /.service-img
+              .service-content
+                h2
+                  a(href='#')
+                    | Choose amazing tour packages
+                p Must use our tour Planner for breathtaking tour packages!
+              // /.service-content
+            // /.single-service-box
+          // /.col
+          .col-md-4.col-sm-4
+            .single-service-box
+              .service-img
+                img(src='assets/images/service/s2.png' alt='service-icon')
+              // /.service-img
+              .service-content
+                h2
+                  a(href='#')
+                    | book top class hotel
+                p This amazing site helps you book the best hotels all around the world!
+              // /.service-content
+            // /.single-service-box
+          // /.col
+          .col-md-4.col-sm-4
+            .single-service-box
+              .statistics-img
+                img(src='assets/images/service/s3.png' alt='service-icon')
+              // /.service-img
+              .service-content
+                h2
+                  a(href='#')
+                    | online flight booking
+                p Book your flight instantly using TourNest!
+              // /.service-content
+            // /.single-service-box
+          // /.col
+        // /.statistics-counter
+      // /.container
+    // /.service
+    // service end
+    // galley start
+    section#gallery.gallery
+      .container
+        .gallery-details
+          .gallary-header.text-center
+            h2
+              | top destinations
+            p
+              | Where do you wanna go? How much you wanna explore?
+          // /.gallery-header
+          .gallery-box
+            .gallery-content
+              .filtr-container
+                .row
+                  .col-md-6
+                    .filtr-item
+                      img(src=towns[0].imagePath alt='portfolio image')
+                      .item-title
+                        a(href='/properties?townId='+towns[0].id+'&cityId='+towns[0].cityFk +"&fromDt=undefined&toDt=undefined&guests=1")
+                          | #{towns[0].name}
+                        
+                      // /.item-title
+                    // /.filtr-item
+                  // /.col
+                  .col-md-6
+                    .filtr-item
+                      img(src=towns[1].imagePath alt='portfolio image')
+                      .item-title
+                        a(href='/properties?townId='+towns[1].id+'&cityId='+towns[1].cityFk +"&fromDt=undefined&toDt=undefined&guests=1")
+                          | #{towns[1].name}
+                      
+                      // /.item-title
+                    // /.filtr-item
+                  // /.col
+                  .col-md-4
+                    .filtr-item
+                      img(src=towns[2].imagePath alt='portfolio image')
+                      .item-title
+                        a(href='/properties?townId='+towns[2].id+'&cityId='+towns[2].cityFk +"&fromDt=undefined&toDt=undefined&guests=1")
+                          | #{towns[2].name}
+                        
+                      // /.item-title
+                    // /.filtr-item
+                  // /.col
+                  .col-md-4
+                    .filtr-item
+                      img(src=towns[3].imagePath alt='portfolio image')
+                      .item-title
+                        a(href='/properties?townId='+towns[3].id+'&cityId='+towns[3].cityFk +"&fromDt=undefined&toDt=undefined&guests=1")
+                          | #{towns[3].name}
+                      
+                      // /.item-title
+                    // /.filtr-item
+                  // /.col
+                  .col-md-4
+                    .filtr-item
+                      img(src=towns[4].imagePath alt='portfolio image')
+                      .item-title
+                        a(href='/properties?townId='+towns[4].id+'&cityId='+towns[4].cityFk +"&fromDt=undefined&toDt=undefined&guests=1")
+                          | #{towns[4].name}
+                      
+                      // /.item-title
+                    // /.filtr-item
+                  // /.col
+                  .col-md-8
+                    .filtr-item
+                      img(src=towns[5].imagePath alt='portfolio image')
+                      .item-title
+                        a(href='/properties?townId='+towns[5].id+'&cityId='+towns[5].cityFk +"&fromDt=undefined&toDt=undefined&guests=1")
+                          | #{towns[5].name}
+                      
+                      // /.item-title
+                    // /.filtr-item
+                  // /.col
+                // /.row
+              // /.filtr-container
+            // /.gallery-content
+          // /.galley-box
+        // /.gallery-details
+      // /.container
+    // /.gallery
+    // gallery end
+    // discount-offer start
+    //- section.discount-offer
+      .container
+        .row
+          .col-sm-12
+            .dicount-offer-content.text-center
+              h2 Join with us within 7 March, 2019 and get upto 40% Discount
+              .campaign-timer
+                #timer
+                  #days.time.time-after
+                    span
+                  // /.time
+                  #hours.time.time-after
+                  // /.time
+                  #minutes.time.time-after
+                  // /.time
+                  #seconds.time
+                  // /.time
+                // /.timer
+              // /.campaign-timer
+              .about-btn
+                button.about-view.discount-offer-btn
+                  | join now
+              // /.about-btn
+            // /.dicount-offer-content
+          // /.col
+        // /.row
+      // /.container
+    // /.discount-offer
+    // discount-offer end
+    // packages start
+    section#pack.packages
+      .container
+        .gallary-header.text-center
+          h2
+            | Latest Properties
+          p
+            | Duis aute irure dolor in  velit esse cillum dolore eu fugiat nulla.
+        // /.gallery-header
+        
+        .packages-content
+          .row
+            each property in properties
+              .col-md-4.col-sm-6
+                a(href="#")
+                  .single-package-item(style="text-align:center")
+                    img(src=property.displayImage1 alt='package-place')
+                    .single-package-item-txt
+                      h3 #{property.name} 
+                        span.pull-right £#{(parseFloat(property.pricePerDay)).toFixed(2)}
+                      .packages-para(style="text-align:center")
+                        p
+                          span
+                            | #{property.guests} Guests
+                        p
+                          span
+                            | #{property.bathrooms} Bathrooms
+                        p
+                          span
+                            | #{property.bedrooms} Bedrooms
+                      // /.packages-para
+                      //- .packages-review
+                        p
+                          i.fa.fa-star
+                          i.fa.fa-star
+                          i.fa.fa-star
+                          i.fa.fa-star
+                          i.fa.fa-star
+                          span 10 reviews
+                      // /.packages-review
+                      //- .about-btn
+                        button.about-view.packages-btn(style="text-align:center;display:unset")
+                          | book now
+                      // /.about-btn
+                    // /.single-package-item-txt
+                  // /.single-package-item
+                // /.col
+            
+                
+              // /.single-package-item
+            // /.col
+          // /.row
+        // /.packages-content
+      // /.container
+    // /.packages
+    // packages end
+    // testemonial Start
+    //- section.testemonial
+      .container
+        .gallary-header.text-center
+          h2
+            | clients reviews
+          p
+            | Duis aute irure dolor in  velit esse cillum dolore eu fugiat nulla.
+        // /.gallery-header
+        #testemonial-carousel.owl-carousel.owl-theme
+          .home1-testm.item
+            .home1-testm-single.text-center
+              .home1-testm-img
+                img(src='assets/images/client/testimonial1.jpg' alt='img')
+              // /.home1-testm-img
+              .home1-testm-txt
+                span.icon.section-icon
+                  i.fa.fa-quote-left(aria-hidden='true')
+                p
+                  | Lorem ipsum dolor sit amet, contur adip elit, sed do mod incid ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+                h3
+                  a(href='#')
+                    | kevin watson
+                h4 london, england
+              // /.home1-testm-txt
+            // /.home1-testm-single
+          // /.item
+          .home1-testm.item
+            .home1-testm-single.text-center
+              .home1-testm-img
+                img(src='assets/images/client/testimonial2.jpg' alt='img')
+              // /.home1-testm-img
+              .home1-testm-txt
+                span.icon.section-icon
+                  i.fa.fa-quote-left(aria-hidden='true')
+                p
+                  | Lorem ipsum dolor sit amet, contur adip elit, sed do mod incid ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+                h3
+                  a(href='#')
+                    | kevin watson
+                h4 london, england
+              // /.home1-testm-txt
+            // /.home1-testm-single
+          // /.item
+          .home1-testm.item
+            .home1-testm-single.text-center
+              .home1-testm-img
+                img(src='assets/images/client/testimonial1.jpg' alt='img')
+              // /.home1-testm-img
+              .home1-testm-txt
+                span.icon.section-icon
+                  i.fa.fa-quote-left(aria-hidden='true')
+                p
+                  | Lorem ipsum dolor sit amet, contur adip elit, sed do mod incid ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+                h3
+                  a(href='#')
+                    | kevin watson
+                h4 london, england
+              // /.home1-testm-txt
+            // /.home1-testm-single
+          // /.item
+          .home1-testm.item
+            .home1-testm-single.text-center
+              .home1-testm-img
+                img(src='assets/images/client/testimonial1.jpg' alt='img')
+              // /.home1-testm-img
+              .home1-testm-txt
+                span.icon.section-icon
+                  i.fa.fa-quote-left(aria-hidden='true')
+                p
+                  | Lorem ipsum dolor sit amet, contur adip elit, sed do mod incid ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+                h3
+                  a(href='#')
+                    | kevin watson
+                h4 london, england
+              // /.home1-testm-txt
+            // /.home1-testm-single
+          // /.item
+          .home1-testm.item
+            .home1-testm-single.text-center
+              .home1-testm-img
+                img(src='assets/images/client/testimonial2.jpg' alt='img')
+              // /.home1-testm-img
+              .home1-testm-txt
+                span.icon.section-icon
+                  i.fa.fa-quote-left(aria-hidden='true')
+                p
+                  | Lorem ipsum dolor sit amet, contur adip elit, sed do mod incid ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+                h3
+                  a(href='#')
+                    | kevin watson
+                h4 london, england
+              // /.home1-testm-txt
+            // /.home1-testm-single
+          // /.item
+          .home1-testm.item
+            .home1-testm-single.text-center
+              .home1-testm-img
+                img(src='assets/images/client/testimonial1.jpg' alt='img')
+              // /.home1-testm-img
+              .home1-testm-txt
+                span.icon.section-icon
+                  i.fa.fa-quote-left(aria-hidden='true')
+                p
+                  | Lorem ipsum dolor sit amet, contur adip elit, sed do mod incid ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+                h3
+                  a(href='#')
+                    | kevin watson
+                h4 london, england
+              // /.home1-testm-txt
+            // /.home1-testm-single
+          // /.item
+          .home1-testm.item
+            .home1-testm-single.text-center
+              .home1-testm-img
+                img(src='assets/images/client/testimonial1.jpg' alt='img')
+              // /.home1-testm-img
+              .home1-testm-txt
+                span.icon.section-icon
+                  i.fa.fa-quote-left(aria-hidden='true')
+                p
+                  | Lorem ipsum dolor sit amet, contur adip elit, sed do mod incid ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+                h3
+                  a(href='#')
+                    | kevin watson
+                h4 london, england
+              // /.home1-testm-txt
+            // /.home1-testm-single
+          // /.item
+          .home1-testm.item
+            .home1-testm-single.text-center
+              .home1-testm-img
+                img(src='assets/images/client/testimonial2.jpg' alt='img')
+              // /.home1-testm-img
+              .home1-testm-txt
+                span.icon.section-icon
+                  i.fa.fa-quote-left(aria-hidden='true')
+                p
+                  | Lorem ipsum dolor sit amet, contur adip elit, sed do mod incid ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+                h3
+                  a(href='#')
+                    | kevin watson
+                h4 london, england
+              // /.home1-testm-txt
+            // /.home1-testm-single
+          // /.item
+          .home1-testm.item
+            .home1-testm-single.text-center
+              .home1-testm-img
+                img(src='assets/images/client/testimonial1.jpg' alt='img')
+              // /.home1-testm-img
+              .home1-testm-txt
+                span.icon.section-icon
+                  i.fa.fa-quote-left(aria-hidden='true')
+                p
+                  | Lorem ipsum dolor sit amet, contur adip elit, sed do mod incid ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+                h3
+                  a(href='#')
+                    | kevin watson
+                h4 london, england
+              // /.home1-testm-txt
+            // /.home1-testm-single
+          // /.item
+        // /.testemonial-carousel
+      // /.container
+    // /.testimonial
+    // testemonial End
+    // special-offer start
+    //- section#spo.special-offer
+      .container
+        .special-offer-content
+          .row
+            .col-sm-8
+              .single-special-offer
+                .single-special-offer-txt
+                  h2 thiland
+                  .packages-review.special-offer-review
+                    p
+                      i.fa.fa-star
+                      i.fa.fa-star
+                      i.fa.fa-star
+                      i.fa.fa-star
+                      i.fa.fa-star
+                      span 2544 review
+                  // /.packages-review
+                  .packages-para.special-offer-para
+                    p
+                      span
+                        i.fa.fa-angle-right
+                        | 5 Days 6 nights
+                      span
+                        i.fa.fa-angle-right
+                        | 2 person
+                      span
+                        i.fa.fa-angle-right
+                        | 5 star accomodation
+                    p
+                      span
+                        i.fa.fa-angle-right
+                        | transportation
+                      span
+                        i.fa.fa-angle-right
+                        | food facilities
+                    p.offer-para
+                      | Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tem ut labore et dolore magna  aliqua. Ut enim ad minim veniam, quis nostrud exercitation una
+                      br
+                      | ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                  // /.packages-para
+                  .offer-btn-group
+                    .about-btn
+                      button.about-view.packages-btn.offfer-btn
+                        | make tour
+                    // /.about-btn
+                    .about-btn
+                      button.about-view.packages-btn
+                        | book now
+                    // /.about-btn
+                  // /.offer-btn-group
+                // /.single-special-offer-txt
+              // /.single-special-offer
+            // /.col
+            .col-sm-4
+              .single-special-offer
+                .single-special-offer-bg
+                  img(src='assets/images/offer/offer-shape.png' alt='offer-shape')
+                // /.single-special-offer-bg
+                .single-special-shape-txt
+                  h3 special offer
+                  h4
+                    span 40%
+                    br
+                    | off
+                  p
+                    span $999
+                    br
+                    | reguler $ 1450
+                // /.single-special-shape-txt
+              // /.single-special-offer
+            // /.col
+          // /.row
+        // /.special-offer-content
+      // /.container
+    // /.special-offer end
+    // special-offer end
+    // blog start
+    //- section#blog.blog
+      .container
+        .blog-details
+          .gallary-header.text-center
+            h2
+              | latest news
+            p
+              | Travel News from all over the world
+          // /.gallery-header
+          .blog-content
+            .row
+              .col-sm-4.col-md-4
+                .thumbnail
+                  h2 trending news 
+                    span 15 november 2017
+                  .thumbnail-img
+                    img(src='assets/images/blog/b1.jpg' alt='blog-img')
+                    .thumbnail-img-overlay
+                    // /.thumbnail-img-overlay
+                  // /.thumbnail-img
+                  .caption
+                    .blog-txt
+                      h3
+                        a(href='#')
+                          | Discover on beautiful weather, Fantastic foods and historical place in Prag
+                      p
+                        | Lorem ipsum dolor sit amet, contur adip elit, sed do mod incid ut labore et dolore magna aliqua. Ut enim ad minim veniam
+                      a(href='#') Read More
+                    // /.blog-txt
+                  // /.caption
+                // /.thumbnail
+              // /.col
+              .col-sm-4.col-md-4
+                .thumbnail
+                  h2 trending news 
+                    span 15 november 2017
+                  .thumbnail-img
+                    img(src='assets/images/blog/b2.jpg' alt='blog-img')
+                    .thumbnail-img-overlay
+                    // /.thumbnail-img-overlay
+                  // /.thumbnail-img
+                  .caption
+                    .blog-txt
+                      h3
+                        a(href='#')
+                          | Discover on beautiful weather, Fantastic foods and historical place in india
+                      p
+                        | Lorem ipsum dolor sit amet, contur adip elit, sed do mod incid ut labore et dolore magna aliqua. Ut enim ad minim veniam
+                      a(href='#') Read More
+                    // /.blog-txt
+                  // /.caption
+                // /.thumbnail
+              // /.col
+              .col-sm-4.col-md-4
+                .thumbnail
+                  h2 trending news 
+                    span 15 november 2017
+                  .thumbnail-img
+                    img(src='assets/images/blog/b3.jpg' alt='blog-img')
+                    .thumbnail-img-overlay
+                    // /.thumbnail-img-overlay
+                  // /.thumbnail-img
+                  .caption
+                    .blog-txt
+                      h3
+                        a(href='#') 10 Most Natural place to Discover
+                      p
+                        | Lorem ipsum dolor sit amet, contur adip elit, sed do mod incid ut labore et dolore magna aliqua. Ut enim ad minim veniam
+                      a(href='#') Read More
+                    // /.blog-txt
+                  // /.caption
+                // /.thumbnail
+              // /.col
+            // /.row
+          // /.blog-content
+        // /.blog-details
+      // /.container
+    // /.blog
+    // blog end
+    // subscribe start
+    section#subs.subscribe
+      .container
+        .subscribe-title.text-center
+          h2
+            | Join our Subscribers List to Get Regular Update
+          p
+            | Subscribe Now. We will send you Best offer for your Trip
+        form
+          .row
+            .col-md-6.col-md-offset-3.col-sm-8.col-sm-offset-2
+              .custom-input-group
+                input.form-control(type='email' placeholder='Enter your Email Here')
+                button.appsLand-btn.subscribe-btn Subscribe
+                .clearfix
+                i.fa.fa-envelope
+    // subscribe end
+    // footer-copyright start
+    include common/footer.pug
+    +footer()
+    script(src="js/home.js")

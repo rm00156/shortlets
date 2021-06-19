@@ -1,0 +1,34 @@
+mixin accountNavbar()
+    .card-body(style="border: 1px solid rgba(0,0,0,.125)")
+        div(style="padding-bottom:10px;padding-top:10px;padding-left:5px;background-color:rgba(0,0,0,.125);")
+            h6(style="font-weight:700") MY ACCOUNT
+        div(style="padding-left:5px")
+            ul(style="list-style:none;font-weight:500;font-size:14px;margin-top:20px;padding-bottom:10px;")
+                li
+                    a(href="/myAccount" style="color:black;") Dashboard
+                li
+                    a(href="/accountDetails" style="color:black;") Account Details
+                li
+                    a(href="#" id="closeAccount" style="color:black;") Close Account
+    
+        .row(style="margin-top:20px;")
+            .col-sm-12
+                div(style="padding-bottom:10px;padding-top:10px;padding-left:5px;background-color:rgba(0,0,0,.125);")
+                    h6(style="font-weight:700") BOOKING INFORMATION
+                div(style="padding-left:5px")
+                    ul(style="list-style:none;font-weight:500;font-size:14px;margin-top:20px;padding-bottom:10px;")
+                        li
+                            a(href="/bookingHistory" style="color:black;") Booking History
+                        li
+                            a(href="/cancellation" style="color:black;") Cancellation Policy
+
+        .row(style="margin-top:20px;")
+            .col-sm-12
+                div(style="padding-bottom:10px;padding-top:10px;padding-left:5px;background-color:rgba(0,0,0,.125);")
+                    h6(style="font-weight:700") SHOP CONFIDENTLY
+                div(style="padding-left:5px")
+                    ul(style="list-style:none;font-weight:500;font-size:14px;margin-top:20px;padding-bottom:10px;")
+                        li
+                            a(href="#" style="color:black;") Privacy Notice
+                        li
+                            a(href="#" style="color:black;") Cancellation Information

@@ -1,0 +1,17 @@
+mixin accountOverlay()
+    #preloader2(style="display:none;z-index:999")
+        .loader2(style="display:none")
+    script(src="js/closeAccount.js")
+    div(id="overlay" style="text-align:center")
+        .overlaySection.spad
+            .container-fluid(style="margin-top:20px")
+                h3(style="font-weight:700") Close Account : #{user.email}
+                .row(style="margin-top:20px")
+                    .col-sm-12
+                        p Are you sure you wish to close this account?
+                        p Once it is closed you will lose access to your order history.
+                .row(style="margin-top:20px;")
+                    .col-sm-6
+                        button.site-btn(id="close" style="text-align:center") Close Account
+                    .col-sm-6
+                        button.site-btn(id="cancelClose" style="text-align:center") Cancel

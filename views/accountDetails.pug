@@ -1,0 +1,196 @@
+doctype html
+html(lang='en')
+  include common/header.pug 
+  +head('Login Details')
+  body(style='padding-top: 72px;')
+    include common/navbar.pug 
+    +navbar(user)
+    section.py-5
+      .container
+        // Breadcrumbs
+        ol.breadcrumb.ps-0.justify-content-start
+          li.breadcrumb-item
+            a(href='/') Home
+          li.breadcrumb-item
+            a(href='/myAccount') Account
+          li.breadcrumb-item.active Login & security   
+        h1.hero-heading.mb-0 Login & security
+        p.text-muted.mb-5 Manage your Login & security and settings here.
+        .row
+          .col-lg-7.mb-5.mb-lg-0
+            .text-block
+              h3.mb-4 Login
+              .row
+                .col-sm-8
+                  h6 Password
+                //-   p.text-sm.text-muted Last updated 3 years ago
+                .col.text-end
+                  button.btn.btn-link.ps-0.text-primary.collapsed(type='button' data-bs-toggle='collapse' data-bs-target='#updatePassword' aria-expanded='false' aria-controls='updatePassword') Update
+              #updatePassword.collapse
+                form(action='/updatePassword' method='post') 
+                    .row.mt-4
+                        //-   .mb-4.col-12
+                        //-     label.form-label(for='') Current Password
+                        //-     input#password-current.form-control(type='password' name='password-current')
+                        p.small.text-danger #{(success ? 'Password Updated' :'')}
+                        .mb-4.col-md-6
+                            label.form-label(for='password-new') New Password
+                            input#password.form-control(type='password' name='password' required=true  value=(formData != undefined) ? formData.password : '')
+                            if(errors && errors.password)
+                                p.error(id="error").small.text-danger #{errors.password}
+                        .mb-4.col-md-6
+                            label.form-label(for='password-confirm') Confirm Password
+                            input#confirmPassword.form-control(required=true , name='confirmPassword', type='password', value=(formData != undefined) ? formData.confirmPassword : '')
+                    button.btn.btn-outline-primary Update Password
+            //- .text-block
+              h3.mb-4 Social accounts
+              .row
+                .col-sm-8
+                  h6 Facebook
+                  p.text-sm.text-muted Not connected
+                .col.text-end
+                  a.btn.btn-link.text-primary.ps-0(href='#') Connect
+              .row
+                .col-sm-8
+                  h6 Google
+                  p.text-sm Connected
+                .col.text-end
+                  a.btn.btn-link.text-primary.ps-0(href='#') Disconnect
+            //- .text-block
+              h3.mb-4 Device history
+              .d-flex
+                .icon-rounded.bg-secondary-light.flex-shrink-0
+                  svg.svg-icon.text-secondary.w-2rem.h-2rem
+                    use(xlink:href='#imac-screen-1')  
+                .pt-2.ms-3
+                  strong Windows 10.0 
+                  | · Chrome
+                  .badge.badge-secondary-light.text-uppercase Current  Session
+                  p.text-sm.text-muted Ostrava, Moravskoslezsky kraj · April 6, 2020 at 01:51pm
+                  a.btn.btn-link.text-primary.ps-0(href='#') Log out device
+          .col-md-8.col-lg-4.ms-lg-auto
+            .card.border-0.shadow
+              .card-header.bg-primary-light.py-4.border-0
+                .d-flex.align-items-center
+                  div
+                    h4.h6.subtitle.text-sm.text-primary Let's make your account more secure
+                  svg.svg-icon.svg-icon.svg-icon-light.w-3rem.h-3rem.ms-3.text-primary.flex-shrink-0
+                    use(xlink:href='#shield-security-1')  
+              .card-body.p-4
+                h6.card-text Your account security: 
+                p.card-text.mb-4
+                  span.badge.badge-info-light High
+                p.text-muted.card-text We’re always working on ways to increase safety in our community. 
+                p.text-muted.card-text That’s why we look at every account to make sure it’s as secure as possible.
+    // Footer
+    footer.position-relative.z-index-10.d-print-none
+      // Main block - menus, subscribe form
+      .py-6.bg-gray-200.text-muted
+        .container
+          .row
+            .col-lg-4.mb-5.mb-lg-0
+              .fw-bold.text-uppercase.text-dark.mb-3 Directory
+              p Lorem ipsum dolor sit amet, consectetur adipisicing.
+              ul.list-inline
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='twitter')
+                    i.fab.fa-twitter
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='facebook')
+                    i.fab.fa-facebook
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='instagram')
+                    i.fab.fa-instagram
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='pinterest')
+                    i.fab.fa-pinterest
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='vimeo')
+                    i.fab.fa-vimeo
+            .col-lg-2.col-md-6.mb-5.mb-lg-0
+              h6.text-uppercase.text-dark.mb-3 Rentals
+              ul.list-unstyled
+                li
+                  a.text-muted(href='index.html') Rooms
+                li
+                  a.text-muted(href='category-rooms.html') Map on top
+                li
+                  a.text-muted(href='category-2-rooms.html') Side map
+                li
+                  a.text-muted(href='category-3-rooms.html') No map
+                li
+                  a.text-muted(href='detail-rooms.html') Room detail
+            .col-lg-2.col-md-6.mb-5.mb-lg-0
+              h6.text-uppercase.text-dark.mb-3 Pages
+              ul.list-unstyled
+                li
+                  a.text-muted(href='compare.html') Comparison                                   
+                li
+                  a.text-muted(href='team.html') Team                                   
+                li
+                  a.text-muted(href='contact.html') Contact                                   
+            .col-lg-4
+              h6.text-uppercase.text-dark.mb-3 Daily Offers & Discounts
+              p.mb-3  Lorem ipsum dolor sit amet, consectetur adipisicing elit. At itaque temporibus.
+              form#newsletter-form(action='#')
+                .input-group.mb-3
+                  input.form-control.bg-transparent.border-dark.border-end-0(type='email' placeholder='Your Email Address' aria-label='Your Email Address')
+                  button.btn.btn-outline-dark.border-start-0(type='submit')
+                    i.fa.fa-paper-plane.text-lg
+      // Copyright section of the footer
+      .py-4.fw-light.bg-gray-800.text-gray-300
+        .container
+          .row.align-items-center
+            .col-md-6.text-center.text-md-start
+              p.text-sm.mb-md-0 © 2021, Your company.  All rights reserved.
+            .col-md-6
+              ul.list-inline.mb-0.mt-2.mt-md-0.text-center.text-md-end
+                li.list-inline-item
+                  img.w-2rem(src='img/visa.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/mastercard.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/paypal.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/western-union.svg' alt='...')
+    // JavaScript files
+    script.
+      // ------------------------------------------------------- //
+      //   Inject SVG Sprite -
+      //   see more here
+      //   https://css-tricks.com/ajaxing-svg-sprite/
+      // ------------------------------------------------------ //
+      function injectSvgSprite(path) {
+      var ajax = new XMLHttpRequest();
+      ajax.open("GET", path, true);
+      ajax.send();
+      ajax.onload = function(e) {
+      var div = document.createElement("div");
+      div.className = 'd-none';
+      div.innerHTML = ajax.responseText;
+      document.body.insertBefore(div, document.body.childNodes[0]);
+      }
+      }
+      // to avoid CORS issues when viewing using file:// protocol, using the demo URL for the SVG sprite
+      // use your own URL in production, please :)
+      // https://demo.bootstrapious.com/directory/1-0/icons/orion-svg-sprite.svg
+      //- injectSvgSprite('${path}icons/orion-svg-sprite.svg');
+      injectSvgSprite('https://demo.bootstrapious.com/directory/1-4/icons/orion-svg-sprite.svg');
+    // jQuery
+    script(src='vendor/jquery/jquery.min.js')
+    // Bootstrap JS bundle - Bootstrap + PopperJS
+    script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')
+    // Magnific Popup - Lightbox for the gallery
+    script(src='vendor/magnific-popup/jquery.magnific-popup.min.js')
+    // Smooth scroll
+    script(src='vendor/smooth-scroll/smooth-scroll.polyfills.min.js')
+    // Bootstrap Select
+    script(src='vendor/bootstrap-select/js/bootstrap-select.min.js')
+    // Object Fit Images - Fallback for browsers that don't support object-fit
+    script(src='vendor/object-fit-images/ofi.min.js')
+    // Swiper Carousel
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/js/swiper.min.js')
+    script.
+      var basePath = ''
+    // Main Theme JS file
+    script(src='js/theme.js')

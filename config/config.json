@@ -1,0 +1,70 @@
+{
+ 
+    "development": {
+ 
+        "username": "root",
+ 
+        "password": "amazing",
+ 
+        "database": "michelle",
+ 
+        "host": "localhost",
+ 
+        "dialect": "mysql",
+ 
+       
+ 
+        "logging": false,
+        "freezeTableName": true,
+        "operatorsAliases": {
+          "$and": "Op.and",
+          "$or": "Op.or",
+          "$eq": "Op.eq",
+          "$gt": "Op.gt",
+          "$lt": "Op.lt",
+          "$lte": "Op.lte",
+          "$like": "Op.like"
+    }
+},
+ 
+    "test": {
+ 
+         "username": "root",
+ 
+        "password": "amazing",
+ 
+        "database": "uncle",
+ 
+        "host": "localhost",
+ 
+        "dialect": "mysql"
+ 
+    },
+ 
+    "production": {
+ 
+        "username": "b5768bab4af161",
+ 
+        "password": "a34e94fa",
+ 
+        "database": "heroku_952dd57c8a20043",
+ 
+        "host": "eu-cdbr-west-03.cleardb.net",
+ 
+        "dialect": "mysql"
+ 
+    },
+ 
+    "mailServer_email": "trainers4you1@outlook.com", 
+    "mailServer_password" :"Liverpool123",
+    "mailServer_host":"smtp-mail.outlook.com",
+
+    "secretAccessKey":"X7GewRTheMEei0qpIU5hGNKGjDOh8ZKj6HgHgmCq",
+    "accessKeyId":"AKIAIYL6YZXIPHSPOGHQ",
+    "region":"eu-west-2",
+    "s3BucketPath":"https://michelleshortlets.s3.eu-west-2.amazonaws.com/",
+    "bucketName":"michelleshortlets",
+    "testUrl":"http://localhost:3000",
+    "prodUrl":"https://reggaemasters.herokuapp.com"
+}
+

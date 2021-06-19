@@ -1,0 +1,167 @@
+doctype html
+html(lang='en')
+  include common/header.pug 
+  +head('Booking History')
+  body(style='padding-top: 72px;')
+    include common/navbar.pug 
+    +navbar(user)
+    section.py-5
+      .container
+        // Breadcrumbs
+        ol.breadcrumb.ps-0.justify-content-start
+          li.breadcrumb-item
+            if(user.accountTypeFk == 2)
+              a(href='/') Home
+            else
+              a(href="/adminDashboard") Dashboard
+          li.breadcrumb-item.active Bookings 
+        h1.hero-heading.mb-4 Your bookings
+        if(bookingHistory.length == 0 )
+            p.text-muted.mb-5 You have no booking history. Start exploring ideas for your next trip.
+            p.mb-6
+            img.img-fluid(src='img/illustration/undraw_trip_dv9f.svg' alt='' style='width: 400px;')
+        else
+            .row
+                each booking in bookingHistory
+        
+                    // place item
+                    .col-xl-3.col-md-4.col-sm-6.mb-5(data-marker-id='59c0c8e33b1527bfe2abaf92')
+                        .card.hover-animate.h-100.border-0.shadow
+                            .card-img-top.overflow-hidden
+                              if(user.accountTypeFk == 2)
+                                a(href='/customerBooking?id=' + booking.id)
+                                  img.img-fluid(src=booking.displayImage1 alt=booking.propertyName)
+                              else
+                                a(href='/adminCustomerBooking?id=' + booking.id)
+                                  img.img-fluid(src=booking.displayImage1 alt=booking.propertyName)
+
+                            .card-body.d-flex.align-items-center
+                                .w-100
+                                    p.subtitle.fw-normal.text-sm.mb-2
+                                    span.badge.badge-pill.p-2.badge-secondary-light #{booking.bookingDttm}
+                                    h6.card-title
+                                      if(user.accountTypeFk == 2)
+                                        a.text-decoration-none.text-dark(href='/customerBooking?id=' + booking.id) #{booking.propertyName}
+                                      else
+                                        a.text-decoration-none.text-dark(href='/adminCustomerBooking?id=' + booking.id) #{booking.propertyName}
+                                    .d-flex.card-subtitle
+                                            p.flex-grow-1.mb-0.text-muted.text-sm £#{(parseFloat(booking.cost)).toFixed(2)}
+                                            //- p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
+                                                i.fa.fa-star.text-warning
+                                                i.fa.fa-star.text-warning
+                                                i.fa.fa-star.text-warning
+                                                i.fa.fa-star.text-warning
+                                                i.fa.fa-star.text-warning
+                                                
+    // Footer
+    footer.position-relative.z-index-10.d-print-none
+      // Main block - menus, subscribe form
+      .py-6.bg-gray-200.text-muted
+        .container
+          .row
+            .col-lg-4.mb-5.mb-lg-0
+              .fw-bold.text-uppercase.text-dark.mb-3 Directory
+              p Lorem ipsum dolor sit amet, consectetur adipisicing.
+              ul.list-inline
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='twitter')
+                    i.fab.fa-twitter
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='facebook')
+                    i.fab.fa-facebook
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='instagram')
+                    i.fab.fa-instagram
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='pinterest')
+                    i.fab.fa-pinterest
+                li.list-inline-item
+                  a.text-muted.text-primary-hover(href='#' target='_blank' title='vimeo')
+                    i.fab.fa-vimeo
+            .col-lg-2.col-md-6.mb-5.mb-lg-0
+              h6.text-uppercase.text-dark.mb-3 Rentals
+              ul.list-unstyled
+                li
+                  a.text-muted(href='index.html') Rooms
+                li
+                  a.text-muted(href='category-rooms.html') Map on top
+                li
+                  a.text-muted(href='category-2-rooms.html') Side map
+                li
+                  a.text-muted(href='category-3-rooms.html') No map
+                li
+                  a.text-muted(href='detail-rooms.html') Room detail
+            .col-lg-2.col-md-6.mb-5.mb-lg-0
+              h6.text-uppercase.text-dark.mb-3 Pages
+              ul.list-unstyled
+                li
+                  a.text-muted(href='compare.html') Comparison                                   
+                li
+                  a.text-muted(href='team.html') Team                                   
+                li
+                  a.text-muted(href='contact.html') Contact                                   
+            .col-lg-4
+              h6.text-uppercase.text-dark.mb-3 Daily Offers & Discounts
+              p.mb-3  Lorem ipsum dolor sit amet, consectetur adipisicing elit. At itaque temporibus.
+              form#newsletter-form(action='#')
+                .input-group.mb-3
+                  input.form-control.bg-transparent.border-dark.border-end-0(type='email' placeholder='Your Email Address' aria-label='Your Email Address')
+                  button.btn.btn-outline-dark.border-start-0(type='submit')
+                    i.fa.fa-paper-plane.text-lg
+      // Copyright section of the footer
+      .py-4.fw-light.bg-gray-800.text-gray-300
+        .container
+          .row.align-items-center
+            .col-md-6.text-center.text-md-start
+              p.text-sm.mb-md-0 © 2021, Your company.  All rights reserved.
+            .col-md-6
+              ul.list-inline.mb-0.mt-2.mt-md-0.text-center.text-md-end
+                li.list-inline-item
+                  img.w-2rem(src='img/visa.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/mastercard.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/paypal.svg' alt='...')
+                li.list-inline-item
+                  img.w-2rem(src='img/western-union.svg' alt='...')
+    // JavaScript files
+    script.
+      // ------------------------------------------------------- //
+      //   Inject SVG Sprite -
+      //   see more here
+      //   https://css-tricks.com/ajaxing-svg-sprite/
+      // ------------------------------------------------------ //
+      function injectSvgSprite(path) {
+      var ajax = new XMLHttpRequest();
+      ajax.open("GET", path, true);
+      ajax.send();
+      ajax.onload = function(e) {
+      var div = document.createElement("div");
+      div.className = 'd-none';
+      div.innerHTML = ajax.responseText;
+      document.body.insertBefore(div, document.body.childNodes[0]);
+      }
+      }
+      // to avoid CORS issues when viewing using file:// protocol, using the demo URL for the SVG sprite
+      // use your own URL in production, please :)
+      // https://demo.bootstrapious.com/directory/1-0/icons/orion-svg-sprite.svg
+      //- injectSvgSprite('${path}icons/orion-svg-sprite.svg');
+      injectSvgSprite('https://demo.bootstrapious.com/directory/1-4/icons/orion-svg-sprite.svg');
+    // jQuery
+    script(src='vendor/jquery/jquery.min.js')
+    // Bootstrap JS bundle - Bootstrap + PopperJS
+    script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')
+    // Magnific Popup - Lightbox for the gallery
+    script(src='vendor/magnific-popup/jquery.magnific-popup.min.js')
+    // Smooth scroll
+    script(src='vendor/smooth-scroll/smooth-scroll.polyfills.min.js')
+    // Bootstrap Select
+    script(src='vendor/bootstrap-select/js/bootstrap-select.min.js')
+    // Object Fit Images - Fallback for browsers that don't support object-fit
+    script(src='vendor/object-fit-images/ofi.min.js')
+    // Swiper Carousel
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/js/swiper.min.js')
+    script.
+      var basePath = ''
+    // Main Theme JS file
+    script(src='js/theme.js')
