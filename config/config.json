@@ -49,7 +49,7 @@
  
         "database": "heroku_717c423df49b84e",
  
-        "host": "eu-cdbr-west-03.cleardb.net",
+        "host": "eu-cdbr-west-01.cleardb.net",
  
         "dialect": "mysql"
  
