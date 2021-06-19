@@ -36,7 +36,7 @@ exports.placeOrder = async function(req,res)
 
     var totalCost = (parseFloat(property.pricePerDay) * dayDiff).toFixed(2);
 
-    res.render('placeorder', {user:req.user,property:property,fromDay:fromDay,fromNumber:fromNumber,fromYear:fromYear,fromMonth:fromMonth,
+    res.render('placeOrder', {user:req.user,property:property,fromDay:fromDay,fromNumber:fromNumber,fromYear:fromYear,fromMonth:fromMonth,
                             toDay:toDay,toNumber:toNumber,toYear:toYear,toMonth:toMonth, dayDiff, totalCost:totalCost, guests:guests, fromDate:originalFromDate, toDate:originalToDate});
 }
 
