@@ -50,6 +50,13 @@ exports.checkout = async function(req,res)
     var nights = req.body.nights;
     var url = req.body.url;
 
+    console.log(fromDate);
+    console.log(toDate);
+    console.log(guests);
+    console.log(propertyId);
+    console.log(totalCost);
+    console.log(nights);
+    console.log(url);
     // if(!url.includes('localhost'))
     // {
     //     url = 'https://' + url;
@@ -59,6 +66,8 @@ exports.checkout = async function(req,res)
             id:propertyId
         }
     });
+
+    console.log(property);
 
     var lineItems = new Array();
     lineItems.push({name:property.name,amount:parseFloat(totalCost)*100,currency:'gbp',quantity:1});
@@ -77,7 +86,9 @@ exports.checkout = async function(req,res)
         bookingDttm: Date.now(),
         deleteFl:false,
         versionNo:1
-    })
+    });
+
+    console.log(booking);
     const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         line_items: lineItems,
@@ -86,7 +97,9 @@ exports.checkout = async function(req,res)
         success_url: url + '/purchaseSuccessful?guests=' + guests +'&propertyId=' + property.id + '&nights=' + nights + '&totalCost=' + totalCost +
                 '&fromDate=' + fromDate + '&toDate=' + toDate +'&booking=' + booking.id,
         cancel_url: url +'/placeOrder',
-      });
+    });
+
+    console.log(session);
 
     res.json({session:session});
 }

@@ -5,7 +5,7 @@ html(lang='en')
    body(style='padding-top: 72px;')
     include common/navbar.pug 
     +navbar(user)
-    script(src="https://js.stripe.com/v3/")
+    
     .progress.rounded-0.sticky-top(style='height: 8px; top: 72px;')
       .progress-bar(role='progressbar' style='width: 50%' aria-valuenow='50' aria-valuemin='0' aria-valuemax='100')
     section.py-5
@@ -237,4 +237,5 @@ html(lang='en')
       var basePath = ''
     // Main Theme JS file
     script(src='js/theme.js')
+    script(src="https://js.stripe.com/v3/")
     script(src="js/checkout.js")
