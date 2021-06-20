@@ -457,6 +457,7 @@ async function getPropertyAvailabilty(propertyId)
     
 
     var result = new Array();
+    console.log(bookings);
     for( var i = 0; i < bookings.length; i++ )
     {
         var booking = bookings[i];
@@ -469,6 +470,7 @@ async function getPropertyAvailabilty(propertyId)
             var day = fromDt.getDate();
             var year = fromDt.getFullYear();
             var date = year + '-' + month + '-' + day;
+            console.log(date);
             result.push(date);
             fromDt.setDate(fromDt.getDate() + 1);
         }
