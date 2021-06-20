@@ -50,10 +50,10 @@ exports.checkout = async function(req,res)
     var nights = req.body.nights;
     var url = req.body.url;
 
-    if(!url.includes('localhost'))
-    {
-        url = 'https://' + url;
-    }
+    // if(!url.includes('localhost'))
+    // {
+    //     url = 'https://' + url;
+    // }
     var property = await models.property.findOne({
         where:{
             id:propertyId
@@ -88,7 +88,7 @@ exports.checkout = async function(req,res)
         cancel_url: url +'/placeOrder',
       });
 
-      res.json({session:session});
+    res.json({session:session});
 }
 
 exports.purchaseSuccessful = async function(req,res)

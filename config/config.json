@@ -65,6 +65,6 @@
     "s3BucketPath":"https://michelleshortlets.s3.eu-west-2.amazonaws.com/",
     "bucketName":"michelleshortlets",
     "testUrl":"http://localhost:3000",
-    "prodUrl":"https://reggaemasters.herokuapp.com"
+    "prodUrl":"https://shortlets.herokuapp.com/"
 }
 
