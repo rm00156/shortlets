@@ -34,17 +34,17 @@ const start = function()
 
 async function syncCalendarsTask()
 {
-    // var propertySyncs = await models.propertySync.findAll({
-    //     where:{
-    //         deleteFl:false
-    //     }
-    // });
+    var propertySyncs = await models.propertySync.findAll({
+        where:{
+            deleteFl:false
+        }
+    });
 
-    // for( var i = 0; i < propertySyncs.length; i++ )
-    // {
-    //     var propertySync = propertySyncs[i];
-    //     await processCalendarSync(propertySync);
-    // }
+    for( var i = 0; i < propertySyncs.length; i++ )
+    {
+        var propertySync = propertySyncs[i];
+        await processCalendarSync(propertySync);
+    }
 }
 
 async function processCalendarSync(propertySync)
