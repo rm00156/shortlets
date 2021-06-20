@@ -50,13 +50,24 @@ exports.checkout = async function(req,res)
     var nights = req.body.nights;
     var url = req.body.url;
 
-    console.log(fromDate);
-    console.log(toDate);
-    console.log(guests);
-    console.log(propertyId);
-    console.log(totalCost);
-    console.log(nights);
-    console.log(url);
+    var momentFromDate = moment(fromDate).utcOffset(0);
+    momentFromDate.set({hour:0,minute:0,second:0,millisecond:0});
+    momentFromDate.toISOString();
+    momentFromDate.format();
+
+
+    var momentToDate = moment(toDate).utcOffset(0);
+    momentToDate.set({hour:0,minute:0,second:0,millisecond:0});
+    momentToDate.toISOString();
+    momentToDate.format();
+
+    // console.log(fromDate);
+    // console.log(toDate);
+    // console.log(guests);
+    // console.log(propertyId);
+    // console.log(totalCost);
+    // console.log(nights);
+    // console.log(url);
     // if(!url.includes('localhost'))
     // {
     //     url = 'https://' + url;
@@ -74,11 +85,12 @@ exports.checkout = async function(req,res)
     
     url = env == 'development' ? config.testUrl : config.prodUrl;
 
+
     var booking = await models.booking.create({
         accountFk:req.user.id,
         propertyFk:propertyId,
-        fromDt:new Date(fromDate),
-        toDt: new Date(toDate),
+        fromDt:momentFromDate,
+        toDt: momentToDate,
         guests:guests,
         nights:nights,
         cost:totalCost,

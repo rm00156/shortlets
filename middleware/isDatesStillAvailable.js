@@ -18,9 +18,10 @@ exports.isDatesStillAvailable = async function(req,res, next)
 
     if(bookings.length > 0)
     {
-        res.redirect('/property?id=' + propertyId +'&error=true');
+        return res.redirect('/property?id=' + propertyId +'&error=true');
     }
     else
+    {
         next();
-    console.log(bookings)
+    } 
 }
