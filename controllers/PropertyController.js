@@ -444,16 +444,16 @@ exports.getProperty = async function(req,res)
 
 async function getPropertyAvailabilty(propertyId)
 {
-    var today = new Date();
+    
     // get all bookings where the toDate is after or equal today
     // find all dates within each booking
 
     var bookings = await models.sequelize.query('select * from bookings b ' + 
                     ' where b.propertyFk = :propertyId ' + 
-                    ' and b.toDt >= :today ' + 
+                    ' and b.toDt >= CURDATE() ' + 
                     ' and (b.status != :cancelled and b.status != :pending)' + 
                     ' and b.deleteFl = false ' ,
-                    {replacements:{propertyId:propertyId, today:today,cancelled:'Cancelled',pending:'Pending'}, type:models.sequelize.QueryTypes.SELECT});
+                    {replacements:{propertyId:propertyId,cancelled:'Cancelled',pending:'Pending'}, type:models.sequelize.QueryTypes.SELECT});
     
 
     var result = new Array();
