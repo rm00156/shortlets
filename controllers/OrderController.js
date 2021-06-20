@@ -78,10 +78,10 @@ exports.checkout = async function(req,res)
         }
     });
 
-    console.log(property);
+    console.log(totalCost);
 
     var lineItems = new Array();
-    lineItems.push({name:property.name,amount:parseFloat(totalCost)*100,currency:'gbp',quantity:1});
+    lineItems.push({name:property.name,amount:((parseFloat(totalCost)).toFixed(2)*100),currency:'gbp',quantity:1});
     
     url = env == 'development' ? config.testUrl : config.prodUrl;
 
