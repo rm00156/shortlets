@@ -13,6 +13,7 @@ const nodeMailer = require('nodemailer');
 const config = require('./config/config.json');
 const moment = require('moment');
 const sequelize = require('sequelize');
+const ical = require('node-ical');
 
 const REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
 const env = process.env.NODE_ENV || "development";
@@ -27,15 +28,15 @@ const workers = process.env.WEB_CONCURRENCY || 2;
 // to be much lower.
 let maxJobsPerWorker = 50;
 
-var smtpTransport = nodeMailer.createTransport({
-    host:config.mailServer_host,
-    port:587,
-    secure:false,
-    auth:{
-      user:config.mailServer_email,
-      pass:config.mailServer_password
-    }
-});
+// var smtpTransport = nodeMailer.createTransport({
+//     host:config.mailServer_host,
+//     port:587,
+//     secure:false,
+//     auth:{
+//       user:config.mailServer_email,
+//       pass:config.mailServer_password
+//     }
+// });
 
 const compile = async function(templateName, data)
 {
@@ -368,7 +369,7 @@ async function processCalendarSync(propertySync)
         end.set({hour:0,minute:0,second:0,millisecond:0});
         end.toISOString();
         end.format();
-        
+
         var summary = webEvent.summary;
         var status;
         if(summary == 'Reserved')
