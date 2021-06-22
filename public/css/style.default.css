@@ -3111,14 +3111,14 @@ fieldset:disabled .btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #4E66F8;
-  border-color: #4E66F8;
+  background-color: #010101;
+  border-color: #010101;
 }
 
 .btn-primary:hover {
   color: #fff;
-  background-color: #4257d3;
-  border-color: #3e52c6;
+  background-color: #6A6262;
+  border-color: #696161;
 }
 
 .btn-check:focus + .btn-primary, .btn-primary:focus {
@@ -8703,19 +8703,19 @@ fieldset:disabled .btn {
 }
 
 .text-primary {
-  color: #4E66F8 !important;
+  color: #fcba03 !important;
 }
 
 .text-primary-hover:hover {
-  color: #4E66F8 !important;
+  color: #fcba03 !important;
 }
 
 .text-secondary {
-  color: #e83e8c !important;
+  color: #fcba03 !important;
 }
 
 .text-secondary-hover:hover {
-  color: #e83e8c !important;
+  color: #fcba03 !important;
 }
 
 .text-success {
@@ -14444,7 +14444,7 @@ fieldset:disabled .btn {
 */
 .testimonial-quote {
   margin-bottom: 10px;
-  color: #4E66F8;
+  color: #fcba03;
   font-size: 1.5rem;
 }
 
@@ -16383,7 +16383,7 @@ button.mfp-close {
 
 .swiper-pagination-bullet-active {
   opacity: 1;
-  background: #4E66F8;
+  background: #fcba03;
 }
 
 .swiper .swiper-pagination-bullet-active {
