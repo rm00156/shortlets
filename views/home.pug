@@ -87,7 +87,7 @@ html(lang='en')
             each town in towns
                 .swiper-slide.h-auto.px-2
                     .card.card-poster.gradient-overlay.hover-animate.mb-4.mb-lg-0
-                        a.tile-link(href='/properties?townId='+town.id+'&cityId='+towns.cityFk)
+                        a.tile-link(href='/properties?townId='+town.id+'&cityId='+town.cityFk)
                         img.bg-image(src=town.imagePath alt='Card image')
                         .card-body.overlay-content
                             h6.card-title.text-shadow.text-uppercase #{town.name}
@@ -135,8 +135,8 @@ html(lang='en')
                         // place item
                         .w-100.h-100.hover-animate(data-marker-id='59c0c8e322f3375db4d89128')
                             .card.h-100.border-0.shadow
-                                .card-img-top.overflow-hidden.gradient-overlay
-                                    img.img-fluid(src=property.displayImage1 alt='Cute Quirky Garden apt, NYC adjacent')
+                                .card-img-top.overflow-hidden.gradient-overlay(style="height:200px")
+                                    img.img-fluid(src=property.displayImage1 alt='Cute Quirky Garden apt, NYC adjacent' style="object-fit:scale-down")
                                     a.tile-link(href='/property?id=' + property.id)
                                     //- .card-img-overlay-bottom.z-index-20
                                         .d-flex.text-white.text-sm.align-items-center
@@ -154,7 +154,7 @@ html(lang='en')
                                             p.flex-grow-1.mb-0.text-muted.text-sm #{property.bedrooms} bedrooms
                                             //- p.flex-grow-1.mb-0.text-muted.text-sm #{property.guests} guests
                                             //- p.flex-grow-1.mb-0.text-muted.text-sm #{property.bathrooms} bathrooms
-                                            p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
+                                            //- p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
                                                 i.fa.fa-star.text-warning
                                                 i.fa.fa-star.text-warning
                                                 i.fa.fa-star.text-warning

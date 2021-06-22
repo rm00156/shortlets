@@ -17,6 +17,7 @@ $(document).ready(function(){
     
    
     var hide = property.deleteFl;
+    console.log(hide)
     if(hide == 1)
         $('#hide').prop("checked",true);
     
@@ -434,6 +435,7 @@ async function editProperty()
         data.append('townId',townId);
         data.append('postCode', postCode);
         data.append('addressId',property.addressId);
+        data.append('hide', $('#hide').is(':checked'));
 
         request.addEventListener('load', function(e){
 

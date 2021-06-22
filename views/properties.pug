@@ -301,7 +301,7 @@ html(lang='en')
             each property in properties
                 .col-sm-6.col-xl-4.mb-5.hover-animate(data-marker-id='59c0c8e33b1527bfe2abaf92')
                     .card.h-100.border-0.shadow
-                        .card-img-top.overflow-hidden.gradient-overlay
+                        .card-img-top.overflow-hidden.gradient-overlay(style="height:200px")
                             img.img-fluid(src=property.displayImage1 alt=property.name)
                             a.tile-link(href='/property?id=' + property.id)
                             //- .card-img-overlay-bottom.z-index-20
@@ -320,7 +320,7 @@ html(lang='en')
                                     p.flex-grow-1.mb-0.text-muted.text-sm #{property.bedrooms} bedrooms
                                     //- p.flex-grow-1.mb-0.text-muted.text-sm #{property.guests} guests
                                     //- p.flex-grow-1.mb-0.text-muted.text-sm #{property.bathrooms} bathrooms
-                                    p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
+                                    //- p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
                                         i.fa.fa-star.text-warning
                                         i.fa.fa-star.text-warning
                                         i.fa.fa-star.text-warning
