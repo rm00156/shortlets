@@ -11,8 +11,11 @@ $(function () {
     if ($(window).width() < 767) {
         singleMonth = true;
     }
+
     var propertyAvailabilityDates = JSON.parse($('#propertyAvailabilityDates').val());
-    console.log(propertyAvailabilityDates)
+    var advanceNoticeDates = JSON.parse($('#advanceNoticeDates').val());
+    console.log(propertyAvailabilityDates);
+    console.log(advanceNoticeDates);
     var dateRangeConfig = {
         autoClose: true,
         startDate: new Date(),
@@ -39,7 +42,7 @@ $(function () {
             var year = t.getFullYear();
             var date = year + '-' + month + '-' + day;
 
-            var valid = propertyAvailabilityDates.includes(date) ? false : true; //disable saturday and sunday
+            var valid = advanceNoticeDates.includes(date) || propertyAvailabilityDates.includes(date) ? false : true; //disable saturday and sunday
             var _class = "";
             var _tooltip = valid ? "" : "Booked";
             return [valid, _class, _tooltip];

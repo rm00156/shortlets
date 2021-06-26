@@ -303,6 +303,46 @@ exports.propertyAvailability = async function (req, res) {
     var bookings = await getBookingsForProperty(id);
     var advanceNotice = property.advanceNotice;
 
+    var advanceNoticeInfo = await getAdvanceNoticeWindow(advanceNotice, property.id);
+    var advanceNoticeFrom = advanceNoticeInfo[0];
+    var advanceNoticeTo = advanceNoticeInfo[1];
+    // if (advanceNotice > 0) {
+    //     var start = moment(start).utcOffset(0);
+    //     start.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+    //     start.toISOString();
+    //     start.format();
+    //     start = start.toDate();
+
+    //     var end = moment(start).add(advanceNotice - 1, 'days').toDate();
+    //     // are there any bookings in this window
+    //     var bookingWindow = await models.sequelize.query('select * from bookings ' +
+    //         ' where fromDt <= :toDate ' +
+    //         ' and toDt >= :fromDate ' +
+    //         ' and (status = :status1 or status = :status2) ' +
+    //         ' and propertyFk = :propertyId ' +
+    //         ' and deleteFl = false ',
+    //         {
+    //             replacements: {
+    //                 fromDate: start, toDate: end, propertyId: id,
+    //                 status1: 'Successful', status2: 'Unavailable'
+    //             },
+    //             type: models.sequelize.QueryTypes.SELECT
+    //         });
+
+    //     if (bookingWindow.length == 0) {
+    //         advanceNoticeFrom = start;
+    //         advanceNoticeTo = end;
+    //     }
+
+    // }
+    res.render('propertyAvailability', {
+        user: req.user, bookings: bookings, property: property, advanceNoticeFrom: advanceNoticeFrom,
+        advanceNoticeTo: advanceNoticeTo
+    });
+}
+
+async function getAdvanceNoticeWindow(advanceNotice, propertyId)
+{
     var advanceNoticeFrom = null;
     var advanceNoticeTo = null;
     if (advanceNotice > 0) {
@@ -322,7 +362,7 @@ exports.propertyAvailability = async function (req, res) {
             ' and deleteFl = false ',
             {
                 replacements: {
-                    fromDate: start, toDate: end, propertyId: id,
+                    fromDate: start, toDate: end, propertyId: propertyId,
                     status1: 'Successful', status2: 'Unavailable'
                 },
                 type: models.sequelize.QueryTypes.SELECT
@@ -332,12 +372,9 @@ exports.propertyAvailability = async function (req, res) {
             advanceNoticeFrom = start;
             advanceNoticeTo = end;
         }
-
     }
-    res.render('propertyAvailability', {
-        user: req.user, bookings: bookings, property: property, advanceNoticeFrom: advanceNoticeFrom,
-        advanceNoticeTo: advanceNoticeTo
-    });
+
+    return [advanceNoticeFrom,advanceNoticeTo];
 }
 
 exports.syncListing = async function (req, res) {
@@ -525,9 +562,29 @@ exports.getProperty = async function (req, res) {
     var error = req.query.error;
 
     var randomProperties = await getRandomPropertiesNotIncludingProperty(id);
+    var advanceNotice = property.advanceNotice;
+
+    var advanceNoticeInfo = await getAdvanceNoticeWindow(advanceNotice, property.id);
+    var advanceNoticeFrom = advanceNoticeInfo[0];
+    var advanceNoticeTo = advanceNoticeInfo[1];
+    
+    var advanceNoticeDates = new Array();
+    if(advanceNoticeFrom != null )
+    {
+        while(advanceNoticeFrom <= advanceNoticeTo)
+        {
+            var month = advanceNoticeFrom.getMonth();
+            var day = advanceNoticeFrom.getDate();
+            var year = advanceNoticeFrom.getFullYear();
+            var date = year + '-' + month + '-' + day;
+            console.log(date);
+            advanceNoticeDates.push(date);
+            advanceNoticeFrom.setDate(advanceNoticeFrom.getDate() + 1)
+        }
+    }
 
     res.render('property', {
-        user: req.user, error: error, randomProperties: randomProperties,
+        user: req.user, error: error, randomProperties: randomProperties, advanceNoticeDates:advanceNoticeDates,
         propertyAmenities: propertyAmenities, propertyAvailabilityDates: propertyAvailabilityDates, property: property,
         longitude: longitude, latitude: latitude
     });
