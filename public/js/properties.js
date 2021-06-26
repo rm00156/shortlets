@@ -91,6 +91,7 @@ function search(e)
     var guests = $('#guests').val();
     var bedrooms = $('#bedrooms').val();
     var bathrooms = $('#bathrooms').val();
+    var beds = $('#beds').val();
 
     if(cityId == 0)
     {
@@ -101,6 +102,6 @@ function search(e)
     }
     else
         window.location = '/properties?townId='+townId+'&cityId='+cityId+'&fromDt='+fromDt+'&toDt='+toDt+'&guests='+guests +
-            '&bathrooms=' + bathrooms + '&bedrooms=' + bedrooms;
+            '&bathrooms=' + bathrooms + '&bedrooms=' + bedrooms + '&beds=' + beds;
 
 }

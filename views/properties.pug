@@ -172,11 +172,11 @@ html(lang='en')
                       | Explore top-rated homes with essentials like a workspace, wifi, and self check-in
                 .filter-block
                     h6.mb-3 Rooms and beds
-                    //- .mb-2
+                    .mb-2
                         label.form-label Beds
                         .d-flex.align-items-center
                             .btn.btn-items.btn-items-decrease -
-                            input.form-control.input-items.input-items-greaterthan(type='text' value='1+' disabled='')
+                            input#beds.form-control.input-items.input-items-greaterthan(type='text' value=(beds == undefined ? '1+' : beds +'+')  disabled='')
                             .btn.btn-items.btn-items-increase +
                     .mb-2
                         label.form-label Bedrooms
@@ -329,7 +329,9 @@ html(lang='en')
                                 .d-flex.card-subtitle.mb-3
                                     p.flex-grow-1.mb-0.text-muted.text-sm #{property.guests} guests     
                                 .d-flex.card-subtitle.mb-3
-                                    p.flex-grow-1.mb-0.text-muted.text-sm #{property.bathrooms} bathrooms                             
+                                    p.flex-grow-1.mb-0.text-muted.text-sm #{property.bathrooms} bathrooms 
+                                .d-flex.card-subtitle.mb-3
+                                    p.flex-grow-1.mb-0.text-muted.text-sm #{property.beds} beds                            
                                 p.card-text.text-muted
                                     span.h4.text-primary £#{(parseFloat(property.pricePerDay)).toFixed(2)}
                                     |  per night

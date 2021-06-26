@@ -33,9 +33,8 @@ exports.getAllCitiesWithProperties = async function () {
     return await getAllCitiesWithProperties();
 }
 
-exports.addProperty1 = async function(req,res)
-{
-    res.render('addProperty1',{user:req.user});
+exports.addProperty1 = async function (req, res) {
+    res.render('addProperty1', { user: req.user });
 }
 
 exports.getProperties = async function (req, res) {
@@ -95,12 +94,32 @@ exports.getAdminProperty = async function (req, res) {
         " inner join towns t on a.townFk = t.id " +
         " where p.id = :id ", { replacements: { id: id }, type: models.sequelize.QueryTypes.SELECT });
 
+    var propertyAmenities = await models.propertyAmenity.findAll({
+        where: {
+            propertyFk: id,
+            deleteFl: false
+        }
+    });
     var cities = await getAllCities();
 
     var propertySyncs = await getPropertySyncsForProperty(id);
     var ical = 'localhost:3000/syncListing?id=' + id;
-    res.render('adminProperty', {user:req.user, property: property[0], cities: cities, success: success, propertySyncs: propertySyncs, ical: ical });
+    var amenities = await getAmenities();
 
+    res.render('adminProperty', { user: req.user, propertyAmenities: propertyAmenities, amenities: amenities, property: property[0], cities: cities, success: success, propertySyncs: propertySyncs, ical: ical });
+
+}
+
+exports.getAmenities = async function () {
+    return await getAmenities();
+}
+
+async function getAmenities() {
+    return await models.amenity.findAll({
+        where: {
+            deleteFl: false
+        }
+    });
 }
 
 async function getPropertySyncsForProperty(id) {
@@ -122,6 +141,8 @@ exports.editProperty = async function (req, res) {
     var bedrooms = req.body.bedrooms;
     var bathrooms = req.body.bathrooms;
     var guests = req.body.guests;
+    var beds = req.body.beds;
+    var advanceNotice = req.body.advanceNotice;
     var addressLine1 = req.body.addressLine1;
     var addressLine2 = req.body.addressLine2;
     var cityId = req.body.cityId;
@@ -192,6 +213,8 @@ exports.editProperty = async function (req, res) {
         bedrooms: bedrooms,
         bathrooms: bathrooms,
         guests: guests,
+        beds: beds,
+        advanceNotice: advanceNotice,
         description: description,
         deleteFl: hide,
         versionNo: sequelize.literal('versionNo + 1')
@@ -215,13 +238,31 @@ exports.editProperty = async function (req, res) {
             }
         });
 
-        for(var i = 0; i < count; i++ )
-        {
-            var name = 'syncName' + i;
-            if( req.body[name] != undefined)
-                await addPropertySync(req.body['syncName' + i],req.body['syncUrl' + i],propertyId);
-        }
+    for (var i = 0; i < count; i++) {
+        var name = 'syncName' + i;
+        if (req.body[name] != undefined)
+            await addPropertySync(req.body['syncName' + i], req.body['syncUrl' + i], propertyId);
+    }
 
+    var amenities = await getAmenities();
+
+    for (var j = 0; j < amenities.length; j++) {
+        var amenity = amenities[j];
+        var id = amenity.id;
+        var amenityName = amenity.name;
+        var isChecked = req.body[amenityName] == 'true';
+
+        await models.propertyAmenity.update({
+            checkedFl: isChecked,
+            versionNo: sequelize.literal('versionNo + 1')
+        }, {
+                where: {
+                    propertyFk: propertyId,
+                    amenityFk: id
+                }
+            });
+
+    }
 
     return res.json({ success: 'success' });
 }
@@ -255,12 +296,48 @@ async function addPropertySync(name, url, propertyId) {
 exports.propertyAvailability = async function (req, res) {
     var id = req.query.id;
     var property = await models.property.findOne({
-        where:{
-            id:id
+        where: {
+            id: id
         }
     });
     var bookings = await getBookingsForProperty(id);
-    res.render('propertyAvailability', {user:req.user, bookings: bookings, property:property });
+    var advanceNotice = property.advanceNotice;
+
+    var advanceNoticeFrom = null;
+    var advanceNoticeTo = null;
+    if (advanceNotice > 0) {
+        var start = moment(start).utcOffset(0);
+        start.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+        start.toISOString();
+        start.format();
+        start = start.toDate();
+
+        var end = moment(start).add(advanceNotice - 1, 'days').toDate();
+        // are there any bookings in this window
+        var bookingWindow = await models.sequelize.query('select * from bookings ' +
+            ' where fromDt <= :toDate ' +
+            ' and toDt >= :fromDate ' +
+            ' and (status = :status1 or status = :status2) ' +
+            ' and propertyFk = :propertyId ' +
+            ' and deleteFl = false ',
+            {
+                replacements: {
+                    fromDate: start, toDate: end, propertyId: id,
+                    status1: 'Successful', status2: 'Unavailable'
+                },
+                type: models.sequelize.QueryTypes.SELECT
+            });
+
+        if (bookingWindow.length == 0) {
+            advanceNoticeFrom = start;
+            advanceNoticeTo = end;
+        }
+
+    }
+    res.render('propertyAvailability', {
+        user: req.user, bookings: bookings, property: property, advanceNoticeFrom: advanceNoticeFrom,
+        advanceNoticeTo: advanceNoticeTo
+    });
 }
 
 exports.syncListing = async function (req, res) {
@@ -294,7 +371,7 @@ async function getBookingsForProperty(propertyId) {
         ' inner join accounts a on b.accountfk = a.id ' +
         ' where b.propertyFk = :propertyId ' +
         ' and b.propertySyncFk is null ' +
-        ' and (b.status != :status and b.status != :status2)' + 
+        ' and (b.status != :status and b.status != :status2)' +
         ' and b.deleteFl = false ',
         {
             replacements: {
@@ -304,21 +381,23 @@ async function getBookingsForProperty(propertyId) {
             }, type: models.sequelize.QueryTypes.SELECT
         });
 
-    var result2 = await models.sequelize.query('select b.*, ps.name as propertySyncName from bookings b ' + 
-                ' inner join propertySyncs ps on b.propertySyncFk = ps.id ' +
-                ' where b.propertyFk = :propertyId ' + 
-                ' and (b.status != :status and b.status != :status2) ' + 
-                ' and b.accountFk = :dummyId ' +
-                ' and b.deleteFl = false ', 
-                {replacements:{propertyId:propertyId,status:'Cancelled', status2:'Pending',dummyId:0},
-                type:models.sequelize.QueryTypes.SELECT});
+    var result2 = await models.sequelize.query('select b.*, ps.name as propertySyncName from bookings b ' +
+        ' inner join propertySyncs ps on b.propertySyncFk = ps.id ' +
+        ' where b.propertyFk = :propertyId ' +
+        ' and (b.status != :status and b.status != :status2) ' +
+        ' and b.accountFk = :dummyId ' +
+        ' and b.deleteFl = false ',
+        {
+            replacements: { propertyId: propertyId, status: 'Cancelled', status2: 'Pending', dummyId: 0 },
+            type: models.sequelize.QueryTypes.SELECT
+        });
 
     var results = new Array();
-    result1.forEach(result =>{
+    result1.forEach(result => {
         results.push(result);
     });
-    
-    result2.forEach(result=>{
+
+    result2.forEach(result => {
         results.push(result);
     })
 
@@ -346,6 +425,7 @@ exports.searchProperties = async function (req, res) {
     var cityId = req.query.cityId;
     var townId = req.query.townId;
     var bedrooms = req.query.bedrooms;
+    var beds = req.query.beds;
     var bathrooms = req.query.bathrooms;
     var city = await models.city.findOne({
         where: {
@@ -373,7 +453,7 @@ exports.searchProperties = async function (req, res) {
         fromDt = new Date(fromDt);
     }
 
-    if (guests != undefined && guests != 'undefined' &&  guests != '')
+    if (guests != undefined && guests != 'undefined' && guests != '')
         query = query + ' and p.guests >= :guests ';
 
     if (cityId != undefined && cityId != 0)
@@ -396,6 +476,11 @@ exports.searchProperties = async function (req, res) {
         bathrooms = bathrooms.replace('+', '');
     }
 
+    if (beds != undefined) {
+        query = query + ' and p.beds >= :beds ';
+        beds = beds.replace('+', '');
+    }
+
     if (bedrooms != undefined) {
         query = query + ' and p.bedrooms >= :bedrooms ';
         bedrooms = bedrooms.replace('+', '');
@@ -407,6 +492,7 @@ exports.searchProperties = async function (req, res) {
                 guests: guests, fromDt: fromDt, toDt: toDt, cityId: cityId,
                 bedrooms: bedrooms,
                 bathrooms: bathrooms,
+                beds: beds,
                 townId: townId, completed: 'Completed'
             },
             type: models.sequelize.QueryTypes.SELECT
@@ -414,58 +500,69 @@ exports.searchProperties = async function (req, res) {
 
     var cities = await getAllCitiesWithProperties();
     var towns = await homeController.getAllTowns();
-        console.log(bathrooms)
-    res.render('properties', { user: req.user, bedrooms:bedrooms,bathrooms:bathrooms, properties: properties, cityId: cityId, city: city, town: town, cities: cities, towns: towns });
+    console.log(bathrooms)
+    res.render('properties', { user: req.user, bedrooms: bedrooms, bathrooms: bathrooms, beds: beds, properties: properties, cityId: cityId, city: city, town: town, cities: cities, towns: towns });
 }
 
-exports.getProperty = async function(req,res)
-{
+exports.getProperty = async function (req, res) {
     var id = req.query.id;
-    var property = await models.sequelize.query('select p.*, t.name as town, c.name as city, addr.postCode from properties p ' + 
-            ' inner join addresses addr on addr.propertyFk = p.id ' + 
-            ' inner join towns t on addr.townFk = t.id ' + 
-            ' inner join cities c on addr.cityFk = c.id ' + 
-            ' where p.id = :id ',
-            {replacements:{id:id},type:models.sequelize.QueryTypes.SELECT});
+    var property = await models.sequelize.query('select p.*, t.name as town, c.name as city, addr.postCode from properties p ' +
+        ' inner join addresses addr on addr.propertyFk = p.id ' +
+        ' inner join towns t on addr.townFk = t.id ' +
+        ' inner join cities c on addr.cityFk = c.id ' +
+        ' where p.id = :id ',
+        { replacements: { id: id }, type: models.sequelize.QueryTypes.SELECT });
     property = property[0];
-    if(property == null)
+    if (property == null)
         return res.redirect('/properties?cityId=1');
-    
+
     const body = await fetch("https://api.postcodes.io/postcodes/" + property.postCode).then(result => result.json());
     var longitude = body.result.longitude;
-    var latitude = body.result.latitude; 
+    var latitude = body.result.latitude;
 
     var propertyAvailabilityDates = await getPropertyAvailabilty(id);
+    var propertyAmenities = await getPropertyAmenitiesForPropertyId(id);
     var error = req.query.error;
 
+    var randomProperties = await getRandomPropertiesNotIncludingProperty(id);
 
-    res.render('property',{user:req.user,error:error, propertyAvailabilityDates:propertyAvailabilityDates, property:property, longitude:longitude,latitude:latitude});
+    res.render('property', {
+        user: req.user, error: error, randomProperties: randomProperties,
+        propertyAmenities: propertyAmenities, propertyAvailabilityDates: propertyAvailabilityDates, property: property,
+        longitude: longitude, latitude: latitude
+    });
 }
 
-async function getPropertyAvailabilty(propertyId)
-{
-    
+async function getPropertyAmenitiesForPropertyId(id) {
+    return await models.sequelize.query('select pa.*, a.name, a.icon from propertyAmenities pa ' +
+        ' inner join amenities a on pa.amenityFk = a.id ' +
+        ' where pa.propertyFk = :id ' +
+        ' and pa.checkedFl = true ' +
+        ' and pa.deleteFl = false ',
+        { replacements: { id: id }, type: models.sequelize.QueryTypes.SELECT });
+}
+
+async function getPropertyAvailabilty(propertyId) {
+
     // get all bookings where the toDate is after or equal today
     // find all dates within each booking
 
-    var bookings = await models.sequelize.query('select * from bookings b ' + 
-                    ' where b.propertyFk = :propertyId ' + 
-                    ' and b.toDt >= CURDATE() ' + 
-                    ' and (b.status != :cancelled and b.status != :pending)' + 
-                    ' and b.deleteFl = false ' ,
-                    {replacements:{propertyId:propertyId,cancelled:'Cancelled',pending:'Pending'}, type:models.sequelize.QueryTypes.SELECT});
-    
+    var bookings = await models.sequelize.query('select * from bookings b ' +
+        ' where b.propertyFk = :propertyId ' +
+        ' and b.toDt >= CURDATE() ' +
+        ' and (b.status != :cancelled and b.status != :pending)' +
+        ' and b.deleteFl = false ',
+        { replacements: { propertyId: propertyId, cancelled: 'Cancelled', pending: 'Pending' }, type: models.sequelize.QueryTypes.SELECT });
+
 
     var result = new Array();
     console.log(bookings);
-    for( var i = 0; i < bookings.length; i++ )
-    {
+    for (var i = 0; i < bookings.length; i++) {
         var booking = bookings[i];
         var fromDt = booking.fromDt;
         var toDt = booking.toDt;
         // var between = new Array();
-        while (fromDt < toDt) 
-        {
+        while (fromDt < toDt) {
             var month = fromDt.getMonth();
             var day = fromDt.getDate();
             var year = fromDt.getFullYear();
@@ -518,25 +615,27 @@ exports.removeSync = async function (req, res) {
 //     res.render('booking', {user:req.user, booking: booking, dayDiff: dayDiff, currentlyStaying: currentlyStaying });
 // }
 
-exports.getBooking = async function(req,res)
-{
+exports.getBooking = async function (req, res) {
     var bookingId = req.query.id;
 
-    var booking = await models.sequelize.query('select b.cost, p.displayImage1,p.displayImage2,p.displayImage3, p.displayImage4, p.name as propertyName,' + 
-    ' DATE_FORMAT(b.bookingDttm, "%a %b %D %Y") as bookingDttm,DATE_FORMAT(b.fromDt, "%a %b %D %Y") as formatFromDt, DATE_FORMAT(b.toDt, "%a %b %D %Y") as formatToDt,b.fromDt,b.toDt, b.id as bookingId, ' + 
-    ' DATE_FORMAT(b.fromDt, "%W") as fromDay,  DATE_FORMAT(b.fromDt, "%b") as fromMonth,  DATE_FORMAT(b.fromDt, "%D") as fromDate, ' +
-    ' DATE_FORMAT(b.toDt, "%W") as toDay,  DATE_FORMAT(b.toDt, "%b") as toMonth,  DATE_FORMAT(b.toDt, "%D") as toDate, b.guests, ' +
-    ' DATE_FORMAT(b.bookingDttm, "%W") as bookingDay,  DATE_FORMAT(b.bookingDttm, "%b") as bookingMonth,  DATE_FORMAT(b.bookingDttm, "%D") as bookingDate, DATE_FORMAT(b.bookingDttm, "%l:%i %p") as bookingTime ,b.confirmationCode, a.id as accountId, ' +
-    ' addr.addressLine1, addr.addressLine2, t.name as town, c.name as cityName, addr.postCode, a.name as customerName, b.status,b.propertySyncFk ' +
-    ' from bookings b ' + 
-            ' inner join accounts a on b.accountFk = a.id ' + 
-            ' inner join properties p on b.propertyFk = p.id ' +
-            ' inner join addresses addr on addr.propertyFk = p.id ' +
-            ' inner join cities c on addr.cityFk = c.id ' + 
-            ' inner join towns t on addr.townFk = t.id ' +
-            ' where  b.id = :bookingId ' +
-            ' order by b.bookingDttm desc ',{replacements:{
-                bookingId:bookingId},type:models.sequelize.QueryTypes.SELECT});
+    var booking = await models.sequelize.query('select b.cost, p.displayImage1,p.displayImage2,p.displayImage3, p.displayImage4, p.name as propertyName,' +
+        ' DATE_FORMAT(b.bookingDttm, "%a %b %D %Y") as bookingDttm,DATE_FORMAT(b.fromDt, "%a %b %D %Y") as formatFromDt, DATE_FORMAT(b.toDt, "%a %b %D %Y") as formatToDt,b.fromDt,b.toDt, b.id as bookingId, ' +
+        ' DATE_FORMAT(b.fromDt, "%W") as fromDay,  DATE_FORMAT(b.fromDt, "%b") as fromMonth,  DATE_FORMAT(b.fromDt, "%D") as fromDate, ' +
+        ' DATE_FORMAT(b.toDt, "%W") as toDay,  DATE_FORMAT(b.toDt, "%b") as toMonth,  DATE_FORMAT(b.toDt, "%D") as toDate, b.guests, ' +
+        ' DATE_FORMAT(b.bookingDttm, "%W") as bookingDay,  DATE_FORMAT(b.bookingDttm, "%b") as bookingMonth,  DATE_FORMAT(b.bookingDttm, "%D") as bookingDate, DATE_FORMAT(b.bookingDttm, "%l:%i %p") as bookingTime ,b.confirmationCode, a.id as accountId, ' +
+        ' addr.addressLine1, addr.addressLine2, t.name as town, c.name as cityName, addr.postCode, a.name as customerName, b.status,b.propertySyncFk ' +
+        ' from bookings b ' +
+        ' inner join accounts a on b.accountFk = a.id ' +
+        ' inner join properties p on b.propertyFk = p.id ' +
+        ' inner join addresses addr on addr.propertyFk = p.id ' +
+        ' inner join cities c on addr.cityFk = c.id ' +
+        ' inner join towns t on addr.townFk = t.id ' +
+        ' where  b.id = :bookingId ' +
+        ' order by b.bookingDttm desc ', {
+            replacements: {
+                bookingId: bookingId
+            }, type: models.sequelize.QueryTypes.SELECT
+        });
     booking = booking[0];
 
     // deal with this later
@@ -552,16 +651,15 @@ exports.getBooking = async function(req,res)
     console.log(dayDiff);
 
     var propertySync = null;
-    if(booking.propertySyncFk != null)
-    {
+    if (booking.propertySyncFk != null) {
         propertySync = await models.propertySync.findOne({
-            where:{
-                id:booking.propertySyncFk
+            where: {
+                id: booking.propertySyncFk
             }
         });
     }
 
-    return res.render('booking', {user:req.user,propertySync:propertySync, dayDiff:dayDiff, booking:booking,latitude:latitude,longitude:longitude});
+    return res.render('booking', { user: req.user, propertySync: propertySync, dayDiff: dayDiff, booking: booking, latitude: latitude, longitude: longitude });
 }
 
 
@@ -575,8 +673,7 @@ exports.dateDiff = async function (first, second) {
     return await dateDiff(first, second);
 }
 
-exports.adminSearchProperties = async function(req,res)
-{
+exports.adminSearchProperties = async function (req, res) {
     var cities = await getAllCities();
     var propertyName = req.query.propertyName;
     var addressLine1 = req.query.addressLine1;
@@ -584,35 +681,55 @@ exports.adminSearchProperties = async function(req,res)
     var town = req.query.town;
     var postCode = req.query.postCode;
 
-    var query = 'select p.*, c.name as city, t.name as town, addr.addressLine1, addressLine2, addr.postCode from properties p ' + 
-            ' inner join addresses addr on addr.propertyFk = p.id ' + 
-            ' inner join cities c on addr.cityFk = c.id ' + 
-            ' inner join towns t on addr.townFk = t.id ' + 
-            ' where p.deleteFl = false ';
+    var query = 'select p.*, c.name as city, t.name as town, addr.addressLine1, addressLine2, addr.postCode from properties p ' +
+        ' inner join addresses addr on addr.propertyFk = p.id ' +
+        ' inner join cities c on addr.cityFk = c.id ' +
+        ' inner join towns t on addr.townFk = t.id ' +
+        ' where p.deleteFl = false ';
 
-    if(propertyName != undefined && propertyName != null)
+    if (propertyName != undefined && propertyName != null)
         query = query + ' and p.name like :propertyName ';
 
-    if(addressLine1 != undefined && addressLine1 != null)
+    if (addressLine1 != undefined && addressLine1 != null)
         query = query + ' and addr.addressLine1 like :addressLine1 ';
 
-    if(city != undefined && city != null && city != "" )
+    if (city != undefined && city != null && city != "")
         query = query + ' and addr.cityFk = :city ';
 
-    if(town != undefined && town != null && town != "" )
+    if (town != undefined && town != null && town != "")
         query = query + ' and addr.townFk = :town ';
 
-    if(postCode != undefined && postCode != null)
+    if (postCode != undefined && postCode != null)
         query = query + ' and addr.postCode like :postCode ';
 
     var results = await models.sequelize.query(query,
-                            {replacements:{
-                                propertyName: '%' + propertyName + '%',
-                                addressLine1: '%' + addressLine1 + '%',
-                                city:city,
-                                town:town,
-                                postCode: '%' + postCode + '%',
-                            },type:models.sequelize.QueryTypes.SELECT});
+        {
+            replacements: {
+                propertyName: '%' + propertyName + '%',
+                addressLine1: '%' + addressLine1 + '%',
+                city: city,
+                town: town,
+                postCode: '%' + postCode + '%',
+            }, type: models.sequelize.QueryTypes.SELECT
+        });
 
-    res.render('adminSearchProperty', {user:req.user, cities:cities,results:results});
+    res.render('adminSearchProperty', { user: req.user, cities: cities, results: results });
+}
+
+exports.getRandomProperties = async function () 
+{
+    return await getRandomProperties();
+}
+
+async function getRandomProperties() 
+{
+    return await models.sequelize.query('select * from properties  where deleteFl = false order by rand() LIMIT 6',
+                            {type:models.sequelize.QueryTypes.SELECT});
+}
+
+async function getRandomPropertiesNotIncludingProperty(id) 
+{
+    return await models.sequelize.query('select * from properties  where deleteFl = false ' +
+                                    ' and id != :id order by rand() LIMIT 6',
+                            {replacements:{id:id},type:models.sequelize.QueryTypes.SELECT});
 }

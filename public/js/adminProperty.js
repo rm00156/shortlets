@@ -8,6 +8,7 @@ var picture3Change = false;
 var picture4Change = false;
 var property;
 var count = 0;
+var propertyAmenitiesMap;
 $(document).ready(function(){
     property = JSON.parse($('#property').val());
     $('#city').on('change', selectCity);
@@ -37,7 +38,61 @@ $(document).ready(function(){
     $('#exportCalendar').on('click', exportCalendar);
     $('#closeExport').on('click', closeExport);
 
+    propertyAmenity();
 });
+
+function amenities(data)
+{
+    var noAmenities = $('#noAmenities').val();
+
+    for( var i = 0 ; i < noAmenities; i++ )
+    {
+        var amenity = $('#amenity' + i);
+        var name = amenity.data('name');
+        var isChecked = amenity.is(':checked');
+
+        data.append(name, isChecked);
+    }
+}
+
+function isPropertyAmenitiesChanged()
+{
+
+    var noOfAmenites = $('#noAmenities').val();
+
+    for(var j = 0; j < noOfAmenites; j++ )
+    {
+        var amenity = $('#amenity' + j);
+        var id = amenity.data('id');
+
+        if(amenity.is('checked') != propertyAmenitiesMap.get(id))
+            return true;
+    }
+
+    return false;
+}
+
+function propertyAmenity()
+{
+    var propertyAmenities = JSON.parse($('#propertyAmenities').val());
+    propertyAmenitiesMap = new Map();
+    console.log(propertyAmenities)
+    for(var i = 0; i < propertyAmenities.length; i++)
+    {
+        var propertyAmenity = propertyAmenities[i];
+        propertyAmenitiesMap.set(propertyAmenity.amenityFk,propertyAmenity.checkedFl == 1);
+    }
+
+    var noOfAmenites = $('#noAmenities').val();
+
+    for(var j = 0; j < noOfAmenites; j++ )
+    {
+        var amenity = $('#amenity' + j);
+        var id = amenity.data('id');
+
+        amenity.prop('checked', propertyAmenitiesMap.get(id));
+    }
+}
 
 function closeExport()
 {
@@ -265,24 +320,26 @@ async function editProperty()
     var description = $('#description').val();
     var property =  JSON.parse($('#property').val());
     var bedrooms = $('#bedrooms').val();
+    var beds = $('#beds').val();
     var bathrooms = $('#bathrooms').val();
     var guests = $('#guests').val();
+    var advanceNotice = $('#advanceNotice').val();
     var addressLine1 = $('#addressLine1').val();
     var addressLine2 = $('#addressLine2').val();
     var cityId = $('#city').val();
     var townId = $('#town').val();
     var postCode = $('#postCode').val();
-
+    var isAmenitiesChanged = isPropertyAmenitiesChanged();
     // console.log('picture4 ' + picture4Change )
     var noChange = propertyName == property.name && pricePerDay == parseFloat((property.pricePerDay)).toFixed(2) && description == property.description 
-                && bedrooms == property.bedrooms && bathrooms == property.bathrooms && guests == property.guests
+                && bedrooms == property.bedrooms && bathrooms == property.bathrooms && guests == property.guests && beds == property.beds && advanceNotice == property.advanceNotice
                 && addressLine1 == property.addressLine1 && (addressLine2 == property.addressLine2 || (addressLine2 == '' && property.addressLine2 == null))
                 && postCode == property.postCode && townId == property.townId
                 && cityId == property.cityId && property.deleteFl == $('#hide').is(':checked') && picture1Change == false 
-                && picture2Change == false && picture3Change == false && picture4Change == false && count == 0;
+                && picture2Change == false && picture3Change == false && picture4Change == false && count == 0 && !isAmenitiesChanged;
 
     if( ( propertyName == '' || pricePerDay == '' || isNaN(pricePerDay) || bedrooms < 1 || bathrooms < 1  || 
-            guests < 1 || addressLine1 == '' || cityId == 0 || townId == null || postCode == '' ) || noChange == true || !validCalendarSync )
+            guests < 1 || beds < 1 || advanceNotice < 0 || addressLine1 == '' || cityId == 0 || townId == null || postCode == '' ) || noChange == true || !validCalendarSync )
     {
         console.log('error');
         if(propertyName == '')
@@ -312,6 +369,20 @@ async function editProperty()
             $('#bedroomError').text('No bedroom has been selected');
             location.href = "#bedrooms";
             console.log('bedrooms');
+        }
+
+        if(beds < 1)
+        {
+            $('#bedsError').text('No beds has been selected');
+            location.href = "#beds";
+            console.log('beds');
+        }
+
+        if(advanceNotice < 1)
+        {
+            $('#advanceNoticeError').text('Advance Notice must be a positive value');
+            location.href = "#advanceNotice";
+            console.log('advanceNotice');
         }
 
         if(bathrooms < 1)
@@ -427,6 +498,8 @@ async function editProperty()
         data.append('pricePerDay',pricePerDay);
         data.append('bedrooms',bedrooms)
         data.append('bathrooms',bathrooms);
+        data.append('beds',beds);
+        data.append('advanceNotice',advanceNotice);
         data.append('guests',guests);
         data.append('description',description);
         data.append('addressLine1',addressLine1);
@@ -436,7 +509,7 @@ async function editProperty()
         data.append('postCode', postCode);
         data.append('addressId',property.addressId);
         data.append('hide', $('#hide').is(':checked'));
-
+        amenities(data);
         request.addEventListener('load', function(e){
 
             var data = request.response;

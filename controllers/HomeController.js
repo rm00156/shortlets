@@ -9,15 +9,15 @@ exports.getHome = async function(req,res){
 
     var cities = await propertyController.getAllCitiesWithProperties();
     var towns = await getAllTowns();
-    var properties = await getRandomProperties();
-    res.render('home', {user:req.user,cities:cities,towns:towns[0],properties:properties[0]});
+    var properties = await propertyController.getRandomProperties();
+    res.render('home', {user:req.user,cities:cities,towns:towns,properties:properties});
 }
 
 exports.getTestHome = async function(req,res){
 
     var cities = await propertyController.getAllCitiesWithProperties();
     var towns = await getAllTowns();
-    var properties = await getRandomProperties();
+    var properties = await propertyController.getRandomProperties();
     res.render('home_original', {user:req.user,cities:cities,towns:towns[0],properties:properties[0]});
 }
 
@@ -28,10 +28,7 @@ exports.getAllTowns = async function()
 
 async function getAllTowns()
 {
-    return await models.sequelize.query('select * from towns where deleteFl = false ORDER BY name asc LIMIT 6');
+    return await models.sequelize.query('select * from towns where deleteFl = false ORDER BY name asc LIMIT 6',
+                            {type:models.sequelize.QueryTypes.SELECT});
 }
 
-async function getRandomProperties()
-{
-    return await models.sequelize.query('select * from properties p where deleteFl = false order by rand() LIMIT 6');
-}

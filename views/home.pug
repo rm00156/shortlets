@@ -138,32 +138,20 @@ html(lang='en')
                                 .card-img-top.overflow-hidden.gradient-overlay(style="height:200px")
                                     img.img-fluid(src=property.displayImage1 alt='Cute Quirky Garden apt, NYC adjacent' style="object-fit:scale-down")
                                     a.tile-link(href='/property?id=' + property.id)
-                                    //- .card-img-overlay-bottom.z-index-20
-                                        .d-flex.text-white.text-sm.align-items-center
-                                            img.avatar.avatar-border-white.flex-shrink-0.me-2(src='img/avatar/avatar-7.jpg' alt='John')
-                                            div John
-                                        //- .card-img-overlay-top.text-end
-                                            a.card-fav-icon.position-relative.z-index-40(href='javascript: void();')
-                                                svg.svg-icon.text-white
-                                                    use(xlink:href='#heart-1')  
+                                    
                                 .card-body.d-flex.align-items-center
                                     .w-100
                                         h6.card-title
                                             a.text-decoration-none.text-dark(href='/property?id=' + property.id ) #{property.name}
                                         .d-flex.card-subtitle.mb-3
                                             p.flex-grow-1.mb-0.text-muted.text-sm #{property.bedrooms} bedrooms
-                                            //- p.flex-grow-1.mb-0.text-muted.text-sm #{property.guests} guests
-                                            //- p.flex-grow-1.mb-0.text-muted.text-sm #{property.bathrooms} bathrooms
-                                            //- p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
-                                                i.fa.fa-star.text-warning
-                                                i.fa.fa-star.text-warning
-                                                i.fa.fa-star.text-warning
-                                                i.fa.fa-star.text-warning
-                                                i.fa.fa-star.text-gray-300   
+                                            
                                         .d-flex.card-subtitle.mb-3
                                             p.flex-grow-1.mb-0.text-muted.text-sm #{property.guests} guests     
                                         .d-flex.card-subtitle.mb-3
-                                            p.flex-grow-1.mb-0.text-muted.text-sm #{property.bathrooms} bathrooms                             
+                                            p.flex-grow-1.mb-0.text-muted.text-sm #{property.bathrooms} bathrooms
+                                        .d-flex.card-subtitle.mb-3
+                                            p.flex-grow-1.mb-0.text-muted.text-sm #{property.beds} beds                              
                                         p.card-text.text-muted
                                             span.h4.text-primary £#{(parseFloat(property.pricePerDay)).toFixed(2)}
                                             |  per night

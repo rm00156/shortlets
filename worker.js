@@ -60,16 +60,8 @@ async function processCalendarSync(propertySync)
         var start = webEvent.start;
         var end = webEvent.end;
 
-        start = moment(start).utcOffset(0);
-        start.set({hour:0,minute:0,second:0,millisecond:0});
-        start.toISOString();
-        start.format();
-
-
-        end = moment(end).utcOffset(0);
-        end.set({hour:0,minute:0,second:0,millisecond:0});
-        end.toISOString();
-        end.format();
+        start.setUTCHours(24);
+        end.setUTCHours(24);
 
         var summary = webEvent.summary;
         var status;
@@ -115,4 +107,5 @@ async function processCalendarSync(propertySync)
         }
     }
 }
+
 throng({ workers, start });

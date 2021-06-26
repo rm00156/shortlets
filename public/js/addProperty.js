@@ -16,6 +16,38 @@ $(document).ready(function(){
 
 });
 
+function isAnAmenitySelected()
+{
+    var noAmenities = $('#noAmenities').val();
+
+    for( var i = 0 ; i < noAmenities; i++ )
+    {
+        var amenity = $('#amenity' + i);
+        var isChecked = amenity.is(':checked');
+        if(isChecked)
+        {
+            return true;
+        }
+        
+    }
+
+    return false;
+}
+
+function amenities(data)
+{
+    var noAmenities = $('#noAmenities').val();
+
+    for( var i = 0 ; i < noAmenities; i++ )
+    {
+        var amenity = $('#amenity' + i);
+        var name = amenity.data('name');
+        var isChecked = amenity.is(':checked');
+
+        data.append(name, isChecked);
+    }
+}
+
 function addRow()
 {
     var syncName = 'syncName' + count;
@@ -93,6 +125,7 @@ async function addProperty()
     $('#pricePerDayError').text('');
     $('#bedroomError').text('');
     $('#bathroomError').text('');
+    $('#bedsError').text('');
     $('#guestError').text('');
     $('#addressLine1Error').text('');
     $('#cityError').text('');
@@ -105,18 +138,20 @@ async function addProperty()
     var propertyName = $('#propertyName').val();
     var pricePerDay = $('#pricePerDay').val();
     var bedroom = $('#bedrooms').val();
+    var beds = $('#beds').val();
     var bathroom = $('#bathrooms').val();
     var guest = $('#guests').val();
+    var advanceNotice = $('#advanceNotice').val();
     var picture1Fl = $('#picture1').prop('files').length == 0;
     var addressLine1 = $('#addressLine1').val();
     var cityId = $('#city').val();
     var townId = $('#town').val();
     var postCode = $('#postCode').val();
     var description = $('#description').val();
-    
-    if( propertyName == '' || pricePerDay == '' || isNaN(pricePerDay) || bedroom < 1 || bathroom < 1  || 
+    var isAmenitySelected = isAnAmenitySelected();
+    if( propertyName == '' || pricePerDay == '' || isNaN(pricePerDay) || bedroom < 1 || bathroom < 1  || beds < 1  || 
         guest < 1 || picture1Fl == true || addressLine1 == '' || cityId == 0 || townId == null ||
-           postCode == '' || !validCalendarSync)
+           postCode == '' || !validCalendarSync || !isAmenitySelected || advanceNotice < 0 )
     {
         // error
         // determine the error display the necessary message
@@ -157,6 +192,18 @@ async function addProperty()
             location.href = "#guests";
         }
 
+        if(beds < 1)
+        {
+            $('#bedsError').text('No beds has been selected');
+            location.href = "#beds";
+        }
+
+        if(advanceNotice < 0)
+        {
+            $('#advanceNoticeError').text('Advance Notice must be a positive number');
+            location.href = "#advanceNotice";
+        }
+
         if(picture1Fl == true)
         {
             $('#picture1Error').text('No Main Picture has been selected');
@@ -194,6 +241,10 @@ async function addProperty()
             location.href = "#descriptionError";
         }
 
+        if(!isAmenitySelected)
+        {
+            $('#amenitiesError').text('No Amenity has been selected');
+        }
         $('#addProperty').css('disabled','');
         console.log('error');
         $('#preloader2').css('display','none');
@@ -211,7 +262,9 @@ async function addProperty()
         data.append('pricePerDay',pricePerDay);
         data.append('bedroom',bedroom)
         data.append('bathroom',bathroom);
+        data.append('beds',beds);
         data.append('guest',guest);
+        data.append('advanceNotice', advanceNotice);
         data.append('picture1',($('#picture1').prop('files'))[0]);
         data.append('picture2',($('#picture2').prop('files'))[0]);
         data.append('picture3',($('#picture3').prop('files'))[0]);
@@ -234,6 +287,8 @@ async function addProperty()
             data.append('syncName' + i, syncName);
             data.append('syncUrl' + i, syncUrl);
         }
+
+        amenities(data);
 
         data.append('syncCount', count);
         

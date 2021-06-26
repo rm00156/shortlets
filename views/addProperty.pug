@@ -44,19 +44,27 @@ html(lang='en')
                                         .row
                                             .col-lg-12.ms-auto
                                                 .row
-                                                    .col-lg-4
+                                                    .col-lg-3
                                                         label.form-label Bedrooms
                                                         .d-flex.align-items-center
                                                             .btn.btn-items.btn-items-decrease -
                                                             input#bedrooms.form-control.input-items(type='text' disabled='' value=1)
                                                             .btn.btn-items.btn-items-increase +
-                                                    .col-lg-4
+                                                    .col-lg-3
+                                                        label.form-label Beds
+                                                        .d-flex.align-items-center
+                                                            .btn.btn-items.btn-items-decrease -
+                                                            input#beds.form-control.input-items(type='text' disabled='' value=1)
+                                                            .btn.btn-items.btn-items-increase +
+                                                    
+                                                    
+                                                    .col-lg-3
                                                         label.form-label Bathrooms
                                                         .d-flex.align-items-center
                                                             .btn.btn-items.btn-items-decrease -
                                                             input#bathrooms.form-control.input-items(type='text' disabled='' value=1)
                                                             .btn.btn-items.btn-items-increase +
-                                                    .col-lg-4
+                                                    .col-lg-3
                                                         label.form-label Guests
                                                         .d-flex.align-items-center
                                                             .btn.btn-items.btn-items-decrease -
@@ -89,6 +97,16 @@ html(lang='en')
                                                         label.form-label(for='postCode') Post Code
                                                         input#postCode.form-control(type='text' name='postCode')
                                                         p.small.text-danger(id="postCodeError")
+                                        .text-block
+                                            .row.mb-3
+                                                .col-sm-12
+                                                    h5 Advance Notice
+                                                    .row.pt-4
+                                                        label.form-label(for='advanceNotice') Number of days notice for a booking
+                                                        .d-flex.align-items-center
+                                                            .btn.btn-items.btn-items-decrease -
+                                                            input#advanceNotice.form-control.input-items(type='text' disabled='' value=2)
+                                                            .btn.btn-items.btn-items-increase +
                                         .text-block
                                             .row.mb-3
                                                 .col-sm-12
@@ -197,8 +215,18 @@ html(lang='en')
                                     //-     button.primary-btn#newRow Add New Row
                                     //- .col-sm-6
                                     //-     button.primary-btn#exportCalendar Export Calendar
-
-                                
+                        .row.form-block
+                            .col-lg-12
+                                h5.mb-4 Amenities
+                                input#noAmenities(style="display:none" value=amenities.length)
+                                .row
+                                    each amenity, index in amenities
+                                        .col-lg-4
+                                            .mb-4
+                                                .form-check
+                                                    input.form-check-input(type='checkbox' data-name=amenity.name id='amenity'+ index)
+                                                    label.form-check-label(for='amenity'+ index) #{amenity.name} 
+                                p#amenitiesError.small.text-danger
                         .row.form-block
                             .col-lg-12
                                 button.btn.btn-primary#addProperty Create Property

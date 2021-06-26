@@ -65,8 +65,9 @@ exports.getAddProperty = async function(req,res)
         success = "";
 
     var cities = await propertyController.getAllCities();
+    var amenities = await propertyController.getAmenities();
 
-    res.render('addProperty', {user:req.user, cities:cities,success:success});
+    res.render('addProperty', {user:req.user, amenities:amenities, cities:cities,success:success});
            
 }
 
@@ -77,6 +78,8 @@ exports.addProperty = async function(req,res)
     var bedroom = req.body.bedroom;
     var bathroom = req.body.bathroom;
     var guest = req.body.guest;
+    var beds = req.body.beds;
+    var advanceNotice = req.body.advanceNotice;
     var addressLine1 = req.body.addressLine1;
     var addressLine2 = req.body.addressLine2;
     var cityId = req.body.cityId;
@@ -128,6 +131,8 @@ exports.addProperty = async function(req,res)
         description:description,
         pricePerDay:pricePerDay,
         guests:guest,
+        beds:beds,
+        advanceNotice:advanceNotice,
         bedrooms:bedroom,
         bathrooms:bathroom,
         displayImage1:config.s3BucketPath + s3FileLocations[0],
@@ -154,6 +159,25 @@ exports.addProperty = async function(req,res)
         var name = 'syncName' + i;
         if( req.body[name] != undefined)
             await propertyController.addPropertySync(req.body['syncName' + i],req.body['syncUrl' + i],property.id);
+    }
+
+    var amenities = await propertyController.getAmenities();
+
+    for( var j = 0; j < amenities.length; j++ )
+    {
+        var amenity = amenities[j];
+        var id = amenity.id;
+        var amenityName = amenity.name;
+        var isChecked = req.body[amenityName] == 'true'; 
+
+        await models.propertyAmenity.create({
+            propertyFk:property.id,
+            amenityFk:id,
+            checkedFl:isChecked,
+            deleteFl:false,
+            versionNo:1
+        });
+
     }
 
     res.json({propertyId:property.id});

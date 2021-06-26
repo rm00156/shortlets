@@ -28,12 +28,22 @@ module.exports = function(sequelize, Sequelize) {
             allowNull:false
         },
 
+        beds:{
+            type: Sequelize.INTEGER,
+            allowNull:false
+        },
+
         bedrooms:{
             type: Sequelize.INTEGER,
             allowNull:false
         },
 
         bathrooms:{
+            type: Sequelize.INTEGER,
+            allowNull:false
+        },
+
+        advanceNotice:{
             type: Sequelize.INTEGER,
             allowNull:false
         },

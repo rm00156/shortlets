@@ -49,7 +49,7 @@ html(lang='en')
                 |  #{property.bedrooms} bedrooms
               li.list-inline-item.me-3
                 i.fa.fa-bed.me-1.text-secondary
-                |  3 beds
+                |  #{property.beds} beds
               li.list-inline-item.me-3
                 i.fa.fa-bath.me-1.text-secondary
                 |  #{property.bathrooms} bath
@@ -59,8 +59,8 @@ html(lang='en')
             //- h6.mb-3 The space
             //- p.text-muted.fw-light
               | Welcome to Brooklyn! We are excited to share our wonderful neighborhood with you. Our modern apartment has a private entrance, fully equipped kitchen, and a very comfortable queen size bed. We are happy to accommodate additional guests with a single bed in the living room, another comfy mattress on the floor and can make arrangements for small children with a portable crib and highchair if requested.
-            p.text-muted.fw-light Also in the apartment:
-            ul.text-muted.fw-light
+            //- p.text-muted.fw-light Also in the apartment:
+            //- ul.text-muted.fw-light
               li TV with Netflix and DirectTVNow
               li Free WiFi
               li Gourmet Coffee/Tea making supplies
@@ -68,7 +68,7 @@ html(lang='en')
               li
                 | Toaster, microwave, pots and pans and basic cooking needs like salt, pepper, sugar, and olive oil.
               li Air Conditioning to keep you cool all summer!
-            p.text-muted.fw-light
+            //- p.text-muted.fw-light
               | The apartment is surprisingly quiet for being in the heart of a vibrant, bustling neighborhood.
             //- h6.mb-3 Interaction with guests
             //- p.text-muted.fw-light
@@ -76,34 +76,40 @@ html(lang='en')
           .text-block
             h4.mb-4 Amenities
             .row
-              .col-md-6
-                ul.list-unstyled.text-muted
-                  li.mb-2
-                    i.fa.fa-wifi.text-secondary.w-1rem.me-3.text-center
-                    span.text-sm Wifi
-                  li.mb-2
-                    i.fa.fa-tv.text-secondary.w-1rem.me-3.text-center
-                    span.text-sm Cable TV
-                  li.mb-2
-                    i.fa.fa-snowflake.text-secondary.w-1rem.me-3.text-center
-                    span.text-sm Air conditioning
-                  li.mb-2
-                    i.fa.fa-thermometer-three-quarters.text-secondary.w-1rem.me-3.text-center
-                    span.text-sm Heating
-              .col-md-6
-                ul.list-unstyled.text-muted
-                  li.mb-2
-                    i.fa.fa-bath.text-secondary.w-1rem.me-3.text-center
-                    span.text-sm Toiletteries
-                  li.mb-2
-                    i.fa.fa-utensils.text-secondary.w-1rem.me-3.text-center
-                    span.text-sm Equipped Kitchen
-                  li.mb-2
-                    i.fa.fa-laptop.text-secondary.w-1rem.me-3.text-center
-                    span.text-sm Desk for work
-                  li.mb-2
-                    i.fa.fa-tshirt.text-secondary.w-1rem.me-3.text-center
-                    span.text-sm Washing machine
+              each amenity in propertyAmenities
+                .col-md-6
+                  .mb-2
+                    i.fa.text-secondary.w-1rem.me-3.text-center(class=amenity.icon)
+                    span.text-sm #{amenity.name}
+              //-     li.mb-2
+              //-       i.fa.fa-tv.text-secondary.w-1rem.me-3.text-center
+              //-       span.text-sm Cable TV
+              //-     li.mb-2
+              //-       i.fa.fa-snowflake.text-secondary.w-1rem.me-3.text-center
+              //-       span.text-sm Air conditioning
+              //-     li.mb-2
+              //-       i.fa.fa-thermometer-three-quarters.text-secondary.w-1rem.me-3.text-center
+              //-       span.text-sm Heating
+              //-     li.mb-2
+              //-       i.fa.fa-car.text-secondary.w-1rem.me-3.text-center
+              //-       span.text-sm Free Parking
+              //-     li.mb-2
+              //-       i.fas.fa-sensor.text-secondary.w-1rem.me-3.text-center
+              //-       span.text-sm Essentials
+              //- .col-md-6
+              //-   ul.list-unstyled.text-muted
+              //-     li.mb-2
+              //-       i.fa.fa-bath.text-secondary.w-1rem.me-3.text-center
+              //-       span.text-sm Toiletteries
+              //-     li.mb-2
+              //-       i.fa.fa-utensils.text-secondary.w-1rem.me-3.text-center
+              //-       span.text-sm Equipped Kitchen
+              //-     li.mb-2
+              //-       i.fa.fa-laptop.text-secondary.w-1rem.me-3.text-center
+              //-       span.text-sm Desk for work
+              //-     li.mb-2
+              //-       i.fa.fa-tshirt.text-secondary.w-1rem.me-3.text-center
+              //-       span.text-sm Washing machine
             //-   .text-block
             //-     h4.mb-0 Amenities alternative
             //-     p.subtitle.text-sm.text-primary.mb-4 Alternative amenities display
@@ -164,7 +170,7 @@ html(lang='en')
                         a(href=property.displayImage4 data-fancybox='gallery' title='Outside')
                             img.img-fluid(src=property.displayImage2  alt='...')
               
-          .text-block
+          //- .text-block
             p.subtitle.text-sm.text-primary Reviews    
             h5.mb-4 Listing Reviews 
             .d-flex.d-block.d-sm-flex.review
@@ -297,186 +303,204 @@ html(lang='en')
           // Additional required wrapper
           .swiper-wrapper.pb-5
             // Slides
-            .swiper-slide.h-auto.px-2
-              // place item
-              .w-100.h-100.hover-animate(data-marker-id='59c0c8e33b1527bfe2abaf92')
-                .card.h-100.border-0.shadow
-                  .card-img-top.overflow-hidden.gradient-overlay
-                    img.img-fluid(src='img/photo/photo-1484154218962-a197022b5858.jpg' alt='Modern, Well-Appointed Room')
-                    a.tile-link(href='detail-rooms.html')
-                    .card-img-overlay-bottom.z-index-20
-                      .d-flex.text-white.text-sm.align-items-center
-                        img.avatar.avatar-border-white.flex-shrink-0.me-2(src='img/avatar/avatar-0.jpg' alt='Pamela')
-                        div Pamela
-                    .card-img-overlay-top.text-end
-                      a.card-fav-icon.position-relative.z-index-40(href='javascript: void();')
-                        svg.svg-icon.text-white
-                          use(xlink:href='#heart-1')  
-                  .card-body.d-flex.align-items-center
-                    .w-100
-                      h6.card-title
-                        a.text-decoration-none.text-dark(href='detail-rooms.html') Modern, Well-Appointed Room
-                      .d-flex.card-subtitle.mb-3
-                        p.flex-grow-1.mb-0.text-muted.text-sm Private room
-                        p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-warning
-                      p.card-text.text-muted
-                        span.h4.text-primary $80
-                        |  per night
-            .swiper-slide.h-auto.px-2
-              // place item
-              .w-100.h-100.hover-animate(data-marker-id='59c0c8e322f3375db4d89128')
-                .card.h-100.border-0.shadow
-                  .card-img-top.overflow-hidden.gradient-overlay
-                    img.img-fluid(src='img/photo/photo-1426122402199-be02db90eb90.jpg' alt='Cute Quirky Garden apt, NYC adjacent')
-                    a.tile-link(href='detail-rooms.html')
-                    .card-img-overlay-bottom.z-index-20
-                      .d-flex.text-white.text-sm.align-items-center
-                        img.avatar.avatar-border-white.flex-shrink-0.me-2(src='img/avatar/avatar-7.jpg' alt='John')
-                        div John
-                    .card-img-overlay-top.text-end
-                      a.card-fav-icon.position-relative.z-index-40(href='javascript: void();')
-                        svg.svg-icon.text-white
-                          use(xlink:href='#heart-1')  
-                  .card-body.d-flex.align-items-center
-                    .w-100
-                      h6.card-title
-                        a.text-decoration-none.text-dark(href='detail-rooms.html') Cute Quirky Garden apt, NYC adjacent
-                      .d-flex.card-subtitle.mb-3
-                        p.flex-grow-1.mb-0.text-muted.text-sm Entire apartment
-                        p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-gray-300                                   
-                      p.card-text.text-muted
-                        span.h4.text-primary $121
-                        |  per night
-            .swiper-slide.h-auto.px-2
-              // place item
-              .w-100.h-100.hover-animate(data-marker-id='59c0c8e3a31e62979bf147c9')
-                .card.h-100.border-0.shadow
-                  .card-img-top.overflow-hidden.gradient-overlay
-                    img.img-fluid(src='img/photo/photo-1512917774080-9991f1c4c750.jpg' alt='Modern Apt - Vibrant Neighborhood!')
-                    a.tile-link(href='detail-rooms.html')
-                    .card-img-overlay-bottom.z-index-20
-                      .d-flex.text-white.text-sm.align-items-center
-                        img.avatar.avatar-border-white.flex-shrink-0.me-2(src='img/avatar/avatar-8.jpg' alt='Julie')
-                        div Julie
-                    .card-img-overlay-top.text-end
-                      a.card-fav-icon.position-relative.z-index-40(href='javascript: void();')
-                        svg.svg-icon.text-white
-                          use(xlink:href='#heart-1')  
-                  .card-body.d-flex.align-items-center
-                    .w-100
-                      h6.card-title
-                        a.text-decoration-none.text-dark(href='detail-rooms.html') Modern Apt - Vibrant Neighborhood!
-                      .d-flex.card-subtitle.mb-3
-                        p.flex-grow-1.mb-0.text-muted.text-sm Entire apartment
-                        p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-gray-300                                   
-                          i.fa.fa-star.text-gray-300                                   
-                      p.card-text.text-muted
-                        span.h4.text-primary $75
-                        |  per night
-            .swiper-slide.h-auto.px-2
-              // place item
-              .w-100.h-100.hover-animate(data-marker-id='59c0c8e3503eb77d487e8082')
-                .card.h-100.border-0.shadow
-                  .card-img-top.overflow-hidden.gradient-overlay
-                    img.img-fluid(src='img/photo/photo-1494526585095-c41746248156.jpg' alt='Sunny Private Studio-Apartment')
-                    a.tile-link(href='detail-rooms.html')
-                    .card-img-overlay-bottom.z-index-20
-                      .d-flex.text-white.text-sm.align-items-center
-                        img.avatar.avatar-border-white.flex-shrink-0.me-2(src='img/avatar/avatar-9.jpg' alt='Barbora')
-                        div Barbora
-                    .card-img-overlay-top.text-end
-                      a.card-fav-icon.position-relative.z-index-40(href='javascript: void();')
-                        svg.svg-icon.text-white
-                          use(xlink:href='#heart-1')  
-                  .card-body.d-flex.align-items-center
-                    .w-100
-                      h6.card-title
-                        a.text-decoration-none.text-dark(href='detail-rooms.html') Sunny Private Studio-Apartment
-                      .d-flex.card-subtitle.mb-3
-                        p.flex-grow-1.mb-0.text-muted.text-sm Shared room
-                        p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-gray-300                                   
-                      p.card-text.text-muted
-                        span.h4.text-primary $93
-                        |  per night
-            .swiper-slide.h-auto.px-2
-              // place item
-              .w-100.h-100.hover-animate(data-marker-id='59c0c8e39aa2eed0626e485d')
-                .card.h-100.border-0.shadow
-                  .card-img-top.overflow-hidden.gradient-overlay
-                    img.img-fluid(src='img/photo/photo-1522771739844-6a9f6d5f14af.jpg' alt='Mid-Century Modern Garden Paradise')
-                    a.tile-link(href='detail-rooms.html')
-                    .card-img-overlay-bottom.z-index-20
-                      .d-flex.text-white.text-sm.align-items-center
-                        img.avatar.avatar-border-white.flex-shrink-0.me-2(src='img/avatar/avatar-10.jpg' alt='Jack')
-                        div Jack
-                    .card-img-overlay-top.text-end
-                      a.card-fav-icon.position-relative.z-index-40(href='javascript: void();')
-                        svg.svg-icon.text-white
-                          use(xlink:href='#heart-1')  
-                  .card-body.d-flex.align-items-center
-                    .w-100
-                      h6.card-title
-                        a.text-decoration-none.text-dark(href='detail-rooms.html') Mid-Century Modern Garden Paradise
-                      .d-flex.card-subtitle.mb-3
-                        p.flex-grow-1.mb-0.text-muted.text-sm Entire house
-                        p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-warning
-                      p.card-text.text-muted
-                        span.h4.text-primary $115
-                        |  per night
-            .swiper-slide.h-auto.px-2
-              // place item
-              .w-100.h-100.hover-animate(data-marker-id='59c0c8e39aa2edasd626e485d')
-                .card.h-100.border-0.shadow
-                  .card-img-top.overflow-hidden.gradient-overlay
-                    img.img-fluid(src='img/photo/photo-1488805990569-3c9e1d76d51c.jpg' alt='Brooklyn Life, Easy to Manhattan')
-                    a.tile-link(href='detail-rooms.html')
-                    .card-img-overlay-bottom.z-index-20
-                      .d-flex.text-white.text-sm.align-items-center
-                        img.avatar.avatar-border-white.flex-shrink-0.me-2(src='img/avatar/avatar-11.jpg' alt='Stuart')
-                        div Stuart
-                    .card-img-overlay-top.text-end
-                      a.card-fav-icon.position-relative.z-index-40(href='javascript: void();')
-                        svg.svg-icon.text-white
-                          use(xlink:href='#heart-1')  
-                  .card-body.d-flex.align-items-center
-                    .w-100
-                      h6.card-title
-                        a.text-decoration-none.text-dark(href='detail-rooms.html') Brooklyn Life, Easy to Manhattan
-                      .d-flex.card-subtitle.mb-3
-                        p.flex-grow-1.mb-0.text-muted.text-sm Private room
-                        p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-warning
-                          i.fa.fa-star.text-gray-300                                   
-                      p.card-text.text-muted
-                        span.h4.text-primary $123
-                        |  per night
+            each randProperty in randomProperties
+              .swiper-slide.h-auto.px-2
+                // place item
+                .w-100.h-100.hover-animate(data-marker-id='59c0c8e322f3375db4d89128')
+                    .card.h-100.border-0.shadow
+                        .card-img-top.overflow-hidden.gradient-overlay(style="height:200px")
+                            img.img-fluid(src=randProperty.displayImage1 alt=randProperty.name style="object-fit:scale-down")
+                            a.tile-link(href='/property?id=' + randProperty.id)
+                            
+                        .card-body.d-flex.align-items-center
+                            .w-100
+                                h6.card-title
+                                    a.text-decoration-none.text-dark(href='/property?id=' + randProperty.id ) #{randProperty.name}
+                                .d-flex.card-subtitle.mb-3
+                                    p.flex-grow-1.mb-0.text-muted.text-sm #{randProperty.bedrooms} bedrooms
+                                    
+                                .d-flex.card-subtitle.mb-3
+                                    p.flex-grow-1.mb-0.text-muted.text-sm #{randProperty.guests} guests     
+                                .d-flex.card-subtitle.mb-3
+                                    p.flex-grow-1.mb-0.text-muted.text-sm #{randProperty.bathrooms} bathrooms
+                                .d-flex.card-subtitle.mb-3
+                                    p.flex-grow-1.mb-0.text-muted.text-sm #{randProperty.beds} beds                              
+                                p.card-text.text-muted
+                                    span.h4.text-primary £#{(parseFloat(randProperty.pricePerDay)).toFixed(2)}
+                                    |  per night
+            //- .swiper-slide.h-auto.px-2
+            //-   // place item
+            //-   .w-100.h-100.hover-animate(data-marker-id='59c0c8e33b1527bfe2abaf92')
+            //-     .card.h-100.border-0.shadow
+            //-       .card-img-top.overflow-hidden.gradient-overlay
+            //-         img.img-fluid(src='img/photo/photo-1484154218962-a197022b5858.jpg' alt='Modern, Well-Appointed Room')
+            //-         a.tile-link(href='detail-rooms.html')
+                    
+            //-       .card-body.d-flex.align-items-center
+            //-         .w-100
+            //-           h6.card-title
+            //-             a.text-decoration-none.text-dark(href='detail-rooms.html') Modern, Well-Appointed Room
+            //-           .d-flex.card-subtitle.mb-3
+            //-             p.flex-grow-1.mb-0.text-muted.text-sm Private room
+            //-             p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-warning
+            //-           p.card-text.text-muted
+            //-             span.h4.text-primary $80
+            //-             |  per night
+            //- .swiper-slide.h-auto.px-2
+            //-   // place item
+            //-   .w-100.h-100.hover-animate(data-marker-id='59c0c8e322f3375db4d89128')
+            //-     .card.h-100.border-0.shadow
+            //-       .card-img-top.overflow-hidden.gradient-overlay
+            //-         img.img-fluid(src='img/photo/photo-1426122402199-be02db90eb90.jpg' alt='Cute Quirky Garden apt, NYC adjacent')
+            //-         a.tile-link(href='detail-rooms.html')
+            //-         .card-img-overlay-bottom.z-index-20
+            //-           .d-flex.text-white.text-sm.align-items-center
+            //-             img.avatar.avatar-border-white.flex-shrink-0.me-2(src='img/avatar/avatar-7.jpg' alt='John')
+            //-             div John
+            //-         .card-img-overlay-top.text-end
+            //-           a.card-fav-icon.position-relative.z-index-40(href='javascript: void();')
+            //-             svg.svg-icon.text-white
+            //-               use(xlink:href='#heart-1')  
+            //-       .card-body.d-flex.align-items-center
+            //-         .w-100
+            //-           h6.card-title
+            //-             a.text-decoration-none.text-dark(href='detail-rooms.html') Cute Quirky Garden apt, NYC adjacent
+            //-           .d-flex.card-subtitle.mb-3
+            //-             p.flex-grow-1.mb-0.text-muted.text-sm Entire apartment
+            //-             p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-gray-300                                   
+            //-           p.card-text.text-muted
+            //-             span.h4.text-primary $121
+            //-             |  per night
+            //- .swiper-slide.h-auto.px-2
+            //-   // place item
+            //-   .w-100.h-100.hover-animate(data-marker-id='59c0c8e3a31e62979bf147c9')
+            //-     .card.h-100.border-0.shadow
+            //-       .card-img-top.overflow-hidden.gradient-overlay
+            //-         img.img-fluid(src='img/photo/photo-1512917774080-9991f1c4c750.jpg' alt='Modern Apt - Vibrant Neighborhood!')
+            //-         a.tile-link(href='detail-rooms.html')
+            //-         .card-img-overlay-bottom.z-index-20
+            //-           .d-flex.text-white.text-sm.align-items-center
+            //-             img.avatar.avatar-border-white.flex-shrink-0.me-2(src='img/avatar/avatar-8.jpg' alt='Julie')
+            //-             div Julie
+            //-         .card-img-overlay-top.text-end
+            //-           a.card-fav-icon.position-relative.z-index-40(href='javascript: void();')
+            //-             svg.svg-icon.text-white
+            //-               use(xlink:href='#heart-1')  
+            //-       .card-body.d-flex.align-items-center
+            //-         .w-100
+            //-           h6.card-title
+            //-             a.text-decoration-none.text-dark(href='detail-rooms.html') Modern Apt - Vibrant Neighborhood!
+            //-           .d-flex.card-subtitle.mb-3
+            //-             p.flex-grow-1.mb-0.text-muted.text-sm Entire apartment
+            //-             p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-gray-300                                   
+            //-               i.fa.fa-star.text-gray-300                                   
+            //-           p.card-text.text-muted
+            //-             span.h4.text-primary $75
+            //-             |  per night
+            //- .swiper-slide.h-auto.px-2
+            //-   // place item
+            //-   .w-100.h-100.hover-animate(data-marker-id='59c0c8e3503eb77d487e8082')
+            //-     .card.h-100.border-0.shadow
+            //-       .card-img-top.overflow-hidden.gradient-overlay
+            //-         img.img-fluid(src='img/photo/photo-1494526585095-c41746248156.jpg' alt='Sunny Private Studio-Apartment')
+            //-         a.tile-link(href='detail-rooms.html')
+            //-         .card-img-overlay-bottom.z-index-20
+            //-           .d-flex.text-white.text-sm.align-items-center
+            //-             img.avatar.avatar-border-white.flex-shrink-0.me-2(src='img/avatar/avatar-9.jpg' alt='Barbora')
+            //-             div Barbora
+            //-         .card-img-overlay-top.text-end
+            //-           a.card-fav-icon.position-relative.z-index-40(href='javascript: void();')
+            //-             svg.svg-icon.text-white
+            //-               use(xlink:href='#heart-1')  
+            //-       .card-body.d-flex.align-items-center
+            //-         .w-100
+            //-           h6.card-title
+            //-             a.text-decoration-none.text-dark(href='detail-rooms.html') Sunny Private Studio-Apartment
+            //-           .d-flex.card-subtitle.mb-3
+            //-             p.flex-grow-1.mb-0.text-muted.text-sm Shared room
+            //-             p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-gray-300                                   
+            //-           p.card-text.text-muted
+            //-             span.h4.text-primary $93
+            //-             |  per night
+            //- .swiper-slide.h-auto.px-2
+            //-   // place item
+            //-   .w-100.h-100.hover-animate(data-marker-id='59c0c8e39aa2eed0626e485d')
+            //-     .card.h-100.border-0.shadow
+            //-       .card-img-top.overflow-hidden.gradient-overlay
+            //-         img.img-fluid(src='img/photo/photo-1522771739844-6a9f6d5f14af.jpg' alt='Mid-Century Modern Garden Paradise')
+            //-         a.tile-link(href='detail-rooms.html')
+            //-         .card-img-overlay-bottom.z-index-20
+            //-           .d-flex.text-white.text-sm.align-items-center
+            //-             img.avatar.avatar-border-white.flex-shrink-0.me-2(src='img/avatar/avatar-10.jpg' alt='Jack')
+            //-             div Jack
+            //-         .card-img-overlay-top.text-end
+            //-           a.card-fav-icon.position-relative.z-index-40(href='javascript: void();')
+            //-             svg.svg-icon.text-white
+            //-               use(xlink:href='#heart-1')  
+            //-       .card-body.d-flex.align-items-center
+            //-         .w-100
+            //-           h6.card-title
+            //-             a.text-decoration-none.text-dark(href='detail-rooms.html') Mid-Century Modern Garden Paradise
+            //-           .d-flex.card-subtitle.mb-3
+            //-             p.flex-grow-1.mb-0.text-muted.text-sm Entire house
+            //-             p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-warning
+            //-           p.card-text.text-muted
+            //-             span.h4.text-primary $115
+            //-             |  per night
+            //- .swiper-slide.h-auto.px-2
+            //-   // place item
+            //-   .w-100.h-100.hover-animate(data-marker-id='59c0c8e39aa2edasd626e485d')
+            //-     .card.h-100.border-0.shadow
+            //-       .card-img-top.overflow-hidden.gradient-overlay
+            //-         img.img-fluid(src='img/photo/photo-1488805990569-3c9e1d76d51c.jpg' alt='Brooklyn Life, Easy to Manhattan')
+            //-         a.tile-link(href='detail-rooms.html')
+            //-         .card-img-overlay-bottom.z-index-20
+            //-           .d-flex.text-white.text-sm.align-items-center
+            //-             img.avatar.avatar-border-white.flex-shrink-0.me-2(src='img/avatar/avatar-11.jpg' alt='Stuart')
+            //-             div Stuart
+            //-         .card-img-overlay-top.text-end
+            //-           a.card-fav-icon.position-relative.z-index-40(href='javascript: void();')
+            //-             svg.svg-icon.text-white
+            //-               use(xlink:href='#heart-1')  
+            //-       .card-body.d-flex.align-items-center
+            //-         .w-100
+            //-           h6.card-title
+            //-             a.text-decoration-none.text-dark(href='detail-rooms.html') Brooklyn Life, Easy to Manhattan
+            //-           .d-flex.card-subtitle.mb-3
+            //-             p.flex-grow-1.mb-0.text-muted.text-sm Private room
+            //-             p.flex-shrink-1.mb-0.card-stars.text-xs.text-end
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-warning
+            //-               i.fa.fa-star.text-gray-300                                   
+            //-           p.card-text.text-muted
+            //-             span.h4.text-primary $123
+            //-             |  per night
           // If we need pagination
           .swiper-pagination
     // Footer

@@ -5,6 +5,7 @@ const REDIS_URL = process.env.REDIS_URL || 'redis://127.0.0.1:6379';
 const Queue = require('bull');
 const workerQueue = new Queue('worker', REDIS_URL );
 const ical = require('node-ical');
+const moment = require('moment');
 
 exports.getBookings = async function (req, res) {
     
@@ -175,111 +176,12 @@ exports.getAdminCustomerBooking = async function(req,res)
 
 exports.syncCalendars = async function(req,res)
 {
-    await workerQueue.add({process:'syncCalendarsTask'});
+    // await workerQueue.add({process:'syncCalendarsTask'});
 
-    // find all propertySyncs
-    // each property sync create bookings if doesnt already exist
+    await syncCalendarsTask();
 }
 
-// async function processCalendarSync(propertySync)
-// {
-//     var url = propertySync.dataValues.url;
-//     var webEvents = await ical.async.fromURL(url);
-//     var propertyFk = propertySync.propertyFk;
 
-//     for (const webEvent of Object.values(webEvents))
-//     {
-//         if(webEvent.type != "VEVENT")
-//             continue;
-//         var start = webEvent.start;
-//         var end = webEvent.end;
-//         var summary = webEvent.summary;
-//         var status;
-//         if(summary == 'Reserved')
-//         {
-//             status = 'Successful';
-//         }
-//         else if(summary == 'Airbnb (Not available)')
-//         {
-//             status = 'Unavailable'
-//         }
-//         else
-//         {
-//             status = 'Unknown';
-//         }
-
-//         var booking = await models.booking.findOne({
-//             where:{
-//                 propertyFk:propertyFk,
-//                 fromDt:start,
-//                 toDt:end,
-//                 status:status,
-//                 deleteFl:false
-//             }
-//         });
-
-//         if(booking == null)
-//         {
-//             await models.booking.create({
-//                 propertyFk:propertyFk,
-//                 accountFk:0,
-//                 fromDt:start,
-//                 toDt:end,
-//                 bookingDttm:new Date(),
-//                 guests:0,
-//                 nights:0,
-//                 cost:0,
-//                 status:status,
-//                 propertySyncFk:propertySync.id,
-//                 deleteFl:false,
-//                 versionNo:1
-//             })
-//         }
-//     }
-    
-        
-    // for(var i = 0; i < webEvents.length; i++)
-    // {
-    //     var webEvent = webEvents[i];
-
-    //     var start = webEvent.start;
-    //     var end = webEvent.end;
-    //     var summary = webEvent.summary;
-
-    //     if(summary == 'Reserved')
-    //     {
-    //         var booking = await models.booking.findOne({
-    //             where:{
-    //                 propertyFk:propertyFk,
-    //                 fromDt:start,
-    //                 toDt:end,
-    //                 status:'Successful',
-    //                 deleteFl:false
-    //             }
-    //         });
-
-    //         if(booking == null)
-    //         {
-    //             await models.booking.create({
-    //                 propertyFk:propertyFk,
-    //                 accountFk:0,
-    //                 fromDt:start,
-    //                 toDt:end,
-    //                 bookingDttm:new Date(),
-    //                 guests:0,
-    //                 nights:0,
-    //                 cost:0,
-    //                 status:'Successful',
-    //                 propertySyncFk:propertySync.id,
-    //                 deleteFl:false,
-    //                 versionNo:1
-    //             })
-    //         }
-    //     }
-    //     else if(summary == 'Airbnb (Not available)')
-    //     {
-
-    //     }
-    //     console.log(webEvents[i]);
-    // }
-// }
+function convertDateToUTC(date) { 
+    return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds())); 
+}

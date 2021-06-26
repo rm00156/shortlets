@@ -1,35 +1,124 @@
 doctype html
-html(lang='zxx')
+html(lang='en')
   head
-    include common/header.pug
-    +head("Admin Login")
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible' content='IE=edge')
+    title Short Lets
+    meta(name='description' content='')
+    meta(name='viewport' content='width=device-width, initial-scale=1')
+    meta(name='robots' content='all,follow')
+    // Price Slider Stylesheets
+    link(rel='stylesheet' href='vendor/nouislider/nouislider.css')
+    // Google fonts - Playfair Display
+    link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700')
+    // Google fonts - Poppins
+    link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Poppins:300,400,400i,700')
+    // swiper
+    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/css/swiper.min.css')
+    // Magnigic Popup
+    link(rel='stylesheet' href='vendor/magnific-popup/magnific-popup.css')
+    // theme stylesheet
+    link#theme-stylesheet(rel='stylesheet' href='css/style.default.css')
+    // Custom stylesheet - for your changes
+    link(rel='stylesheet' href='css/custom.css')
+    // Favicon
+    link(rel='shortcut icon' href='img/brand/favicon-32x32.png')
+    // Tweaks for older IEs
+    //if lt IE 9
+      script(src='https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js')
+      script(src='https://oss.maxcdn.com/respond/1.4.2/respond.min.js')
+    // Font Awesome CSS
+    link(rel='stylesheet' href='https://use.fontawesome.com/releases/v5.8.1/css/all.css' integrity='sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf' crossorigin='anonymous')
   body
-    include common/navbar.pug
-    +navbar(user)
-    .reggae-section.spad(style="box-shadow: 0 .15rem 1.75rem 0 rgba(58,59,69,.15)!important;")
-        .container.spad
+    .container-fluid.px-3
+      .row.min-vh-100
+        .col-md-8.col-lg-6.col-xl-5.d-flex.align-items-center
+          .w-100.py-5.px-md-5.px-xxl-6.position-relative
+            .mb-5
+              img.img-fluid.mb-3(src='img/brand/hyde.jpg' alt='...' style='max-width: 192px;')
+              h2 Welcome back
             form(action="/adminlogin", method ="POST")
+              if(error)
+                p.small.text-danger(style="font-size:9pt") #{error} 
+              if(reset)
+                p.small.text-danger Password has successfully been reset
+              .mb-4
+                label.form-label(for='email')  Email Address
+                input#email.form-control(name='email' type='email' placeholder='name@address.com' autocomplete='off' required=true data-msg='Please enter your email' value=(formData != undefined) ? formData.email : 'rmillermcpherson4@gmail.com')
+              .mb-4
                 .row
-                    .col-lg-12.single-package-item(style="padding:10px")
-                        .card.shadow.mb-4
-                            .card-body(style="text-align:left")
-                                h2(style="text-align:center") Login
-                                .row(style="margin-top:30px")
-                                    .col-sm-12
-                                        if(error)
-                                            p.small.text-danger(style="font-size:9pt") #{error} 
-                                        if(reset)
-                                            p.titleLarge Password has successfully been reset
-                                        label(for="email" style="text-align:left") Email
-                                        input.form-control(style="width:100% !important;text-align:left;" placeholder='Please enter your email', required=true, name='email', type='email', value=(formData != undefined) ? formData.email : 'rmillermcpherson4@gmail.com')
-                                .row(style="margin-top:20px")
-                                    .col-sm-12
-                                        label(for="password") Password
-                                        input.form-control(style="width:100% !important;text-align:left;" placeholder="Enter current password", required=true , name='password', type='password', value=(formData != undefined) ? formData.password : 'welcome')
-                                .row(style="margin-top:20px;text-align:center")
-                                    .col-sm-12
-                                        input.about-view.packages-bt(type="submit" value="Login" style="display:unset")
-
-
-    include common/footer.pug
-    +footer()
+                  .col
+                    label.form-label(for='password')  Password
+                //-   .col-auto
+                    a.form-text.small.text-primary(href='/forgotPassword') Forgot password?
+                input#password.form-control(name='password' placeholder='Password' type='password' required=true data-msg='Please enter your password' value=(formData != undefined) ? formData.password : 'welcome')
+                //-   .mb-4
+                    .form-check
+                    input#loginRemember.form-check-input(type='checkbox')
+                    label.form-check-label.text-muted(for='loginRemember')
+                        span.text-sm Remember me for 30 days
+              // Submit
+              
+              .d-grid
+                button.btn.btn-lg.btn-primary Sign in
+            //-   hr.my-3.hr-text.letter-spacing-2(data-content="OR DON'T HAVE AN ACCOUNT")
+            //-   .d-grid.gap-2
+            //-     if(checkout)
+            //-       input(style="display:none" value='checkout' name='checkout')
+            //-       input(style="display:none" value=propertyId name='propertyId')
+            //-       input(style="display:none" value=guests name='guests')
+            //-       a.btn.btn.btn-outline-muted(href="/register?checkout=true&propertyId=" + propertyId + '&guests=' + guests) Register
+            //-     else
+            //-       a.btn.btn.btn-outline-muted(href="/register") Register  
+            //-   hr.my-4
+            //-   p.text-center
+            //-     small.text-muted.text-center
+            //-       | Don't have an account yet? 
+            //-       a(href='signup.html') Sign Up                
+            a.close-absolute.me-md-5.me-xl-6.pt-5(href='/')
+              svg.svg-icon.w-3rem.h-3rem
+                use(xlink:href='#close-1')  
+        .col-md-4.col-lg-6.col-xl-7.d-none.d-md-block
+          // Image
+          .bg-cover.h-100.me-n3(style='background-image: url(img/photo/photo-1497436072909-60f360e1d4b1.jpg);')
+    // JavaScript files
+    script.
+      // ------------------------------------------------------- //
+      //   Inject SVG Sprite -
+      //   see more here
+      //   https://css-tricks.com/ajaxing-svg-sprite/
+      // ------------------------------------------------------ //
+      function injectSvgSprite(path) {
+      var ajax = new XMLHttpRequest();
+      ajax.open("GET", path, true);
+      ajax.send();
+      ajax.onload = function(e) {
+      var div = document.createElement("div");
+      div.className = 'd-none';
+      div.innerHTML = ajax.responseText;
+      document.body.insertBefore(div, document.body.childNodes[0]);
+      }
+      }
+      // to avoid CORS issues when viewing using file:// protocol, using the demo URL for the SVG sprite
+      // use your own URL in production, please :)
+      // https://demo.bootstrapious.com/directory/1-0/icons/orion-svg-sprite.svg
+      //- injectSvgSprite('${path}icons/orion-svg-sprite.svg');
+      injectSvgSprite('https://demo.bootstrapious.com/directory/1-4/icons/orion-svg-sprite.svg');
+    // jQuery
+    script(src='vendor/jquery/jquery.min.js')
+    // Bootstrap JS bundle - Bootstrap + PopperJS
+    script(src='vendor/bootstrap/js/bootstrap.bundle.min.js')
+    // Magnific Popup - Lightbox for the gallery
+    script(src='vendor/magnific-popup/jquery.magnific-popup.min.js')
+    // Smooth scroll
+    script(src='vendor/smooth-scroll/smooth-scroll.polyfills.min.js')
+    // Bootstrap Select
+    script(src='vendor/bootstrap-select/js/bootstrap-select.min.js')
+    // Object Fit Images - Fallback for browsers that don't support object-fit
+    script(src='vendor/object-fit-images/ofi.min.js')
+    // Swiper Carousel
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/js/swiper.min.js')
+    script.
+      var basePath = ''
+    // Main Theme JS file
+    script(src='js/theme.js')

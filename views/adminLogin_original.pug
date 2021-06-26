@@ -1,0 +1,35 @@
+doctype html
+html(lang='zxx')
+  head
+    include common/header.pug
+    +head("Admin Login")
+  body
+    include common/navbar.pug
+    +navbar(user)
+    .reggae-section.spad(style="box-shadow: 0 .15rem 1.75rem 0 rgba(58,59,69,.15)!important;")
+        .container.spad
+            form(action="/adminlogin", method ="POST")
+                .row
+                    .col-lg-12.single-package-item(style="padding:10px")
+                        .card.shadow.mb-4
+                            .card-body(style="text-align:left")
+                                h2(style="text-align:center") Login
+                                .row(style="margin-top:30px")
+                                    .col-sm-12
+                                        if(error)
+                                            p.small.text-danger(style="font-size:9pt") #{error} 
+                                        if(reset)
+                                            p.titleLarge Password has successfully been reset
+                                        label(for="email" style="text-align:left") Email
+                                        input.form-control(style="width:100% !important;text-align:left;" placeholder='Please enter your email', required=true, name='email', type='email', value=(formData != undefined) ? formData.email : 'rmillermcpherson4@gmail.com')
+                                .row(style="margin-top:20px")
+                                    .col-sm-12
+                                        label(for="password") Password
+                                        input.form-control(style="width:100% !important;text-align:left;" placeholder="Enter current password", required=true , name='password', type='password', value=(formData != undefined) ? formData.password : 'welcome')
+                                .row(style="margin-top:20px;text-align:center")
+                                    .col-sm-12
+                                        input.about-view.packages-bt(type="submit" value="Login" style="display:unset")
+
+
+    include common/footer.pug
+    +footer()

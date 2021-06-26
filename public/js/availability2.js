@@ -3,7 +3,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var bookings = JSON.parse($('#bookings').val());
     console.log(bookings);
+    
+    var advanceNoticeFrom = $('#advanceNoticeFrom').val();
+    var advanceNoticeTo = $('#advanceNoticeTo').val();
+
+    console.log(advanceNoticeFrom);
+    console.log(advanceNoticeTo);
     var events = new Array();
+
+    if(advanceNoticeFrom != null && advanceNoticeFrom != 'null')
+    {
+      var data = {
+        // groupId:booking.id,
+        title:'Advance Notice',
+        start: new Date(advanceNoticeFrom),
+        end: new Date(advanceNoticeTo)
+       };
+       events.push(data);
+    }
+  
+
     for(var i = 0; i < bookings.length; i++)
     {
         var booking = bookings[i];
@@ -32,7 +51,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     groupId:booking.id,
                     title:title,
                     start: new Date(booking.fromDt),
-                    end: new Date(booking.toDt)
+                    end: new Date(booking.toDt),
+                    allDay:false,
+                    className:'important'
         };
         events.push(data);
         
@@ -62,7 +83,8 @@ document.addEventListener('DOMContentLoaded', function() {
       eventClick: function(arg) {
           var event = arg.event;
           console.log(event._def.groupId);
-          window.location = '/booking?id=' + event._def.groupId;
+          if(event._def.groupId != '')
+            window.location = '/booking?id=' + event._def.groupId;
         // // if (confirm('Are you sure you want to delete this event?')) {
         // //   arg.event.remove()
         // }
