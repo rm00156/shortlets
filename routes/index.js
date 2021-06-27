@@ -69,4 +69,7 @@ router.get('/adminSearchAccount', isAdmin, accountController.searchAccounts);
 
 router.post('/stripe_webhooks/checkout.session.completed', orderController.stripeSessionCompleted);
 router.get('/purchaseSuccessful',isLoggedInCustomer, orderController.purchaseSuccessful);
+
+router.get('/updateAddPropertyJobs',isAdmin,adminController.updateAddPropertyJobs);
+
 module.exports = router;

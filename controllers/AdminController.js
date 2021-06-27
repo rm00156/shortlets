@@ -1,34 +1,34 @@
 const models = require('../models');
 // const accountController = require('../controllers/AccountController');
 const signupController = require('../controllers/SignUpController');
-const{validateCreateUserFields} = require('../validators/register');
+const { validateCreateUserFields } = require('../validators/register');
 const sequelize = require('sequelize');
-const {isEmpty} = require('lodash');
+const { isEmpty } = require('lodash');
 const aws = require('aws-sdk');
 const config = require('../config/config.json');
 const propertyController = require('../controllers/PropertyController');
 const accountController = require('../controllers/AccountController');
+const REDIS_URL = process.env.REDIS_URL || 'redis://127.0.0.1:6379';
+const Queue = require('bull');
+const workerQueue = new Queue('worker', REDIS_URL);
 
 aws.config.update({
 
     secretAccessKey: config.secretAccessKey,
-    accessKeyId:config.accessKeyId,
+    accessKeyId: config.accessKeyId,
     region: config.region
-  });
+});
 
 
-exports.getLogin = async function(req,res)
-{
+exports.getLogin = async function (req, res) {
     res.render('adminLogin');
 }
 
-exports.getSearchBookingPage = async function(req,res)
-{
-    res.render('adminSearchBooking',{user:req.user});
+exports.getSearchBookingPage = async function (req, res) {
+    res.render('adminSearchBooking', { user: req.user });
 }
 
-exports.getAdminDashboard = async function(req,res)
-{
+exports.getAdminDashboard = async function (req, res) {
     // var thisMonthsTotal = await orderController.getThisMonthsTotal();
     // var thisYearsTotal = await orderController.getThisYearsTotal();
     // var bestSellingProduct = await orderController.getBestSellingProduct();
@@ -37,29 +37,27 @@ exports.getAdminDashboard = async function(req,res)
     // var last7 = await orderController.getLast7DaysOrderCount();
     // var result = sortNumberOfUkandInternationalOrders(numberOfUkandInternationalOrders);
     // var lowStockResult = await lowStock();
-    res.render('adminDashboard',{user:req.user});
+    res.render('adminDashboard', { user: req.user });
 }
 
-exports.getTownsForCityId = async function(req,res)
-{
+exports.getTownsForCityId = async function (req, res) {
     var cityId = req.query.id;
 
     models.town.findAll({
-        where:{
-            cityFk:cityId
+        where: {
+            cityFk: cityId
         },
-        order:[
-            ['name','ASC']
+        order: [
+            ['name', 'ASC']
         ]
-    }).then(towns=>{
-        res.json({towns:towns});
+    }).then(towns => {
+        res.json({ towns: towns });
     })
 }
 
-exports.getAddProperty = async function(req,res)
-{
+exports.getAddProperty = async function (req, res) {
     var success = (req.query.success == undefined) ? false : true;
-    if(success)
+    if (success)
         success = "Created Successfully";
     else
         success = "";
@@ -67,12 +65,11 @@ exports.getAddProperty = async function(req,res)
     var cities = await propertyController.getAllCities();
     var amenities = await propertyController.getAmenities();
 
-    res.render('addProperty', {user:req.user, amenities:amenities, cities:cities,success:success});
-           
+    res.render('addProperty', { user: req.user, amenities: amenities, cities: cities, success: success });
+
 }
 
-exports.addProperty = async function(req,res)
-{
+exports.addProperty = async function (req, res) {
     var propertyName = req.body.propertyName;
     var pricePerDay = req.body.pricePerDay;
     var bedroom = req.body.bedroom;
@@ -92,158 +89,175 @@ exports.addProperty = async function(req,res)
     var picture4 = req.files.picture4;
     var count = req.body.syncCount;
     var error = {};
-    var pictureArray = new Array();
-    
-    pictureArray.push(picture1);
 
     var property = await models.property.findOne({
-        where:{
-            name:propertyName
+        where: {
+            name: propertyName
         }
     });
 
-    if(property != null)
-    {
+    if (property != null) {
         error['propertyName'] = 'Property with name ' + propertyName + ' already exists. Please enter a new unique name.';
-        return res.json({error:error})
+        return res.json({ error: error })
     }
 
-    if(picture2 != undefined)
-    {
-        pictureArray.push(picture2);
-    }
+    // var pictureArray = new Array();
 
-    if(picture3 != undefined)
-    {
-        pictureArray.push(picture3);
-    }
+    // pictureArray.push(picture1);
 
-    if(picture4 != undefined)
-    {
-        pictureArray.push(picture4);
-    }
+    // if(picture2 != undefined)
+    // {
+    //     pictureArray.push(picture2);
+    // }
 
-    var now = Date.now();
-    var s3FileLocations = await forEachSavePictures(pictureArray, propertyName,savePictures,now);
+    // if(picture3 != undefined)
+    // {
+    //     pictureArray.push(picture3);
+    // }
 
-    property = await models.property.create({
-        name:propertyName,
-        description:description,
-        pricePerDay:pricePerDay,
-        guests:guest,
-        beds:beds,
-        advanceNotice:advanceNotice,
-        bedrooms:bedroom,
-        bathrooms:bathroom,
-        displayImage1:config.s3BucketPath + s3FileLocations[0],
-        displayImage2:s3FileLocations.length > 1 ? config.s3BucketPath + s3FileLocations[1] : null,
-        displayImage3:s3FileLocations.length > 2 ? config.s3BucketPath + s3FileLocations[2] : null,
-        displayImage4:s3FileLocations.length > 3 ? config.s3BucketPath + s3FileLocations[3] : null,
-        deleteFl:false,
-        versionNo:1
+    // if(picture4 != undefined)
+    // {
+    //     pictureArray.push(picture4);
+    // }
+
+    // var now = Date.now();
+    // var s3FileLocations = await forEachSavePictures(pictureArray, propertyName,savePictures,now);
+
+    // property = await models.property.create({
+    //     name:propertyName,
+    //     description:description,
+    //     pricePerDay:pricePerDay,
+    //     guests:guest,
+    //     beds:beds,
+    //     advanceNotice:advanceNotice,
+    //     bedrooms:bedroom,
+    //     bathrooms:bathroom,
+    //     displayImage1:config.s3BucketPath + s3FileLocations[0],
+    //     displayImage2:s3FileLocations.length > 1 ? config.s3BucketPath + s3FileLocations[1] : null,
+    //     displayImage3:s3FileLocations.length > 2 ? config.s3BucketPath + s3FileLocations[2] : null,
+    //     displayImage4:s3FileLocations.length > 3 ? config.s3BucketPath + s3FileLocations[3] : null,
+    //     deleteFl:false,
+    //     versionNo:1
+    // });
+
+    // await models.address.create({
+    //     propertyFk:property.id,
+    //     addressLine1:addressLine1,
+    //     addressLine2:addressLine2 == '' ? null : addressLine2,
+    //     cityFk:cityId,
+    //     townFk:townId,
+    //     postCode:postCode,
+    //     deleteFl:false,
+    //     versionNo:1
+    // });
+
+    // for(var i = 0; i < count; i++ )
+    // {
+    //     var name = 'syncName' + i;
+    //     if( req.body[name] != undefined)
+    //         await propertyController.addPropertySync(req.body['syncName' + i],req.body['syncUrl' + i],property.id);
+    // }
+
+    // var amenities = await propertyController.getAmenities();
+
+    // for( var j = 0; j < amenities.length; j++ )
+    // {
+    //     var amenity = amenities[j];
+    //     var id = amenity.id;
+    //     var amenityName = amenity.name;
+    //     var isChecked = req.body[amenityName] == 'true'; 
+
+    //     await models.propertyAmenity.create({
+    //         propertyFk:property.id,
+    //         amenityFk:id,
+    //         checkedFl:isChecked,
+    //         deleteFl:false,
+    //         versionNo:1
+    //     });
+
+    // }
+
+    const job = await workerQueue.add({
+        process: 'addProperty', body: req.body, propertyName: propertyName, pricePerDay: pricePerDay,
+        bedroom: bedroom, bathroom: bathroom, guest: guest, beds: beds, advanceNotice: advanceNotice,
+        addressLine1: addressLine1, addressLine2: addressLine2, cityId: cityId, townId: townId,
+        postCode: postCode, description: description, picture1: picture1, picture2: picture2, picture3: picture3,
+        picture4: picture4, count: count
     });
 
-    await models.address.create({
-        propertyFk:property.id,
-        addressLine1:addressLine1,
-        addressLine2:addressLine2 == '' ? null : addressLine2,
-        cityFk:cityId,
-        townFk:townId,
-        postCode:postCode,
-        deleteFl:false,
-        versionNo:1
-    });
-
-    for(var i = 0; i < count; i++ )
-    {
-        var name = 'syncName' + i;
-        if( req.body[name] != undefined)
-            await propertyController.addPropertySync(req.body['syncName' + i],req.body['syncUrl' + i],property.id);
-    }
-
-    var amenities = await propertyController.getAmenities();
-
-    for( var j = 0; j < amenities.length; j++ )
-    {
-        var amenity = amenities[j];
-        var id = amenity.id;
-        var amenityName = amenity.name;
-        var isChecked = req.body[amenityName] == 'true'; 
-
-        await models.propertyAmenity.create({
-            propertyFk:property.id,
-            amenityFk:id,
-            checkedFl:isChecked,
-            deleteFl:false,
-            versionNo:1
-        });
-
-    }
-
-    res.json({propertyId:property.id});
+    res.json({ id: job.id });
 
 }
-exports.getSearchAccountPage = async function(req,res)
-{
+
+exports.updateAddPropertyJobs = async function (req, res) {
+    var id = req.query.id;
+    var job = await workerQueue.getJob(id);
+
+    if (job === null) {
+        res.status(404).end();
+    }
+    else {
+        var state = await job.getState();
+        var progress = job._progress;
+        var reason = job.failedReason;
+        var process = job.data.process;
+        res.json({ id, state, progress, reason, process });
+    }
+}
+
+exports.getSearchAccountPage = async function (req, res) {
     var accountTypes = await models.accountType.findAll();
 
-    res.render('adminSearchAccount',{user:req.user,accountTypes:accountTypes});  
+    res.render('adminSearchAccount', { user: req.user, accountTypes: accountTypes });
 }
 
-exports.getAccount = async function(req,res)
-{
+exports.getAccount = async function (req, res) {
     var id = req.query.id;
     // var lastOrder = await orderController.getLastOrderForAccountById(id);
     var account = await accountController.getAccountById(id);
     // var lowStockResult = await lowStock();
 
-    res.render('adminAccount',{user:req.user,account:account});
+    res.render('adminAccount', { user: req.user, account: account });
 }
 
-exports.getAddAdmin = async function(req,res)
-{
-    res.render('addAdmin',{user:req.user});
+exports.getAddAdmin = async function (req, res) {
+    res.render('addAdmin', { user: req.user });
 }
 
-exports.getSearchPropertyPage = async function(req,res)
-{
+exports.getSearchPropertyPage = async function (req, res) {
     var cities = await propertyController.getAllCities();
 
-    res.render('adminSearchProperty', {user:req.user,cities:cities});
+    res.render('adminSearchProperty', { user: req.user, cities: cities });
 }
 
 
-async function forEachSavePictures(array, propertyName,callback,now)
-{
+async function forEachSavePictures(array, propertyName, callback, now) {
     var s3FileLocations = new Array();
-    for(var i = 0 ; i < array.length; i++)
-    {
-        var s3FileLocation = await callback(array[i], i,now,propertyName);
+    for (var i = 0; i < array.length; i++) {
+        var s3FileLocation = await callback(array[i], i, now, propertyName);
         s3FileLocations.push(s3FileLocation);
     }
 
     return s3FileLocations;
 }
 
-exports.savePictures = async function(picture, index, now, propertyName)
-{
-    return await savePictures(picture,index,now,propertyName);
+exports.savePictures = async function (picture, index, now, propertyName) {
+    return await savePictures(picture, index, now, propertyName);
 }
 
-async function savePictures(picture,index,now, propertyName)
-{
-    var s3FileLocation = 'Pictures/' + propertyName + '/picture_' + index +'_'+ now + "." + ((picture.mimeType == 'image/png') ? 'png' : 'jpg');
-    
+async function savePictures(picture, index, now, propertyName) {
+    var s3FileLocation = 'Pictures/' + propertyName + '/picture_' + index + '_' + now + "." + ((picture.mimeType == 'image/png') ? 'png' : 'jpg');
+
     const s3 = new aws.S3();
     var params = {
-        Bucket:config.bucketName,
+        Bucket: config.bucketName,
         Body: picture.data,
         Key: s3FileLocation,
-        ACL:'public-read'
+        ACL: 'public-read'
     };
 
-    var s3UploadPromise = new Promise(function(resolve, reject) {
-        s3.upload(params, function(err, data) {
+    var s3UploadPromise = new Promise(function (resolve, reject) {
+        s3.upload(params, function (err, data) {
             if (err) {
                 reject(err);
             } else {
@@ -251,7 +265,7 @@ async function savePictures(picture,index,now, propertyName)
             }
         });
     });
-    
+
     await s3UploadPromise;
     return s3FileLocation;
 }
@@ -316,9 +330,9 @@ async function savePictures(picture,index,now, propertyName)
 // exports.adminUpdateAccountPassword = async function(req,res)
 // {
 //     let errors = {};
-    
+
 //     validateCreateUserFields(errors, req);
- 
+
 //     if(!isEmpty(errors))
 //     {
 //         // reRender the sign up page with the errors

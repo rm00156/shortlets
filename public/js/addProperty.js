@@ -1,4 +1,6 @@
 var count = 0;
+var jobs = {};
+
 $(document).ready(function(){
 
     $('#city').on('change', selectCity);
@@ -13,6 +15,7 @@ $(document).ready(function(){
     // $('.displayAddNewColor').on('click', displayAddNewColor);
     // $('#addNewColor').on('click', addNewColor);
     // $('#cancel').on('click', cancel);
+    setInterval(updateJobs, 1000);
 
 });
 
@@ -319,8 +322,11 @@ async function addProperty()
             }
             else
             {
-                window.location = '/addProperty?success=true';
-                // change to update the page
+                // window.location = '/addProperty?success=true';
+                // // change to update the page
+                $('#progressBar').css('display','');
+                jobs[data.id] = {id: data.id, state: "queued"};
+
             }
         });
 
@@ -465,3 +471,36 @@ function cancel()
     $('#newColorName').val('');
     $('#newColorError').text('');
 }
+
+function updateJobs() {
+    for (var id of Object.keys(jobs)) {
+        var data = {id:id};
+
+        $.ajax({
+            type:'get',
+            url:'/updateAddPropertyJobs',
+            data:data,
+            success:function(result)
+            {
+                if(result.process == 'addProperty')
+                {
+    
+                  var progress = result.progress;
+                  var totalSteps = 7;
+            
+                  var progressAsPercentage = ((progress/totalSteps) * 100).toFixed(2);
+            
+
+                  $('#progress').css('width', progressAsPercentage + '%');
+                  $('#overlay').css('display','block');
+                  if(progress == totalSteps)
+                  {
+                    var jobId = result.id;
+                    window.location = '/addProperty?success=true';
+                    delete jobs[jobId];
+                  }
+                } 
+            }
+        })
+    }
+  }
