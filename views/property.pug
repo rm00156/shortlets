@@ -29,6 +29,20 @@ html(lang='en')
             if(property.displayImage4 != null)
                 .swiper-slide
                     img.img-fluid(src=property.displayImage4 alt='Outside')
+            if(property.displayImage5 != null)
+              .swiper-slide
+                img.img-fluid(src=property.displayImage5 alt='Outside')
+            if(property.displayImage6 != null)
+              .swiper-slide
+                img.img-fluid(src=property.displayImage6 alt='Outside')
+
+            if(property.displayImage7 != null)
+              .swiper-slide
+                img.img-fluid(src=property.displayImage7 alt='Outside')
+            
+            if(property.displayImage8 != null)
+              .swiper-slide
+                img.img-fluid(src=property.displayImage8 alt='Outside')
         .swiper-pagination.swiper-pagination-white
         .swiper-button-prev.swiper-button-white
         .swiper-button-next.swiper-button-white
@@ -169,7 +183,24 @@ html(lang='en')
                 if(property.displayImage4 != null)
                     .col-lg-4.col-6.px-1.mb-2
                         a(href=property.displayImage4 data-fancybox='gallery' title='Outside')
-                            img.img-fluid(src=property.displayImage2  alt='...')
+                            img.img-fluid(src=property.displayImage4  alt='...')
+                if(property.displayImage5 != null)
+                    .col-lg-4.col-6.px-1.mb-2
+                        a(href=property.displayImage5 data-fancybox='gallery' title='Outside')
+                            img.img-fluid(src=property.displayImage5  alt='...')
+                if(property.displayImage6 != null)
+                    .col-lg-4.col-6.px-1.mb-2
+                        a(href=property.displayImage6 data-fancybox='gallery' title='Outside')
+                            img.img-fluid(src=property.displayImage6  alt='...')
+
+                if(property.displayImage7 != null)
+                    .col-lg-4.col-6.px-1.mb-2
+                        a(href=property.displayImage7 data-fancybox='gallery' title='Outside')
+                            img.img-fluid(src=property.displayImage7  alt='...')
+                if(property.displayImage8 != null)
+                    .col-lg-4.col-6.px-1.mb-2
+                        a(href=property.displayImage8 data-fancybox='gallery' title='Outside')
+                            img.img-fluid(src=property.displayImage8  alt='...')
               
           //- .text-block
             p.subtitle.text-sm.text-primary Reviews    

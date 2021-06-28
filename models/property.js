@@ -73,6 +73,21 @@ module.exports = function(sequelize, Sequelize) {
             allowNull:true
         },
 
+        displayImage6:{
+            type: Sequelize.STRING,
+            allowNull:true
+        },
+
+        displayImage7:{
+            type: Sequelize.STRING,
+            allowNull:true
+        },
+
+        displayImage8:{
+            type: Sequelize.STRING,
+            allowNull:true
+        },
+        
         deleteFl:{
             type: Sequelize.BOOLEAN,
             allowNull:false

@@ -87,6 +87,10 @@ exports.addProperty = async function (req, res) {
     var picture2 = req.files.picture2;
     var picture3 = req.files.picture3;
     var picture4 = req.files.picture4;
+    var picture5 = req.files.picture5;
+    var picture6 = req.files.picture6;
+    var picture7 = req.files.picture7;
+    var picture8 = req.files.picture8;
     var count = req.body.syncCount;
     var error = {};
 
@@ -182,7 +186,8 @@ exports.addProperty = async function (req, res) {
         bedroom: bedroom, bathroom: bathroom, guest: guest, beds: beds, advanceNotice: advanceNotice,
         addressLine1: addressLine1, addressLine2: addressLine2, cityId: cityId, townId: townId,
         postCode: postCode, description: description, picture1: picture1, picture2: picture2, picture3: picture3,
-        picture4: picture4, count: count
+        picture4: picture4,picture5: picture5,picture6: picture6,picture7: picture7,
+        picture8: picture8, count: count
     });
 
     res.json({ id: job.id });
@@ -201,6 +206,7 @@ exports.updateAddPropertyJobs = async function (req, res) {
         var progress = job._progress;
         var reason = job.failedReason;
         var process = job.data.process;
+        console.log(job);
         res.json({ id, state, progress, reason, process });
     }
 }

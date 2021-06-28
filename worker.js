@@ -10,6 +10,8 @@ const aws = require('aws-sdk');
 const config = require('./config/config.json');
 const propertyController = require('./controllers/PropertyController');
 const REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
+const sequelize = require('sequelize');
+
 // Spin up multiple processes to handle jobs to take advantage of more CPU cores
 // See: https://devcenter.heroku.com/articles/node-concurrency for more info
 const workers = process.env.WEB_CONCURRENCY || 2;
@@ -44,17 +46,23 @@ const start = function()
                 job.data.bedroom,job.data.bathroom,job.data.guest,job.data.beds,job.data.advanceNotice,
                 job.data.addressLine1,job.data.addressLine2,job.data.cityId,job.data.townId,
                 job.data.postCode,job.data.description,job.data.picture1,job.data.picture2,job.data.picture3,
-                job.data.picture4,job.data.count);
+                job.data.picture4,job.data.picture5,job.data.picture6,job.data.picture7,
+                job.data.picture8,job.data.count);
             
+        }
+        else if(job.data.process == 'editProperty')
+        {
+            return await editProperty(job, job.data.body, job.data.files);
         }
     });
 }
 
 async function addProperty(job,body,propertyName,pricePerDay,bedroom,bathroom,guest,beds,advanceNotice,
             addressLine1,addressLine2,cityId,townId,postCode,description,picture1,picture2,picture3,
-                picture4,count)
+                picture4,picture5,picture6,picture7,picture8,count)
 {
     var processed = 1;
+    job.progress(processed);
     var pictureArray = new Array();
     
     // console.log(picture1);
@@ -76,12 +84,34 @@ async function addProperty(job,body,propertyName,pricePerDay,bedroom,bathroom,gu
         pictureArray.push(picture4);
     }
 
-    job.progress(processed);
+    if(picture5 != undefined)
+    {
+        pictureArray.push(picture5);
+    }
+
+    if(picture6 != undefined)
+    {
+        pictureArray.push(picture6);
+    }
+
+    if(picture7 != undefined)
+    {
+        pictureArray.push(picture7);
+    }
+
+    if(picture8 != undefined)
+    {
+        pictureArray.push(picture8);
+    }
+
+    
     processed++;
+    job.progress(processed);
     var now = Date.now();
-    var s3FileLocations = await forEachSavePictures(pictureArray, propertyName,savePictures,now);
-    job.progress(processed);
-    processed++;
+    var result = await forEachSavePictures(pictureArray, propertyName,savePictures,now, job, processed);
+    var s3FileLocations = result[0];
+    processed = result[1];
+    console.log(processed);
     property = await models.property.create({
         name:propertyName,
         description:description,
@@ -95,12 +125,16 @@ async function addProperty(job,body,propertyName,pricePerDay,bedroom,bathroom,gu
         displayImage2:s3FileLocations.length > 1 ? config.s3BucketPath + s3FileLocations[1] : null,
         displayImage3:s3FileLocations.length > 2 ? config.s3BucketPath + s3FileLocations[2] : null,
         displayImage4:s3FileLocations.length > 3 ? config.s3BucketPath + s3FileLocations[3] : null,
+        displayImage5:s3FileLocations.length > 4 ? config.s3BucketPath + s3FileLocations[4] : null,
+        displayImage6:s3FileLocations.length > 5 ? config.s3BucketPath + s3FileLocations[5] : null,
+        displayImage7:s3FileLocations.length > 6 ? config.s3BucketPath + s3FileLocations[6] : null,
+        displayImage8:s3FileLocations.length > 7 ? config.s3BucketPath + s3FileLocations[7] : null,
         deleteFl:false,
         versionNo:1
     });
-    job.progress(processed);
     processed++;
-
+    job.progress(processed);
+    
     await models.address.create({
         propertyFk:property.id,
         addressLine1:addressLine1,
@@ -111,22 +145,24 @@ async function addProperty(job,body,propertyName,pricePerDay,bedroom,bathroom,gu
         deleteFl:false,
         versionNo:1
     });
-    job.progress(processed);
     processed++;
-
+    job.progress(processed);
+    
     for(var i = 0; i < count; i++ )
     {
         var name = 'syncName' + i;
         if( body[name] != undefined)
             await propertyController.addPropertySync(body['syncName' + i],body['syncUrl' + i],property.id);
     }
-    job.progress(processed);
     processed++;
+    job.progress(processed);
+   
 
     var amenities = await propertyController.getAmenities();
 
-    job.progress(processed);
     processed++;
+    job.progress(processed);
+    
     for( var j = 0; j < amenities.length; j++ )
     {
         var amenity = amenities[j];
@@ -141,11 +177,10 @@ async function addProperty(job,body,propertyName,pricePerDay,bedroom,bathroom,gu
             deleteFl:false,
             versionNo:1
         });
-
     }
-    
-    job.progress(processed);
     processed++;
+    job.progress(processed);
+    console.log(processed);
     return property.id;
 }
 
@@ -184,16 +219,19 @@ async function savePictures(picture,index,now, propertyName)
 }
 
 
-async function forEachSavePictures(array, propertyName,callback,now)
+async function forEachSavePictures(array, propertyName,callback,now, job, processed)
 {
     var s3FileLocations = new Array();
     for(var i = 0 ; i < array.length; i++)
     {
         var s3FileLocation = await callback(array[i], i,now,propertyName);
         s3FileLocations.push(s3FileLocation);
+        processed++;
+        job.progress(processed);
+        console.log(processed);
     }
 
-    return s3FileLocations;
+    return [s3FileLocations,processed];
 }
 
 async function syncCalendarsTask()
@@ -270,6 +308,218 @@ async function processCalendarSync(propertySync)
             })
         }
     }
+}
+
+async function editProperty(job, body, files)
+{
+    var processed = 1;
+    job.progress(processed);
+    var files = files;
+    var hide = body.hide == 'true' ? true : false;
+
+    var propertyId = body.propertyId;
+    var propertyName = body.propertyName;
+    var pricePerDay = body.pricePerDay;
+    var bedrooms = body.bedrooms;
+    var bathrooms = body.bathrooms;
+    var guests = body.guests;
+    var beds = body.beds;
+    var advanceNotice = body.advanceNotice;
+    var addressLine1 = body.addressLine1;
+    var addressLine2 = body.addressLine2;
+    var cityId = body.cityId;
+    var townId = body.townId;
+    var postCode = body.postCode;
+    var description = body.description;
+    var removePicture2 = body.removePicture2 != undefined;
+    var removePicture3 = body.removePicture3 != undefined;
+    var removePicture4 = body.removePicture4 != undefined;
+    var removePicture5 = body.removePicture5 != undefined;
+    var removePicture6 = body.removePicture6 != undefined;
+    var removePicture7 = body.removePicture7 != undefined;
+    var removePicture8 = body.removePicture8 != undefined;
+    var addressId = body.addressId;
+    var picture1;
+    var picture2;
+    var picture3;
+    var picture4;
+    var picture5;
+    var picture6;
+    var picture7;
+    var picture8;
+    var count = body.syncCount;
+
+    var now = Date.now();
+    if (files != null && files.picture1) 
+    {
+        picture1 = config.s3BucketPath + await savePictures(files.picture1, 1, now, propertyName);
+        processed++;
+        job.progress(processed);
+    }
+
+    if (files != null && files.picture2) 
+    {
+        picture2 = config.s3BucketPath + await savePictures(files.picture2, 2, now, propertyName);
+        processed++;
+        job.progress(processed);
+    }
+
+    if (files != null && files.picture3)
+    {
+        picture3 = config.s3BucketPath + await savePictures(files.picture3, 3, now, propertyName);
+        processed++;
+        job.progress(processed);
+    }
+
+    if (files != null && files.picture4)
+    {
+        picture4 = config.s3BucketPath + await savePictures(files.picture4, 4, now, propertyName);
+        processed++;
+        job.progress(processed);
+    }
+
+    if (files != null && files.picture5)
+    {
+        picture5 = config.s3BucketPath + await savePictures(files.picture5, 5, now, propertyName);
+        processed++;
+        job.progress(processed);
+    }
+
+    if (files != null && files.picture6)
+    {
+        picture6 = config.s3BucketPath + await savePictures(files.picture6, 6, now, propertyName);
+        processed++;
+        job.progress(processed);
+    }
+
+    if (files != null && files.picture7) 
+    {
+        picture7 = config.s3BucketPath + await savePictures(files.picture7, 7, now, propertyName);
+        processed++;
+        job.progress(processed);
+    }
+
+    if (files != null && files.picture8) 
+    {
+        picture8 = config.s3BucketPath + await savePictures(files.picture8, 8, now, propertyName);
+        processed++;
+        job.progress(processed);
+    }
+
+    if (removePicture2 == true)
+        picture2 = null;
+
+    if (removePicture3 == true)
+        picture3 = null;
+
+    if (removePicture4 == true)
+        picture4 = null;
+
+    if (removePicture5 == true)
+        picture5 = null;
+
+    if (removePicture6 == true)
+        picture6 = null;
+
+    if (removePicture7 == true)
+        picture7 = null;
+
+    if (removePicture8 == true)
+        picture8 = null;
+
+    await models.address.update({
+        addressLine1: addressLine1,
+        addressLine2: addressLine2,
+        cityFk: cityId,
+        townFk: townId,
+        postCode: postCode,
+        versionNo: sequelize.literal('versionNo + 1')
+    },
+        {
+            where: {
+                id: addressId
+            }
+        });
+    processed++;
+    job.progress(processed);
+    
+    var propertyUpdateJson = {
+        name: propertyName,
+        pricePerDay: pricePerDay,
+        bedrooms: bedrooms,
+        bathrooms: bathrooms,
+        guests: guests,
+        beds: beds,
+        advanceNotice: advanceNotice,
+        description: description,
+        deleteFl: hide,
+        versionNo: sequelize.literal('versionNo + 1')
+    };
+
+    if (picture1 !== undefined)
+        propertyUpdateJson['displayImage1'] = picture1;
+
+    if (picture2 !== undefined)
+        propertyUpdateJson['displayImage2'] = picture2;
+
+    if (picture3 !== undefined)
+        propertyUpdateJson['displayImage3'] = picture3;
+
+    if (picture4 !== undefined)
+        propertyUpdateJson['displayImage4'] = picture4;
+
+    if (picture5 !== undefined)
+        propertyUpdateJson['displayImage5'] = picture5;
+
+    if (picture6 !== undefined)
+        propertyUpdateJson['displayImage6'] = picture6;
+
+    if (picture7 !== undefined)
+        propertyUpdateJson['displayImage7'] = picture7;
+
+    if (picture8 !== undefined)
+        propertyUpdateJson['displayImage8'] = picture8;
+
+    await models.property.update(propertyUpdateJson,
+        {
+            where: {
+                id: propertyId
+            }
+        });
+
+    processed++;
+    job.progress(processed);   
+
+    for (var i = 0; i < count; i++) {
+        var name = 'syncName' + i;
+        if (body[name] != undefined)
+            await propertyController.addPropertySync(body['syncName' + i], body['syncUrl' + i], propertyId);
+    }
+
+    processed++;
+    job.progress(processed);
+    var amenities = await propertyController.getAmenities();
+
+    for (var j = 0; j < amenities.length; j++) {
+        var amenity = amenities[j];
+        var id = amenity.id;
+        var amenityName = amenity.name;
+        var isChecked = body[amenityName] == 'true';
+
+        await models.propertyAmenity.update({
+            checkedFl: isChecked,
+            versionNo: sequelize.literal('versionNo + 1')
+        }, {
+                where: {
+                    propertyFk: propertyId,
+                    amenityFk: id
+                }
+            });
+
+    }
+    processed++;
+    job.progress(processed);
+
 }
 
 throng({ workers, start });

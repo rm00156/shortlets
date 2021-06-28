@@ -7,6 +7,9 @@ const ical = require('node-ical');
 const icalGenerator = require('ical-generator');
 const moment = require('moment');
 const fetch = require('node-fetch');
+const REDIS_URL = process.env.REDIS_URL || 'redis://127.0.0.1:6379';
+const Queue = require('bull');
+const workerQueue = new Queue('worker', REDIS_URL);
 
 exports.getAllCities = async function () {
     return await getAllCities();
@@ -132,32 +135,40 @@ async function getPropertySyncsForProperty(id) {
 }
 
 exports.editProperty = async function (req, res) {
-    var files = req.files;
-    var hide = req.body.hide == 'true' ? true : false;
+    // var files = req.files;
+    // var hide = req.body.hide == 'true' ? true : false;
 
     var propertyId = req.body.propertyId;
     var propertyName = req.body.propertyName;
-    var pricePerDay = req.body.pricePerDay;
-    var bedrooms = req.body.bedrooms;
-    var bathrooms = req.body.bathrooms;
-    var guests = req.body.guests;
-    var beds = req.body.beds;
-    var advanceNotice = req.body.advanceNotice;
-    var addressLine1 = req.body.addressLine1;
-    var addressLine2 = req.body.addressLine2;
-    var cityId = req.body.cityId;
-    var townId = req.body.townId;
-    var postCode = req.body.postCode;
-    var description = req.body.description;
-    var removePicture2 = req.body.removePicture2 != undefined;
-    var removePicture3 = req.body.removePicture3 != undefined;
-    var removePicture4 = req.body.removePicture4 != undefined;
-    var addressId = req.body.addressId;
-    var picture1;
-    var picture2;
-    var picture3;
-    var picture4;
-    var count = req.body.syncCount;
+    // var pricePerDay = req.body.pricePerDay;
+    // var bedrooms = req.body.bedrooms;
+    // var bathrooms = req.body.bathrooms;
+    // var guests = req.body.guests;
+    // var beds = req.body.beds;
+    // var advanceNotice = req.body.advanceNotice;
+    // var addressLine1 = req.body.addressLine1;
+    // var addressLine2 = req.body.addressLine2;
+    // var cityId = req.body.cityId;
+    // var townId = req.body.townId;
+    // var postCode = req.body.postCode;
+    // var description = req.body.description;
+    // var removePicture2 = req.body.removePicture2 != undefined;
+    // var removePicture3 = req.body.removePicture3 != undefined;
+    // var removePicture4 = req.body.removePicture4 != undefined;
+    // var removePicture5 = req.body.removePicture5 != undefined;
+    // var removePicture6 = req.body.removePicture6 != undefined;
+    // var removePicture7 = req.body.removePicture7 != undefined;
+    // var removePicture8 = req.body.removePicture8 != undefined;
+    // var addressId = req.body.addressId;
+    // var picture1;
+    // var picture2;
+    // var picture3;
+    // var picture4;
+    // var picture5;
+    // var picture6;
+    // var picture7;
+    // var picture8;
+    // var count = req.body.syncCount;
     var errors = {};
     var differentPropertyWithName = await models.sequelize.query('select * from properties p where p.name = :propertyName and p.id != :id ',
         { replacements: { propertyName: propertyName, id: propertyId }, type: models.sequelize.QueryTypes.SELECT });
@@ -167,104 +178,151 @@ exports.editProperty = async function (req, res) {
         return res.json({ errors: errors });
     }
 
-    var now = Date.now();
-    if (files != null && files.picture1) {
-        var picture1 = config.s3BucketPath + await adminController.savePictures(files.picture1, 1, now, propertyName)
-    }
+    const job = await workerQueue.add({
+        process: 'editProperty', body: req.body, files:req.files
+    });
 
-    if (files != null && files.picture2) {
-        var picture2 = config.s3BucketPath + await adminController.savePictures(files.picture2, 2, now, propertyName)
-    }
+    res.json({ id: job.id });
 
-    if (files != null && files.picture3) {
-        var picture3 = config.s3BucketPath + await adminController.savePictures(files.picture3, 3, now, propertyName)
-    }
+    // var now = Date.now();
+    // if (files != null && files.picture1) {
+    //     picture1 = config.s3BucketPath + await adminController.savePictures(files.picture1, 1, now, propertyName)
+    // }
 
-    if (files != null && files.picture4) {
-        var picture4 = config.s3BucketPath + await adminController.savePictures(files.picture4, 4, now, propertyName)
-    }
+    // if (files != null && files.picture2) {
+    //     picture2 = config.s3BucketPath + await adminController.savePictures(files.picture2, 2, now, propertyName)
+    // }
 
-    if (removePicture2 == true)
-        picture2 = null;
+    // if (files != null && files.picture3) {
+    //     picture3 = config.s3BucketPath + await adminController.savePictures(files.picture3, 3, now, propertyName)
+    // }
 
-    if (removePicture3 == true)
-        picture3 = null;
+    // if (files != null && files.picture4) {
+    //     picture4 = config.s3BucketPath + await adminController.savePictures(files.picture4, 4, now, propertyName)
+    // }
 
-    if (removePicture4 == true)
-        picture4 = null;
+    // if (files != null && files.picture5) {
+    //     picture5 = config.s3BucketPath + await adminController.savePictures(files.picture5, 5, now, propertyName)
+    // }
 
-    await models.address.update({
-        addressLine1: addressLine1,
-        addressLine2: addressLine2,
-        cityFk: cityId,
-        townFk: townId,
-        postCode: postCode,
-        versionNo: sequelize.literal('versionNo + 1')
-    },
-        {
-            where: {
-                id: addressId
-            }
-        });
+    // if (files != null && files.picture6) {
+    //     picture6 = config.s3BucketPath + await adminController.savePictures(files.picture6, 6, now, propertyName)
+    // }
 
-    var propertyUpdateJson = {
-        name: propertyName,
-        pricePerDay: pricePerDay,
-        bedrooms: bedrooms,
-        bathrooms: bathrooms,
-        guests: guests,
-        beds: beds,
-        advanceNotice: advanceNotice,
-        description: description,
-        deleteFl: hide,
-        versionNo: sequelize.literal('versionNo + 1')
-    };
+    // if (files != null && files.picture7) {
+    //     picture7 = config.s3BucketPath + await adminController.savePictures(files.picture7, 7, now, propertyName)
+    // }
 
-    if (picture1 !== undefined)
-        propertyUpdateJson['displayImage1'] = picture1;
+    // if (files != null && files.picture8) {
+    //     picture8 = config.s3BucketPath + await adminController.savePictures(files.picture8, 8, now, propertyName)
+    // }
 
-    if (picture2 !== undefined)
-        propertyUpdateJson['displayImage2'] = picture2;
+    // if (removePicture2 == true)
+    //     picture2 = null;
 
-    if (picture3 !== undefined)
-        propertyUpdateJson['displayImage3'] = picture3;
+    // if (removePicture3 == true)
+    //     picture3 = null;
 
-    if (picture4 !== undefined)
-        propertyUpdateJson['displayImage4'] = picture4;
-    await models.property.update(propertyUpdateJson,
-        {
-            where: {
-                id: propertyId
-            }
-        });
+    // if (removePicture4 == true)
+    //     picture4 = null;
 
-    for (var i = 0; i < count; i++) {
-        var name = 'syncName' + i;
-        if (req.body[name] != undefined)
-            await addPropertySync(req.body['syncName' + i], req.body['syncUrl' + i], propertyId);
-    }
+    // if (removePicture5 == true)
+    //     picture5 = null;
 
-    var amenities = await getAmenities();
+    // if (removePicture6 == true)
+    //     picture6 = null;
 
-    for (var j = 0; j < amenities.length; j++) {
-        var amenity = amenities[j];
-        var id = amenity.id;
-        var amenityName = amenity.name;
-        var isChecked = req.body[amenityName] == 'true';
+    // if (removePicture7 == true)
+    //     picture7 = null;
 
-        await models.propertyAmenity.update({
-            checkedFl: isChecked,
-            versionNo: sequelize.literal('versionNo + 1')
-        }, {
-                where: {
-                    propertyFk: propertyId,
-                    amenityFk: id
-                }
-            });
+    // if (removePicture8 == true)
+    //     picture8 = null;
 
-    }
+    // await models.address.update({
+    //     addressLine1: addressLine1,
+    //     addressLine2: addressLine2,
+    //     cityFk: cityId,
+    //     townFk: townId,
+    //     postCode: postCode,
+    //     versionNo: sequelize.literal('versionNo + 1')
+    // },
+    //     {
+    //         where: {
+    //             id: addressId
+    //         }
+    //     });
 
-    return res.json({ success: 'success' });
+    // var propertyUpdateJson = {
+    //     name: propertyName,
+    //     pricePerDay: pricePerDay,
+    //     bedrooms: bedrooms,
+    //     bathrooms: bathrooms,
+    //     guests: guests,
+    //     beds: beds,
+    //     advanceNotice: advanceNotice,
+    //     description: description,
+    //     deleteFl: hide,
+    //     versionNo: sequelize.literal('versionNo + 1')
+    // };
+
+    // if (picture1 !== undefined)
+    //     propertyUpdateJson['displayImage1'] = picture1;
+
+    // if (picture2 !== undefined)
+    //     propertyUpdateJson['displayImage2'] = picture2;
+
+    // if (picture3 !== undefined)
+    //     propertyUpdateJson['displayImage3'] = picture3;
+
+    // if (picture4 !== undefined)
+    //     propertyUpdateJson['displayImage4'] = picture4;
+
+    // if (picture5 !== undefined)
+    //     propertyUpdateJson['displayImage5'] = picture5;
+
+    // if (picture6 !== undefined)
+    //     propertyUpdateJson['displayImage6'] = picture6;
+
+    // if (picture7 !== undefined)
+    //     propertyUpdateJson['displayImage7'] = picture7;
+
+    // if (picture8 !== undefined)
+    //     propertyUpdateJson['displayImage8'] = picture8;
+
+    // await models.property.update(propertyUpdateJson,
+    //     {
+    //         where: {
+    //             id: propertyId
+    //         }
+    //     });
+
+    // for (var i = 0; i < count; i++) {
+    //     var name = 'syncName' + i;
+    //     if (req.body[name] != undefined)
+    //         await addPropertySync(req.body['syncName' + i], req.body['syncUrl' + i], propertyId);
+    // }
+
+    // var amenities = await getAmenities();
+
+    // for (var j = 0; j < amenities.length; j++) {
+    //     var amenity = amenities[j];
+    //     var id = amenity.id;
+    //     var amenityName = amenity.name;
+    //     var isChecked = req.body[amenityName] == 'true';
+
+    //     await models.propertyAmenity.update({
+    //         checkedFl: isChecked,
+    //         versionNo: sequelize.literal('versionNo + 1')
+    //     }, {
+    //             where: {
+    //                 propertyFk: propertyId,
+    //                 amenityFk: id
+    //             }
+    //         });
+
+    // }
+
+    // return res.json({ success: 'success' });
 }
 
 exports.addPropertySync = async function (name, url, propertyId) {
@@ -590,6 +648,11 @@ exports.getProperty = async function (req, res) {
     });
 }
 
+exports.getPropertyAmenitiesForPropertyId = async function(id)
+{
+    return await getPropertyAmenitiesForPropertyId(id);
+}
+
 async function getPropertyAmenitiesForPropertyId(id) {
     return await models.sequelize.query('select pa.*, a.name, a.icon from propertyAmenities pa ' +
         ' inner join amenities a on pa.amenityFk = a.id ' +
@@ -789,4 +852,21 @@ async function getRandomPropertiesNotIncludingProperty(id)
     return await models.sequelize.query('select * from properties  where deleteFl = false ' +
                                     ' and id != :id order by rand() LIMIT 6',
                             {replacements:{id:id},type:models.sequelize.QueryTypes.SELECT});
+}
+
+exports.updateEditPropertyJobs = async function (req, res) {
+    var id = req.query.id;
+    var job = await workerQueue.getJob(id);
+
+    if (job === null) {
+        res.status(404).end();
+    }
+    else {
+        var state = await job.getState();
+        var progress = job._progress;
+        var reason = job.failedReason;
+        var process = job.data.process;
+        console.log(job);
+        res.json({ id, state, progress, reason, process });
+    }
 }

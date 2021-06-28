@@ -1,6 +1,6 @@
 var count = 0;
 var jobs = {};
-
+var numberOfSelectedPictures;
 $(document).ready(function(){
 
     $('#city').on('change', selectCity);
@@ -9,6 +9,10 @@ $(document).ready(function(){
     $('#picture2').on('change',picture);
     $('#picture3').on('change',picture);
     $('#picture4').on('change',picture);
+    $('#picture5').on('change',picture);
+    $('#picture6').on('change',picture);
+    $('#picture7').on('change',picture);
+    $('#picture8').on('change',picture);
 
     $('#addProperty').on('click', addProperty);
     $('#newRow').on('click', addRow);
@@ -118,8 +122,24 @@ async function validateCalendarSync()
     return valid;
 }
 
+async function getNumberOfSelectedPictures()
+{
+    var count = 0;
+    for( var i = 1; i <= 8; i++ )
+    {
+        if(($('#picture' + i).prop('files'))[0] != null)
+            count++;
+    }
+
+    return count;
+}
+
 async function addProperty()
 {
+    $('#overlay').css('display','block');
+    $('#progressBar').css('display','');
+    numberOfSelectedPictures = await getNumberOfSelectedPictures();
+    console.log('number' + numberOfSelectedPictures)
     var validCalendarSync = await validateCalendarSync();
     $('#preloader2').css('display','block');
     $('.loader2').css('display','block');
@@ -158,6 +178,8 @@ async function addProperty()
     {
         // error
         // determine the error display the necessary message
+        $('#overlay').css('display','none');
+        $('#progressBar').css('display','none');
        console.log('error');
         if(propertyName == '')
         {
@@ -272,6 +294,10 @@ async function addProperty()
         data.append('picture2',($('#picture2').prop('files'))[0]);
         data.append('picture3',($('#picture3').prop('files'))[0]);
         data.append('picture4',($('#picture4').prop('files'))[0]);
+        data.append('picture5',($('#picture5').prop('files'))[0]);
+        data.append('picture6',($('#picture6').prop('files'))[0]);
+        data.append('picture7',($('#picture7').prop('files'))[0]);
+        data.append('picture8',($('#picture8').prop('files'))[0]);
         data.append('description',description);
         data.append('addressLine1',addressLine1);
         data.append('addressLine2',$('#addressLine2').val());
@@ -316,15 +342,15 @@ async function addProperty()
                     $('#addProperty').css('disabled','');
                     location.href = "#postCode";
                 }
-
-                $('#preloader2').css('display','none');
-                $('.loader2').css('display','none');
+                $('#overlay').css('display','none');
+                
+                $('#progressBar').css('display','none');
             }
             else
             {
                 // window.location = '/addProperty?success=true';
                 // // change to update the page
-                $('#progressBar').css('display','');
+                
                 jobs[data.id] = {id: data.id, state: "queued"};
 
             }
@@ -342,6 +368,10 @@ function picture(e)
     $('#picture2Error').text('');
     $('#picture3Error').text('');
     $('#picture4Error').text('');
+    $('#picture5Error').text('');
+    $('#picture6Error').text('');
+    $('#picture7Error').text('');
+    $('#picture8Error').text('');
     
     var reader = new FileReader();
     var index = e.currentTarget.getAttribute('data-index');
@@ -486,10 +516,12 @@ function updateJobs() {
                 {
     
                   var progress = result.progress;
-                  var totalSteps = 7;
+                  var totalSteps = 7 + numberOfSelectedPictures;
             
                   var progressAsPercentage = ((progress/totalSteps) * 100).toFixed(2);
-            
+                  console.log(progress)
+                  console.log(totalSteps);
+                   console.log(progressAsPercentage) 
 
                   $('#progress').css('width', progressAsPercentage + '%');
                   $('#overlay').css('display','block');

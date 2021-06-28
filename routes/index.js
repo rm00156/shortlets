@@ -71,5 +71,7 @@ router.post('/stripe_webhooks/checkout.session.completed', orderController.strip
 router.get('/purchaseSuccessful',isLoggedInCustomer, orderController.purchaseSuccessful);
 
 router.get('/updateAddPropertyJobs',isAdmin,adminController.updateAddPropertyJobs);
+router.get('/updateEditPropertyJobs',isAdmin,propertyController.updateEditPropertyJobs);
 
+router.get('/yourInvoice', isLoggedInCustomer, orderController.getYourInvoice);
 module.exports = router;

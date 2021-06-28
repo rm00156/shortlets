@@ -7,6 +7,7 @@ $(document).ready(function(){
 
 function checkout(e)
 {
+    $('#checkout').prop("disabled", true);
     var propertyId = $('#propertyId').val();
     var fromDate = $('#fromDate').val();
     var toDate = $('#toDate').val();
@@ -44,6 +45,6 @@ function checkout(e)
     }
     else
     {
-        
+        $('#checkout').prop("disabled", false);
     }
 }

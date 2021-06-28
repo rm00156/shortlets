@@ -28,6 +28,20 @@ html(lang='en')
                 if(booking.displayImage4 != null)
                     .swiper-slide
                         img.img-fluid(src=booking.displayImage4 alt='Outside')
+                if(booking.displayImage5 != null)
+                  .swiper-slide
+                    img.img-fluid(src=booking.displayImage5 alt='Outside')
+                if(booking.displayImage6 != null)
+                  .swiper-slide
+                    img.img-fluid(src=booking.displayImage6 alt='Outside')
+
+                if(booking.displayImage7 != null)
+                  .swiper-slide
+                    img.img-fluid(src=booking.displayImage7 alt='Outside')
+            
+                if(booking.displayImage8 != null)
+                  .swiper-slide
+                    img.img-fluid(src=booking.displayImage8 alt='Outside')
               .swiper-pagination.swiper-pagination-white
               .swiper-button-prev.swiper-button-white
               .swiper-button-next.swiper-button-white    
@@ -78,9 +92,17 @@ html(lang='en')
                 p.text-muted £#{(parseFloat(booking.cost)).toFixed(2)}
               .col.align-self-center
                 p.text-end.d-print-none
-                  a.btn.btn-link.text-muted(href='user-invoice.html')
+                  a.btn.btn-link.text-muted(href='/yourInvoice?bookingId=' + booking.bookingId)
                     i.far.fa-file.me-2
                     | Your invoice
+          .text-block
+            h4.mb-4 Amenities
+            .row
+              each amenity in propertyAmenities
+                .col-md-6
+                  .mb-2
+                    i.fa.text-secondary.w-1rem.me-3.text-center(class=amenity.icon)
+                    span.text-sm #{amenity.name}
           .text-block
             h6.mb-4 Things to keep in mind
             ul.list-unstyled

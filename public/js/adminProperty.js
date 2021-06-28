@@ -1,14 +1,27 @@
+var jobs = {};
+var numberOfSelectedPictures;
 var removePicture2 = false;
 var removePicture3 = false;
 var removePicture4 = false;
+var removePicture5 = false;
+var removePicture6 = false;
+var removePicture7 = false;
+var removePicture8 = false;
+
 
 var picture1Change = false;
 var picture2Change = false;
 var picture3Change = false;
 var picture4Change = false;
+var picture5Change = false;
+var picture6Change = false;
+var picture7Change = false;
+var picture8Change = false;
+
 var property;
 var count = 0;
 var propertyAmenitiesMap;
+var propertyId;
 $(document).ready(function(){
     property = JSON.parse($('#property').val());
     $('#city').on('change', selectCity);
@@ -25,11 +38,19 @@ $(document).ready(function(){
     $('#removeDisplayImage2').on('click', removePic);
     $('#removeDisplayImage3').on('click', removePic);
     $('#removeDisplayImage4').on('click', removePic);
+    $('#removeDisplayImage5').on('click', removePic);
+    $('#removeDisplayImage6').on('click', removePic);
+    $('#removeDisplayImage7').on('click', removePic);
+    $('#removeDisplayImage8').on('click', removePic);
 
     $('#picture1').on('change',picture);
     $('#picture2').on('change',picture);
     $('#picture3').on('change',picture);
     $('#picture4').on('change',picture);
+    $('#picture5').on('change',picture);
+    $('#picture6').on('change',picture);
+    $('#picture7').on('change',picture);
+    $('#picture8').on('change',picture);
 
     $('#editProperty').on('click', editProperty);
     $('#availability').on('click', availability);
@@ -39,6 +60,7 @@ $(document).ready(function(){
     $('#closeExport').on('click', closeExport);
 
     propertyAmenity();
+    setInterval(updateJobs, 1000);
 });
 
 function amenities(data)
@@ -241,6 +263,26 @@ function removePic(e)
         removePicture4 = true;
         picture4Change = true;
     }
+    else if(index == 5)
+    {
+        removePicture5 = true;
+        picture5Change = true;
+    }
+    else if(index == 6)
+    {
+        removePicture6 = true;
+        picture6Change = true;
+    }
+    else if(index == 7)
+    {
+        removePicture7 = true;
+        picture7Change = true;
+    }
+    else if(index == 8)
+    {
+        removePicture8 = true;
+        picture8Change = true;
+    }
 
     var message = "Add Image " + index;
     $('#picArea' + index).empty();
@@ -258,7 +300,10 @@ function picture(e)
     $('#picture2Error').text('');
     $('#picture3Error').text('');
     $('#picture4Error').text('');
-    
+    $('#picture5Error').text('');
+    $('#picture6Error').text('');
+    $('#picture7Error').text('');
+    $('#picture8Error').text('');
     var reader = new FileReader();
     var index = e.currentTarget.getAttribute('data-index');
     var removePrefix = "removeDisplayImage";
@@ -299,6 +344,27 @@ function picture(e)
                 removePicture4 = false;
                 picture4Change = true;
             }
+            else if(index == 5)
+            {
+                removePicture5 = false;
+                picture5Change = true;
+            }
+            else if(index == 6)
+            {
+                removePicture6 = false;
+                picture6Change = true;
+            }
+            else if(index == 7)
+            {
+                removePicture7 = false;
+                picture7Change = true;
+            }
+            else if(index == 8)
+            {
+                removePicture8 = false;
+                picture8Change = true;
+            }
+
             $('#removeDisplayImage' + index).css('display','');
         
         }
@@ -311,14 +377,15 @@ function picture(e)
 
 async function editProperty()
 {
-    $('#preloader2').css('display','block');
-    $('.loader2').css('display','block');
+    $('#overlay').css('display','block');
+    $('#progressBar').css('display','');
     var validCalendarSync = await validateCalendarSync();
     console.log('reece ' + validCalendarSync);
     var propertyName = $('#propertyName').val();
     var pricePerDay = $('#pricePerDay').val();
     var description = $('#description').val();
     var property =  JSON.parse($('#property').val());
+    propertyId = property.id;
     var bedrooms = $('#bedrooms').val();
     var beds = $('#beds').val();
     var bathrooms = $('#bathrooms').val();
@@ -330,17 +397,20 @@ async function editProperty()
     var townId = $('#town').val();
     var postCode = $('#postCode').val();
     var isAmenitiesChanged = isPropertyAmenitiesChanged();
-    // console.log('picture4 ' + picture4Change )
     var noChange = propertyName == property.name && pricePerDay == parseFloat((property.pricePerDay)).toFixed(2) && description == property.description 
                 && bedrooms == property.bedrooms && bathrooms == property.bathrooms && guests == property.guests && beds == property.beds && advanceNotice == property.advanceNotice
                 && addressLine1 == property.addressLine1 && (addressLine2 == property.addressLine2 || (addressLine2 == '' && property.addressLine2 == null))
                 && postCode == property.postCode && townId == property.townId
                 && cityId == property.cityId && property.deleteFl == $('#hide').is(':checked') && picture1Change == false 
-                && picture2Change == false && picture3Change == false && picture4Change == false && count == 0 && !isAmenitiesChanged;
+                && picture2Change == false && picture3Change == false && picture4Change == false  && picture5Change == false 
+                && picture6Change == false  && picture7Change == false  && picture8Change == false && count == 0 && !isAmenitiesChanged;
 
     if( ( propertyName == '' || pricePerDay == '' || isNaN(pricePerDay) || bedrooms < 1 || bathrooms < 1  || 
             guests < 1 || beds < 1 || advanceNotice < 0 || addressLine1 == '' || cityId == 0 || townId == null || postCode == '' ) || noChange == true || !validCalendarSync )
     {
+        
+        $('#overlay').css('display','none');
+        $('#progressBar').css('display','none');
         console.log('error');
         if(propertyName == '')
         {
@@ -441,9 +511,7 @@ async function editProperty()
         }
         
         $('#editProperty').css('disabled','');
-        // console.log('error');
-        $('#preloader2').css('display','none');
-        $('.loader2').css('display','none');
+       
     }
     else
     {
@@ -451,9 +519,11 @@ async function editProperty()
         var request = new XMLHttpRequest();
         request.responseType = 'json';
         
+        numberOfSelectedPictures = 0;
         if(picture1Change == true)
         {
             data.append('picture1', $('#picture1').prop('files')[0]);
+            numberOfSelectedPictures++;
         }
 
         if(picture2Change == true)
@@ -461,7 +531,10 @@ async function editProperty()
             if(removePicture2 == true)
                 data.append('removePicture2',true);
             else
+            {
                 data.append('picture2', $('#picture2').prop('files')[0]);
+                numberOfSelectedPictures++;
+            }
         }
 
         if(picture3Change == true)
@@ -469,7 +542,10 @@ async function editProperty()
             if(removePicture3 == true)
                 data.append('removePicture3',true);
             else
+            {
                 data.append('picture3', $('#picture3').prop('files')[0]);
+                numberOfSelectedPictures++;
+            }
         }
 
         if(picture4Change == true)
@@ -477,7 +553,51 @@ async function editProperty()
             if(removePicture4 == true)
                 data.append('removePicture4',true);
             else
+            {
                 data.append('picture4', $('#picture4').prop('files')[0]);
+                numberOfSelectedPictures++;
+            }
+                
+        }
+        if(picture5Change == true)
+        {
+            if(removePicture5 == true)
+                data.append('removePicture5',true);
+            else
+            {
+                data.append('picture5', $('#picture5').prop('files')[0]);
+                numberOfSelectedPictures++;
+            }
+        }
+        if(picture6Change == true)
+        {
+            if(removePicture6 == true)
+                data.append('removePicture6',true);
+            else
+            {
+                data.append('picture6', $('#picture6').prop('files')[0]);
+                numberOfSelectedPictures++;
+            }
+        }
+        if(picture7Change == true)
+        {
+            if(removePicture7 == true)
+                data.append('removePicture7',true);
+            else
+            {
+                data.append('picture7', $('#picture7').prop('files')[0]);
+                numberOfSelectedPictures++;
+            }
+        }
+        if(picture8Change == true)
+        {
+            if(removePicture8 == true)
+                data.append('removePicture8',true);
+            else
+            {
+                data.append('picture8', $('#picture8').prop('files')[0]);
+                numberOfSelectedPictures++;
+            }
         }
 
         for(var i = 0; i < count; i++)
@@ -518,19 +638,19 @@ async function editProperty()
 
             if(error)
             {
+                
+                $('#overlay').css('display','none');
+                $('#progressBar').css('display','none');
                 if(error.name)
                 {
                     $('#productNameError').text(error.nAME);
                     $('#editProperty').css('disabled','');
                     location.href = "#propertyName";
                 }
-
-                $('#preloader2').css('display','none');
-                $('.loader2').css('display','none');
             }
             else
             {
-                window.location = '/adminProperty?id=' + property.id +'&success=true';
+                jobs[data.id] = {id: data.id, state: "queued"};
                 // change to update the page
             }
         });
@@ -540,3 +660,38 @@ async function editProperty()
     
     }
 }
+
+function updateJobs() {
+    for (var id of Object.keys(jobs)) {
+        var data = {id:id};
+
+        $.ajax({
+            type:'get',
+            url:'/updateEditPropertyJobs',
+            data:data,
+            success:function(result)
+            {
+                if(result.process == 'editProperty')
+                {
+    
+                  var progress = result.progress;
+                  var totalSteps = 5 + numberOfSelectedPictures;
+            
+                  var progressAsPercentage = ((progress/totalSteps) * 100).toFixed(2);
+                  console.log(progress)
+                  console.log(totalSteps);
+                  console.log(progressAsPercentage) 
+
+                  $('#progress').css('width', progressAsPercentage + '%');
+                //   $('#overlay').css('display','block');
+                  if(progress == totalSteps)
+                  {
+                    var jobId = result.id;
+                    window.location = '/adminProperty?id=' + propertyId + '&success=true';
+                    delete jobs[jobId];
+                  }
+                } 
+            }
+        })
+    }
+  }

@@ -5,7 +5,7 @@ mixin navbar()
         .container-fluid
           .d-flex.align-items-center
             a.navbar-brand.py-1(href='/')
-              img(src='img/brand/hyde.jpg' style="width:192px" alt='Directory logo')
+              img(src='img/brand/hyde.jpg' style="width:192px" alt='Hyde logo')
           button.navbar-toggler.navbar-toggler-right(type='button' data-bs-toggle='collapse' data-bs-target='#navbarCollapse' aria-controls='navbarCollapse' aria-expanded='false' aria-label='Toggle navigation')
             i.fa.fa-bars
           // Navbar Collapse
@@ -50,7 +50,7 @@ mixin navbar()
                   li.nav-item
                     a.nav-link(href='/myAccount') Account
                   li.nav-item
-                    a.nav-link(href='/properties?cityId=1') Places
+                    a.nav-link(href='/properties?cityId=1') Places to Stay
                 li.nav-item.dropdown.ms-lg-3
                   a#userDropdownMenuLink(href='#' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
                       img.avatar.avatar-sm.avatar-border-white.me-2(src='img/avatar/avatar-10.jpg' alt='Jack London')

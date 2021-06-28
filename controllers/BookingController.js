@@ -97,26 +97,7 @@ exports.getCustomerBooking = async function(req,res)
 {
     var bookingId = req.query.id;
 
-    var booking = await models.sequelize.query('select b.cost, p.displayImage1,p.displayImage2,p.displayImage3, p.displayImage4, p.name as propertyName,' + 
-    ' DATE_FORMAT(b.bookingDttm, "%Y-%m-%d %H:%i:%s") as bookingDttm,DATE_FORMAT(b.fromDt, "%a %b %D %Y") as formatFromDt, DATE_FORMAT(b.toDt, "%a %b %D %Y") as formatToDt,b.fromDt,b.toDt, b.id as bookingId, ' + 
-    ' DATE_FORMAT(b.fromDt, "%W") as fromDay,  DATE_FORMAT(b.fromDt, "%b") as fromMonth,  DATE_FORMAT(b.fromDt, "%D") as fromDate, ' +
-    ' DATE_FORMAT(b.toDt, "%W") as toDay,  DATE_FORMAT(b.toDt, "%b") as toMonth,  DATE_FORMAT(b.toDt, "%D") as toDate, ' +
-    ' addr.addressLine1, addr.addressLine2, t.name as town, c.name as cityName, addr.postCode ' +
-    ' from bookings b ' + 
-            ' inner join accounts a on b.accountFk = a.id ' + 
-            ' inner join properties p on b.propertyFk = p.id ' +
-            ' inner join addresses addr on addr.propertyFk = p.id ' +
-            ' inner join cities c on addr.cityFk = c.id ' + 
-            ' inner join towns t on addr.townFk = t.id ' +
-            ' where (b.status = :success or b.status = :cancel) ' + 
-            ' and a.id = :accountId ' + 
-            ' and b.id = :bookingId ' +
-            ' order by b.bookingDttm desc ',{replacements:{
-                success:'Successful',
-                cancel:'Cancelled',
-                bookingId:bookingId,
-                accountId:req.user.id},type:models.sequelize.QueryTypes.SELECT});
-    booking = booking[0];
+    var booking = await getBookingForCustomer(bookingId,req.user.id);
 
     if(booking == null)
        return res.redirect('/bookingHistory');
@@ -132,8 +113,38 @@ exports.getCustomerBooking = async function(req,res)
 
     var noCanellations = bookingDttm.setDate(bookingDttm.getDate() + 2)
     var cancel = Date.now() < noCanellations;
+    var propertyAmenities = await propertyController.getPropertyAmenitiesForPropertyId(booking.propertyId);
 
-    return res.render('customerBooking', {user:req.user,dayDiff:dayDiff,cancel:cancel, booking:booking,latitude:latitude,longitude:longitude});
+    return res.render('customerBooking', {user:req.user,propertyAmenities:propertyAmenities, dayDiff:dayDiff,cancel:cancel, booking:booking,latitude:latitude,longitude:longitude});
+}
+
+async function getBookingForCustomer(bookingId,userId)
+{
+    var booking = await models.sequelize.query('select b.cost, p.displayImage1,p.displayImage2,p.displayImage3, p.displayImage4,p.displayImage5,p.displayImage6,p.displayImage7,p.displayImage8, p.name as propertyName,' + 
+    ' DATE_FORMAT(b.bookingDttm, "%Y-%m-%d %H:%i:%s") as bookingDttm,DATE_FORMAT(b.fromDt, "%a %b %D %Y") as formatFromDt, DATE_FORMAT(b.toDt, "%a %b %D %Y") as formatToDt,b.fromDt,b.toDt, b.id as bookingId, ' + 
+    ' DATE_FORMAT(b.fromDt, "%W") as fromDay,  DATE_FORMAT(b.fromDt, "%b") as fromMonth,  DATE_FORMAT(b.fromDt, "%D") as fromDate, ' +
+    ' DATE_FORMAT(b.toDt, "%W") as toDay,  DATE_FORMAT(b.toDt, "%b") as toMonth,  DATE_FORMAT(b.toDt, "%D") as toDate, a.name as customerName, ' +
+    ' addr.addressLine1, addr.addressLine2, t.name as town, c.name as cityName, addr.postCode, p.id as propertyId,b.confirmationCode,b.guests ' +
+    ' from bookings b ' + 
+            ' inner join accounts a on b.accountFk = a.id ' + 
+            ' inner join properties p on b.propertyFk = p.id ' +
+            ' inner join addresses addr on addr.propertyFk = p.id ' +
+            ' inner join cities c on addr.cityFk = c.id ' + 
+            ' inner join towns t on addr.townFk = t.id ' +
+            ' where (b.status = :success or b.status = :cancel) ' + 
+            ' and a.id = :accountId ' + 
+            ' and b.id = :bookingId ' +
+            ' order by b.bookingDttm desc ',{replacements:{
+                success:'Successful',
+                cancel:'Cancelled',
+                bookingId:bookingId,
+                accountId:userId},type:models.sequelize.QueryTypes.SELECT});
+        return booking[0];
+}
+
+exports.getBookingForCustomer = async function(bookingId,userId)
+{
+    return await getBookingForCustomer(bookingId,userId);
 }
 
 exports.getAdminCustomerBooking = async function(req,res)
@@ -176,9 +187,9 @@ exports.getAdminCustomerBooking = async function(req,res)
 
 exports.syncCalendars = async function(req,res)
 {
-    // await workerQueue.add({process:'syncCalendarsTask'});
+    await workerQueue.add({process:'syncCalendarsTask'});
 
-    await syncCalendarsTask();
+    // await syncCalendarsTask();
 }
 
 

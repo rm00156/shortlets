@@ -1,65 +1,112 @@
 doctype html
 html(lang='en')
   include common/header.pug 
-  +head('Order Placed')
+  +head('Your Invoice')
   body(style='padding-top: 72px;')
     include common/navbar.pug 
     +navbar(user)
-    .progress.rounded-0.sticky-top(style='height: 8px; top: 72px;')
-      .progress-bar(role='progressbar' style='width: 100%' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100')
-    section.py-5
+    section.py-5.p-print-0
       .container
-        .row
-          .col-lg-7
-            p.subtitle.text-primary Book your holiday home
-            h1.h2.mb-5
-              | Booking placed 
-            //-   span.text-muted.float-end Step 4
-            .text-block
-              p.text-muted Thank you for your booking, #{user.name}. 
-              p.text-muted.mb-5
-                | Samsa was a travelling salesman - and above it there hung a picture that he had recently cut out of an illustrated magazine and housed in a nice, gilded frame.
-              p.text-center.mb-5
-                a.btn.btn-primary.mx-2.mb-2(href='/customerBooking?id=' + booking)
-                  i.far.fa-file.me-2
-                  | View your booking
-                a.btn.btn-outline-muted.mb-2(href='/properties?cityId=1') Or something else
-              p.mb-5.text-center
-                img.img-fluid(src='img/illustration/undraw_celebration_0jvk.svg' alt='' style='width: 400px;')
-          .col-lg-5.ps-xl-5
-            .card.border-0.shadow
-              .card-body.p-4
-                
-                .text-block.py-3
-                  ul.list-unstyled.mb-0
-                    li.mb-3
-                      i.fas.fa-users.fa-fw.text-muted.me-2
-                      | #{guests} guest(s)
-                    li.mb-0
-                      i.far.fa-calendar.fa-fw.text-muted.me-2
-                      | #{fromMonth} #{fromNumber}, #{fromYear} 
-                      i.fas.fa-arrow-right.fa-fw.text-muted.mx-3
-                      | #{toMonth} #{toNumber}, #{toYear} 
-                .text-block.pt-3.pb-0
-                  table.w-100
-                    tbody
-                      tr
-                        th.fw-normal.py-2 £#{(parseFloat(property.pricePerDay)).toFixed(2)} x #{dayDiff} night(s)
-                        td.text-end.py-2 £#{totalCost}
-                    //-   tr
-                        th.fw-normal.pt-2.pb-3 Service fee
-                        td.text-end.pt-2.pb-3 £67.48
-                    tfoot
-                      tr.border-top
-                        th.pt-3 Total
-                        td.fw-bold.text-end.pt-3 £#{totalCost}
-              .card-footer.bg-primary-light.py-4.border-0
-                .d-flex.align-items-center
-                  div
-                    h6 Flexible – free cancellation
-                    p.text-sm.opacity-8.mb-0
-                      | Cancel within 48 hours of booking to get a full refund. 
-                      a.text-reset.ms-3(href='#') More details
+        .row.mb-4.d-print-none
+          .col-lg-6
+            // Breadcrumbs
+            ol.breadcrumb.ps-0.justify-content-start
+                li.breadcrumb-item
+                    a(href='/') Home
+                li.breadcrumb-item
+                    a(href='/bookingHistory') Bookings
+                li.breadcrumb-item.active #{booking.propertyName}  
+                li.breadcrumb-item.active Invoice #{booking.confirmationCode}   
+          .col-lg-6.text-lg-end
+            //- button.btn.btn-primary.me-2
+              i.far.fa-file-pdf.me-2
+              |  Download PDF
+            button.btn(onclick='window.print()')
+              i.fas.fa-print.me-2
+              |  Print
+        .card.border-0.shadow.shadow-print-0
+          .card-header.bg-gray-100.p-5.border-0.px-print-0
+            .row
+              .col-6.d-flex.align-items-center
+                img(src='img/brand/hyde.jpg' style="width:192px" alt='Hyde logo')
+              .col-6.text-end
+                h3.mb-0 Invoice #{booking.confirmationCode}   
+                p.mb-0 Issued at #{booking.bookingDttm}
+          .card-body.p-5.p-print-0
+            .row.mb-4
+                //-   .col-sm-6.pe-lg-3
+                    h2.h6.text-uppercase.mb-4 Supplier
+                    h6.mb-1 Directory, Inc.
+                    p.text-muted
+                    | 13/25 New Avenue
+                    br
+                    | New Heaven
+                    br
+                    | 45Y 73J
+                    br
+                    | England
+                    br
+                    strong Great Britain
+                .col-sm-6.ps-lg-4
+                    h2.h6.text-uppercase.mb-4 Customer
+                    h6.mb-1 #{booking.customerName}
+                    p.text-muted
+                        | #{booking.addressLine1}
+                        
+                        if(booking.addressLine2 != null)
+                            br
+                            | #{booking.addressLine1}
+                        br
+                        | #{booking.town}
+                        br
+                        | #{booking.cityName}
+                       
+                        br
+                        | #{booking.postCode}
+            .row.mb-5
+              .col-md-6.pe-lg-3.text-sm
+                .row
+                  .col-6.text-uppercase.text-muted Payment method
+                  .col-6.text-end Card Payment
+                .row
+                  .col-6.text-uppercase.text-muted Email
+                  .col-6.text-end #{user.email}
+              
+            .table-responsive.text-sm.mb-5
+              table.table.table-striped
+                thead.bg-gray-200
+                  tr.border-0
+                    th.center #
+                    th Item
+                    th From
+                    th.center To
+
+                    th.text-end Guests
+                    th.text-end Total
+                tbody
+                  tr
+                    td.text-center 1
+                    td.fw-bold #{booking.propertyName}
+                    td #{booking.formatFromDt}
+                    td #{booking.formatToDt}
+                    td.text-end #{booking.guests}
+                    td.text-end £#{(parseFloat(booking.cost)).toFixed(2)}
+                  
+            .row
+              .col-sm-7.col-lg-5.col-xl-4.ms-auto
+                table.table
+                  tbody
+                    //- tr.text-sm
+                    //-   td.fw-bold Subtotal
+                    //-   td.text-end $1,058
+                    //- tr.text-sm
+                    //-   td.fw-bold VAT (21%)
+                    //-   td.text-end $222.18
+                    tr
+                      td.text-uppercase.fw-bold Total
+                      td.text-end.fw-bold £#{(parseFloat(booking.cost)).toFixed(2)}
+          .card-footer.bg-gray-100.p-5.px-print-0.border-0.text-end.text-sm
+            p.mb-0 Thank you for you business. Hyde and Rowe.
     // Footer
     footer.position-relative.z-index-10.d-print-none
       // Main block - menus, subscribe form
@@ -67,7 +114,7 @@ html(lang='en')
         .container
           .row
             .col-lg-4.mb-5.mb-lg-0
-              .fw-bold.text-uppercase.text-dark.mb-3 Directory
+              .fw-bold.text-uppercase.text-dark.mb-3 Hyde and Rowe
               p Lorem ipsum dolor sit amet, consectetur adipisicing.
               ul.list-inline
                 li.list-inline-item
