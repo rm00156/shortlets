@@ -52,6 +52,14 @@ html(lang='en')
             li.breadcrumb-item
               a(href='/bookingHistory') Bookings
             li.breadcrumb-item.active #{booking.propertyName}  
+          if(booking.deleteFl)
+            .text-block
+              .alert.alert-warning.text-sm.mb-3
+                .d-flex.align-items-center
+                  //- svg.svg-icon.svg-icon.svg-icon-light.w-2rem.h-2rem.me-3.text-reset.flex-shrink-0
+                    use(xlink:href='#heart-1')  
+                  div
+                    strong This booking has been cancelled and the refund process has started.
           .text-block
             p.subtitle #{booking.formatFromDt} - #{booking.formatToDt}
             h1.hero-heading.mb-3 #{booking.propertyName}
@@ -153,10 +161,28 @@ html(lang='en')
                       span.text-sm No pets
             //- button.btn.btn-link.btn-collapse.ps-0.text-muted(type='button' data-bs-toggle='collapse' data-bs-target='#moreRules' aria-expanded='false' aria-controls='moreRules' data-expanded-text='Show less' data-collapsed-text='Show more') Show more
           if(cancel)
-            .text-block.d-print-none
-              button.btn.btn-link.ps-0
-                i.fa.fa-ban.me-2
-                | Cancel Booking
+            //- .text-block.d-print-none
+            //-   button.btn.btn-link.ps-0#cancel(data-id=booking.bookingId)
+            //-     i.fa.fa-ban.me-2
+            //-     | Cancel Booking
+            .text-block
+              .row
+                .col-sm-8
+                  button.btn.btn-link.ps-0.collapsed(type='button' data-bs-toggle='collapse' data-bs-target='#cancelButton' aria-expanded='false' aria-controls='cancelButton')
+                    i.fa.fa-ban.me-2
+                    | Cancel Booking
+                .col.text-end
+              #cancelButton.collapse
+                .row.mt-4
+                  .mb-4.col-12
+                    p Are you sure you wish to cancel this booking?
+                    //- label.form-label(for='password-current') Current Password
+                    //- input#password-current.form-control(type='password' name='password-current')
+                  .mb-4.col-md-6
+                    button.btn.btn-outline-primary#cancel(data-id=booking.bookingId) Yes Cancel
+                  .mb-4.col-md-6
+                    button.btn.btn-outline-primary#dontCancel No
+                
           .text-block.d-print-none
             button.btn.btn-link.ps-0(onclick='window.print()')
               i.fa.fa-print.me-2
@@ -280,6 +306,7 @@ html(lang='en')
     // Available tile layers
     script(src='js/map-layers.js')
     script(src='js/map-detail.js')
+    script(src='js/customerBooking.js')
     input#longitude(style="display:none" value=longitude)
     input#latitude(style="display:none" value=latitude)
     script(src="js/map.js")

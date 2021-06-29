@@ -74,4 +74,5 @@ router.get('/updateAddPropertyJobs',isAdmin,adminController.updateAddPropertyJob
 router.get('/updateEditPropertyJobs',isAdmin,propertyController.updateEditPropertyJobs);
 
 router.get('/yourInvoice', isLoggedInCustomer, orderController.getYourInvoice);
+router.post('/cancelBooking',isLoggedIn, bookingController.cancelBooking);
 module.exports = router;

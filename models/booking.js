@@ -63,6 +63,11 @@ module.exports = function(sequelize, Sequelize) {
             allowNull:true
         },
         
+        cancelledDttm:{
+            type:Sequelize.DATE,
+            allowNull:true
+        },
+
         deleteFl:{
             type: Sequelize.BOOLEAN,
             allowNull:false

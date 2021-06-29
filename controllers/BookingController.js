@@ -6,6 +6,7 @@ const Queue = require('bull');
 const workerQueue = new Queue('worker', REDIS_URL );
 const ical = require('node-ical');
 const moment = require('moment');
+const sequelize = require('sequelize');
 
 exports.getBookings = async function (req, res) {
     
@@ -109,10 +110,17 @@ exports.getCustomerBooking = async function(req,res)
     var latitude = body.result.latitude;
     var dayDiff = await propertyController.dateDiff(fromDt, toDt);
 
-    var bookingDttm = new Date(booking.bookingDttm);
+    const bookingDttm = new Date(booking.bookingDttm);
+    bookingDttm.setUTCHours(24);
 
-    var noCanellations = bookingDttm.setDate(bookingDttm.getDate() + 2)
-    var cancel = Date.now() < noCanellations;
+    var cancellationDate = bookingDttm;
+    cancellationDate = (moment(cancellationDate).add(2,'day')).toDate();
+    var bookingFromDttm = (moment(fromDt).add(15,'hour')).toDate();
+    bookingFromDttm.setUTCHours(24);
+    console.log(bookingFromDttm)
+    // console.log(noCanellations);
+    var now = Date.now();
+    var cancel = now < cancellationDate && now < bookingFromDttm && booking.deleteFl == false;
     var propertyAmenities = await propertyController.getPropertyAmenitiesForPropertyId(booking.propertyId);
 
     return res.render('customerBooking', {user:req.user,propertyAmenities:propertyAmenities, dayDiff:dayDiff,cancel:cancel, booking:booking,latitude:latitude,longitude:longitude});
@@ -124,7 +132,7 @@ async function getBookingForCustomer(bookingId,userId)
     ' DATE_FORMAT(b.bookingDttm, "%Y-%m-%d %H:%i:%s") as bookingDttm,DATE_FORMAT(b.fromDt, "%a %b %D %Y") as formatFromDt, DATE_FORMAT(b.toDt, "%a %b %D %Y") as formatToDt,b.fromDt,b.toDt, b.id as bookingId, ' + 
     ' DATE_FORMAT(b.fromDt, "%W") as fromDay,  DATE_FORMAT(b.fromDt, "%b") as fromMonth,  DATE_FORMAT(b.fromDt, "%D") as fromDate, ' +
     ' DATE_FORMAT(b.toDt, "%W") as toDay,  DATE_FORMAT(b.toDt, "%b") as toMonth,  DATE_FORMAT(b.toDt, "%D") as toDate, a.name as customerName, ' +
-    ' addr.addressLine1, addr.addressLine2, t.name as town, c.name as cityName, addr.postCode, p.id as propertyId,b.confirmationCode,b.guests ' +
+    ' addr.addressLine1, addr.addressLine2, t.name as town, c.name as cityName, addr.postCode, p.id as propertyId,b.confirmationCode,b.guests, b.deleteFl ' +
     ' from bookings b ' + 
             ' inner join accounts a on b.accountFk = a.id ' + 
             ' inner join properties p on b.propertyFk = p.id ' +
@@ -195,4 +203,22 @@ exports.syncCalendars = async function(req,res)
 
 function convertDateToUTC(date) { 
     return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds())); 
+}
+
+exports.cancelBooking = async function(req,res)
+{
+    var bookingId = req.body.bookingId;
+    var cancelledDttm = Date.now();
+    cancelledDttm.setUTCHours(24);
+    await models.booking.update({
+        deleteFl:true,
+        cancelledDttm:cancelledDttm,
+        versionNo:sequelize.literal('versionNo + 1')
+    },{
+        where:{
+            id:bookingId
+        }
+    });
+
+    res.json({});
 }
