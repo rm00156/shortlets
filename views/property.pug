@@ -347,19 +347,24 @@ html(lang='en')
                         .card-body.d-flex.align-items-center
                             .w-100
                                 h6.card-title
-                                    a.text-decoration-none.text-dark(href='/property?id=' + randProperty.id ) #{randProperty.name}
-                                .d-flex.card-subtitle.mb-3
+                                  a.text-decoration-none.text-dark(href='/property?id=' + randProperty.id ) #{randProperty.name}
+                                .row
+                                  .col-lg-6
                                     p.flex-grow-1.mb-0.text-muted.text-sm #{randProperty.bedrooms} bedrooms
-                                    
-                                .d-flex.card-subtitle.mb-3
+                                  .col-lg-6
                                     p.flex-grow-1.mb-0.text-muted.text-sm #{randProperty.guests} guests     
-                                .d-flex.card-subtitle.mb-3
-                                    p.flex-grow-1.mb-0.text-muted.text-sm #{randProperty.bathrooms} bathrooms
-                                .d-flex.card-subtitle.mb-3
-                                    p.flex-grow-1.mb-0.text-muted.text-sm #{randProperty.beds} beds                              
+                                     
+                                .mb-3 
+                                  .row
+                                    .col-lg-6
+                                      p.flex-grow-1.mb-0.text-muted.text-sm #{randProperty.bathrooms} bathrooms
+                                    .col-lg-6
+                                      p.flex-grow-1.mb-0.text-muted.text-sm #{randProperty.beds} beds      
+                                               
                                 p.card-text.text-muted
                                     span.h4.text-primary £#{(parseFloat(randProperty.pricePerDay)).toFixed(2)}
                                     |  per night
+            
             //- .swiper-slide.h-auto.px-2
             //-   // place item
             //-   .w-100.h-100.hover-animate(data-marker-id='59c0c8e33b1527bfe2abaf92')

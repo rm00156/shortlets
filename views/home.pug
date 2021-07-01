@@ -142,19 +142,24 @@ html(lang='en')
                                 .card-body.d-flex.align-items-center
                                     .w-100
                                         h6.card-title
-                                            a.text-decoration-none.text-dark(href='/property?id=' + property.id ) #{property.name}
-                                        .d-flex.card-subtitle.mb-3
+                                          a.text-decoration-none.text-dark(href='/property?id=' + property.id ) #{property.name}
+                                        .row
+                                          .col-lg-6
                                             p.flex-grow-1.mb-0.text-muted.text-sm #{property.bedrooms} bedrooms
-                                            
-                                        .d-flex.card-subtitle.mb-3
+                                          .col-lg-6
                                             p.flex-grow-1.mb-0.text-muted.text-sm #{property.guests} guests     
-                                        .d-flex.card-subtitle.mb-3
-                                            p.flex-grow-1.mb-0.text-muted.text-sm #{property.bathrooms} bathrooms
-                                        .d-flex.card-subtitle.mb-3
-                                            p.flex-grow-1.mb-0.text-muted.text-sm #{property.beds} beds                              
-                                        p.card-text.text-muted
-                                            span.h4.text-primary £#{(parseFloat(property.pricePerDay)).toFixed(2)}
-                                            |  per night
+                                     
+                                          .mb-3 
+                                            .row
+                                              .col-lg-6
+                                                p.flex-grow-1.mb-0.text-muted.text-sm #{property.bathrooms} bathrooms
+                                              .col-lg-6
+                                                p.flex-grow-1.mb-0.text-muted.text-sm #{property.beds} beds      
+                                                        
+                                          p.card-text.text-muted
+                                              span.h4.text-primary £#{(parseFloat(property.pricePerDay)).toFixed(2)}
+                                              |  per night
+            
                 
             // If we need pagination
             .swiper-pagination
