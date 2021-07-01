@@ -10,7 +10,7 @@ const fetch = require('node-fetch');
 const REDIS_URL = process.env.REDIS_URL || 'redis://127.0.0.1:6379';
 const Queue = require('bull');
 const workerQueue = new Queue('worker', REDIS_URL);
-
+const propertyController = require('../controllers/PropertyController');
 exports.getAllCities = async function () {
     return await getAllCities();
 }
@@ -735,52 +735,58 @@ exports.removeSync = async function (req, res) {
 //     res.render('booking', {user:req.user, booking: booking, dayDiff: dayDiff, currentlyStaying: currentlyStaying });
 // }
 
-exports.getBooking = async function (req, res) {
-    var bookingId = req.query.id;
+// exports.getBooking = async function (req, res) {
+//     var bookingId = req.query.id;
 
-    var booking = await models.sequelize.query('select b.cost, p.displayImage1,p.displayImage2,p.displayImage3, p.displayImage4, p.name as propertyName,' +
-        ' DATE_FORMAT(b.bookingDttm, "%a %b %D %Y") as bookingDttm,DATE_FORMAT(b.fromDt, "%a %b %D %Y") as formatFromDt, DATE_FORMAT(b.toDt, "%a %b %D %Y") as formatToDt,b.fromDt,b.toDt, b.id as bookingId, ' +
-        ' DATE_FORMAT(b.fromDt, "%W") as fromDay,  DATE_FORMAT(b.fromDt, "%b") as fromMonth,  DATE_FORMAT(b.fromDt, "%D") as fromDate, ' +
-        ' DATE_FORMAT(b.toDt, "%W") as toDay,  DATE_FORMAT(b.toDt, "%b") as toMonth,  DATE_FORMAT(b.toDt, "%D") as toDate, b.guests, ' +
-        ' DATE_FORMAT(b.bookingDttm, "%W") as bookingDay,  DATE_FORMAT(b.bookingDttm, "%b") as bookingMonth,  DATE_FORMAT(b.bookingDttm, "%D") as bookingDate, DATE_FORMAT(b.bookingDttm, "%l:%i %p") as bookingTime ,b.confirmationCode, a.id as accountId, ' +
-        ' addr.addressLine1, addr.addressLine2, t.name as town, c.name as cityName, addr.postCode, a.name as customerName, b.status,b.propertySyncFk ' +
-        ' from bookings b ' +
-        ' inner join accounts a on b.accountFk = a.id ' +
-        ' inner join properties p on b.propertyFk = p.id ' +
-        ' inner join addresses addr on addr.propertyFk = p.id ' +
-        ' inner join cities c on addr.cityFk = c.id ' +
-        ' inner join towns t on addr.townFk = t.id ' +
-        ' where  b.id = :bookingId ' +
-        ' order by b.bookingDttm desc ', {
-            replacements: {
-                bookingId: bookingId
-            }, type: models.sequelize.QueryTypes.SELECT
-        });
-    booking = booking[0];
+//     var booking = await models.sequelize.query('select b.cost, p.displayImage1,p.displayImage2,p.displayImage3, p.displayImage4, p.name as propertyName,' +
+//         ' DATE_FORMAT(b.bookingDttm, "%a %b %D %Y") as bookingDttm,DATE_FORMAT(b.fromDt, "%a %b %D %Y") as formatFromDt, DATE_FORMAT(b.toDt, "%a %b %D %Y") as formatToDt,b.fromDt,b.toDt, b.id as bookingId, ' +
+//         ' DATE_FORMAT(b.fromDt, "%W") as fromDay,  DATE_FORMAT(b.fromDt, "%b") as fromMonth,  DATE_FORMAT(b.fromDt, "%D") as fromDate, ' +
+//         ' DATE_FORMAT(b.toDt, "%W") as toDay,  DATE_FORMAT(b.toDt, "%b") as toMonth,  DATE_FORMAT(b.toDt, "%D") as toDate, b.guests, ' +
+//         ' DATE_FORMAT(b.bookingDttm, "%W") as bookingDay,  DATE_FORMAT(b.bookingDttm, "%b") as bookingMonth,  DATE_FORMAT(b.bookingDttm, "%D") as bookingDate, DATE_FORMAT(b.bookingDttm, "%l:%i %p") as bookingTime ,b.confirmationCode, a.id as accountId, ' +
+//         ' addr.addressLine1, addr.addressLine2, t.name as town, c.name as cityName, addr.postCode, a.name as customerName, b.status,b.propertySyncFk ' +
+//         ' from bookings b ' +
+//         ' inner join accounts a on b.accountFk = a.id ' +
+//         ' inner join properties p on b.propertyFk = p.id ' +
+//         ' inner join addresses addr on addr.propertyFk = p.id ' +
+//         ' inner join cities c on addr.cityFk = c.id ' +
+//         ' inner join towns t on addr.townFk = t.id ' +
+//         ' where  b.id = :bookingId ' +
+//         ' order by b.bookingDttm desc ', {
+//             replacements: {
+//                 bookingId: bookingId
+//             }, type: models.sequelize.QueryTypes.SELECT
+//         });
+//     booking = booking[0];
 
-    // deal with this later
-    // if(booking == null)
-    //    return res.redirect('/bookingHistory');
+//     // deal with this later
+//     // if(booking == null)
+//     //    return res.redirect('/bookingHistory');
 
-    var fromDt = new Date(booking.fromDt);
-    var toDt = new Date(booking.toDt);
-    const body = await fetch("https://api.postcodes.io/postcodes/" + booking.postCode).then(result => result.json());
-    var longitude = body.result.longitude;
-    var latitude = body.result.latitude;
-    var dayDiff = await dateDiff(fromDt, toDt);
-    console.log(dayDiff);
+//     var fromDt = new Date(booking.fromDt);
+//     var toDt = new Date(booking.toDt);
+//     const body = await fetch("https://api.postcodes.io/postcodes/" + booking.postCode).then(result => result.json());
+//     var longitude = body.result.longitude;
+//     var latitude = body.result.latitude;
+//     var dayDiff = await propertyController.dateDiff(fromDt, toDt);
+//     console.log(dayDiff);
 
-    var propertySync = null;
-    if (booking.propertySyncFk != null) {
-        propertySync = await models.propertySync.findOne({
-            where: {
-                id: booking.propertySyncFk
-            }
-        });
-    }
+//     var propertySync = null;
+//     if (booking.propertySyncFk != null) {
+//         propertySync = await models.propertySync.findOne({
+//             where: {
+//                 id: booking.propertySyncFk
+//             }
+//         });
+//     }
 
-    return res.render('booking', { user: req.user, propertySync: propertySync, dayDiff: dayDiff, booking: booking, latitude: latitude, longitude: longitude });
-}
+//     var refundTypes = await models.refundType.findAll({
+//         where:{
+//             deleteFl:false
+//         }
+//     });
+
+//     return res.render('booking', { user: req.user,refundTypes:refundTypes, propertySync: propertySync, dayDiff: dayDiff, booking: booking, latitude: latitude, longitude: longitude });
+// }
 
 
 function dateDiff(first, second) {

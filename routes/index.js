@@ -39,7 +39,7 @@ router.get('/syncListing', propertyController.syncListing);
 
 router.get('/placeOrder', isLoggedInToCheckout, orderController.placeOrder);
 router.post('/stripeCheckout', isLoggedInCustomer,isDatesStillAvailable, orderController.checkout);
-router.get('/booking',isAdmin, propertyController.getBooking);
+router.get('/booking',isAdmin, bookingController.getBooking);
 router.post('/removeSync', propertyController.removeSync);
 router.get('/property', propertyController.getProperty);
 router.get('/myAccount',isLoggedInCustomer, accountController.getMyAccount);
@@ -73,6 +73,8 @@ router.get('/purchaseSuccessful',isLoggedInCustomer, orderController.purchaseSuc
 router.get('/updateAddPropertyJobs',isAdmin,adminController.updateAddPropertyJobs);
 router.get('/updateEditPropertyJobs',isAdmin,propertyController.updateEditPropertyJobs);
 
-router.get('/yourInvoice', isLoggedInCustomer, orderController.getYourInvoice);
+router.get('/yourInvoice', isLoggedIn, orderController.getYourInvoice);
 router.post('/cancelBooking',isLoggedIn, bookingController.cancelBooking);
+
+router.post('/refund', isAdmin, orderController.refund);
 module.exports = router;

@@ -11,12 +11,19 @@ html(lang='en')
           .col-lg-6
             // Breadcrumbs
             ol.breadcrumb.ps-0.justify-content-start
+              if(user.accountTypeFk == 2)
                 li.breadcrumb-item
                     a(href='/') Home
                 li.breadcrumb-item
                     a(href='/bookingHistory') Bookings
                 li.breadcrumb-item.active #{booking.propertyName}  
-                li.breadcrumb-item.active Invoice #{booking.confirmationCode}   
+                li.breadcrumb-item.active Invoice #{booking.confirmationCode}
+              else
+                li.breadcrumb-item
+                    a(href='/adminDashboard') Dashboard
+                li.breadcrumb-item
+                    a(href='/booking?id='+ booking.bookingId) #{booking.propertyName} Booking 
+                li.breadcrumb-item.active Invoice #{booking.confirmationCode}
           .col-lg-6.text-lg-end
             //- button.btn.btn-primary.me-2
               i.far.fa-file-pdf.me-2

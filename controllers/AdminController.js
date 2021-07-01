@@ -24,8 +24,72 @@ exports.getLogin = async function (req, res) {
     res.render('adminLogin');
 }
 
-exports.getSearchBookingPage = async function (req, res) {
-    res.render('adminSearchBooking', { user: req.user });
+exports.getSearchBookingPage = async function (req, res) 
+{
+    var bookingNumber = req.query.bookingNumber;
+    var bookedFromDt = req.query.bookedFromDt;
+    var bookedToDt = req.query.bookedToDt;
+    var checkinFromDt = req.query.checkinFromDt;
+    var checkinToDt = req.query.checkinToDt;
+    var checkoutFromDt = req.query.checkoutFromDt;
+    var checkoutToDt = req.query.checkoutToDt;
+    // var status = req.query.status;
+
+    // var query = ' select pb.id,DATE_FORMAT(pb.purchaseDttm, "%Y-%m-%d %H:%i:%s") as purchaseDttm, pt.type, b.accountFk as accountId, pb.total, pb.orderNumber from purchaseBaskets pb ' +
+    //     ' inner join basketItems b on b.purchaseBasketFk = pb.id ' +
+    //     ' inner join paymentTypes pt on pb.paymentTypeFk = pt.id ' +
+    //     ' where pb.status = :completed ' +
+    //     ' and b.id = (select id from basketItems where purchaseBasketFk = pb.id LIMIT 1) '
+    // ' and pb.orderNumber like :orderNumber ';
+    var query = ' select b.id,b.cost , DATE_FORMAT(b.bookingDttm,"%a %b %D %Y") as bookingDttm, b.confirmationCode, b.deleteFl, ' +
+    ' DATE_FORMAT(b.fromDt,"%a %b %D %Y") as checkinDt,DATE_FORMAT(b.toDt,"%a %b %D %Y") as checkoutDt, a.name as customerName, p.name as propertyName from bookings b ' + 
+        ' inner join accounts a on b.accountFk = a.id ' + 
+        ' inner join properties p on b.propertyFk = p.id ' + 
+        ' where  b.status != :pending ';
+
+    if (bookedFromDt != undefined && bookedFromDt != null && bookedFromDt != '')
+        query = query + ' and b.bookingDttm >= :bookedFromDt';
+
+    if (bookedToDt != '' && bookedToDt != undefined && bookedToDt != null)
+        query = query + ' and b.bookingDttm <= :bookedToDt';
+
+    if (checkinFromDt != ''  && checkinFromDt != undefined && checkinFromDt != null)
+        query = query + ' and b.fromDt >= :checkinFromDt';
+
+    if (checkinToDt != ''  && checkinToDt != undefined && checkinToDt != null)
+        query = query + ' and b.fromDt <= :checkinToDt';
+    
+    if (checkoutFromDt != ''  && checkoutFromDt != undefined && checkoutFromDt != null)
+        query = query + ' and b.toDt >= :checkoutFromDt';
+
+    if (checkoutToDt != ''  && checkoutToDt != undefined && checkoutToDt != null)
+        query = query + ' and b.toDt <= :checkoutToDt';
+
+    if (bookingNumber != undefined && bookingNumber != null)
+        query = query + ' and b.confirmationCode like :bookingNumber ';
+
+    // if(status != 0)
+    // {
+    //     query = query + ' and b.status = :status';
+    //     status = status == 1 ? 'Successful' : 'Cancelled'
+    // }
+
+    var bookings = await models.sequelize.query(query,
+        {
+            replacements: {
+                // status: status,
+                pending: 'Pending',
+                bookedToDt: bookedToDt,
+                bookedFromDt:bookedFromDt,
+                checkinFromDt:checkinFromDt,
+                checkinToDt:checkinToDt,
+                checkoutFromDt:checkoutFromDt,
+                checkoutToDt:checkoutToDt,
+                bookingNumber: '%' + bookingNumber + '%'
+            },
+            type: models.sequelize.QueryTypes.SELECT
+        });
+    res.render('adminSearchBooking', { user: req.user,bookings:bookings });
 }
 
 exports.getAdminDashboard = async function (req, res) {

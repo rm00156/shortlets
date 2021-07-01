@@ -114,16 +114,62 @@ html(lang='en')
                 .col
                   h6  Total cost
                   p.text-muted £#{(parseFloat(booking.cost)).toFixed(2)}
+                  input(style="display:none" id="totalAmount" value=(parseFloat(totalPossibleRefundAmount)).toFixed(2))
+
                 .col.align-self-center
                   p.text-end.d-print-none
-                    a.btn.btn-link.text-muted(href='user-invoice.html')
+                    a.btn.btn-link.text-muted(href=href='/yourInvoice?bookingId=' + booking.bookingId)
                       i.far.fa-file.me-2
                       | Invoice
             .text-block
               h6.mb-4 Confirmation Code
               p.text-muted #{booking.confirmationCode}  
-            .text-block
-              h6.mb-4 Refund
+            if(displayRefund)
+              .text-block
+                .row
+                    .col-sm-8
+                      button.btn.btn-link.ps-0.collapsed(type='button' data-bs-toggle='collapse' data-bs-target='#refundButton' aria-expanded='false' aria-controls='refundButton')
+                        i.fa.fa-wallet.me-2
+                        | Refund Booking
+                    .col.text-end
+                #refundButton.collapse
+                  .row.mt-4
+                    .mb-4.col-12
+                      label.form-label(for='refundType') Refund Type
+                      select#refundType.selectpicker.form-control(type='text' name='refundType')
+                        each refundType in refundTypes
+                          option(value=refundType.id) #{refundType.type}
+                    .mb-4.col-12
+                      label.form-label(for='refundAmount') Refund Amount
+                      div#partial
+                        input#refundAmount.form-control(type="number" min=0 max=parseFloat(totalPossibleRefundAmount) step=".01")
+                      div#totalRefund(style="display:none")
+                        p#refundAmount2.form-control #{(parseFloat(totalPossibleRefundAmount)).toFixed(2)}
+                      p.error#refundError.small.text-danger 
+                    .mb-4.col-md-6
+                      button.btn.btn-outline-primary#refund(data-id=booking.bookingId) Confirm
+                    .mb-4.col-md-6
+                      button.btn.btn-outline-primary#cancel Cancel
+
+            if(refunds.length > 0)
+              .text-block
+                h6 Refunds
+                .row
+                  .col-lg-4
+                    label.form-label Date
+                  .col-lg-4
+                    label.form-label Refund Type
+                  .col-lg-4
+                    label.form-label Date  
+                each refund in refunds
+                  .row
+                    .col-lg-4
+                      p #{refund.createdDttm}
+                    .col-lg-4
+                      p #{refund.refundType}
+                    .col-lg-4
+                      p £#{(parseFloat(refund.amount)).toFixed(2)} 
+                   
           else
             .text-block
               h6.mb-4 Calendar Sync 
@@ -305,6 +351,7 @@ html(lang='en')
     input#longitude(style="display:none" value=longitude)
     input#latitude(style="display:none" value=latitude)
     script(src="js/map.js")
+    script(src="js/refund.js")
     //- script.
     //-   createDetailMap({
     //-   mapId: 'detailSideMap',

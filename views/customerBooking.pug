@@ -56,10 +56,15 @@ html(lang='en')
             .text-block
               .alert.alert-warning.text-sm.mb-3
                 .d-flex.align-items-center
-                  //- svg.svg-icon.svg-icon.svg-icon-light.w-2rem.h-2rem.me-3.text-reset.flex-shrink-0
-                    use(xlink:href='#heart-1')  
                   div
                     strong This booking has been cancelled and the refund process has started.
+          if(refunds.length > 0)
+            .text-block
+              .alert.alert-success.text-sm.mb-3
+                .d-flex.align-items-center
+                  div
+                    strong Refunds can take up to 5 working days to reach your account
+
           .text-block
             p.subtitle #{booking.formatFromDt} - #{booking.formatToDt}
             h1.hero-heading.mb-3 #{booking.propertyName}
@@ -160,6 +165,25 @@ html(lang='en')
                     div
                       span.text-sm No pets
             //- button.btn.btn-link.btn-collapse.ps-0.text-muted(type='button' data-bs-toggle='collapse' data-bs-target='#moreRules' aria-expanded='false' aria-controls='moreRules' data-expanded-text='Show less' data-collapsed-text='Show more') Show more
+          
+          if(refunds.length > 0)
+              .text-block
+                h6 Refunds
+                .row
+                  .col-lg-4
+                    label.form-label Date
+                  .col-lg-4
+                    label.form-label Refund Type
+                  .col-lg-4
+                    label.form-label Date  
+                each refund in refunds
+                  .row
+                    .col-lg-4
+                      p #{refund.createdDttm}
+                    .col-lg-4
+                      p #{refund.refundType}
+                    .col-lg-4
+                      p £#{(parseFloat(refund.amount)).toFixed(2)} 
           if(cancel)
             //- .text-block.d-print-none
             //-   button.btn.btn-link.ps-0#cancel(data-id=booking.bookingId)

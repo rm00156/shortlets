@@ -114,6 +114,7 @@ exports.checkout = async function (req, res) {
         cancel_url: url + '/placeOrder',
     });
 
+    await bookingController.updateBookingPaymentProcessorId(session.payment_intent, booking.id);
     console.log(session);
 
     res.json({ session: session });
@@ -201,12 +202,66 @@ async function generateNewConfirmationCode() {
     return await generateNewConfirmationCode();
 }
 
+exports.refund = async function(req,res)
+{
+    var bookingId = req.body.bookingId;
+    var refundType = req.body.refundType;
+    var refundAmount = req.body.refundAmount;
+
+    var booking = await bookingController.getBookingById(bookingId);
+
+    var errorMessage = 'There was an issue with attempting to make a refund. Either try again or login into your stripe account for more details'
+    var result = await refundStripePayment(booking,refundAmount);
+        
+    if(result.err)
+        return res.json({err:errorMessage});
+    
+    var refundType = await models.refundType.findOne({
+        where:{
+            id:refundType
+        }
+    });
+
+    await createRefund(booking, refundAmount, refundType.id);
+    return res.json({});
+}
+
+async function createRefund(booking,amount,refundTypeId)
+{
+    await models.refund.create({
+        refundTypeFk:refundTypeId,
+        createdDttm:Date.now(),
+        amount:amount,
+        bookingFk:booking.id,
+        deleteFl:false,
+        versionNo:1
+    });
+}
+
+
 exports.getYourInvoice = async function(req,res)
 {
     var bookingId = req.query.bookingId;
 
-    var booking = await bookingController.getBookingForCustomer(bookingId,req.user.id);
+    var booking = await bookingController.getBookingForCustomer(bookingId,req.user);
     
     res.render('yourInvoice',{user:req.user,booking:booking});
 
 }
+
+async function refundStripePayment(booking,refundAmount)
+{
+  refundAmount = parseFloat(refundAmount) * 100;
+  return await stripe.refunds.create({
+    payment_intent: booking.paymentProcessorOrderId,
+    amount:refundAmount
+  }).then(()=> {
+    
+      return {};
+  }).catch(err=>{
+    console.log(err);
+    
+    return {err:err};
+  })
+}
+

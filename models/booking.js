@@ -67,6 +67,11 @@ module.exports = function(sequelize, Sequelize) {
             type:Sequelize.DATE,
             allowNull:true
         },
+    
+        paymentProcessorOrderId:{
+            type:Sequelize.STRING,
+            allowNull:true
+        },
 
         deleteFl:{
             type: Sequelize.BOOLEAN,
