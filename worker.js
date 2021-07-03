@@ -10,7 +10,7 @@ const aws = require('aws-sdk');
 const config = require('./config/config.json');
 const propertyController = require('./controllers/PropertyController');
 // const REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
-const REDIS_URL = process.env.NODE_ENV === 'production' ? "redis-19621.c77.eu-west-1-1.ec2.cloud.redislabs.com:19621" : "redis://127.0.0.1:6379";
+const REDIS_URL = "redis-19621.c77.eu-west-1-1.ec2.cloud.redislabs.com:19621";
 
 const sequelize = require('sequelize');
 
