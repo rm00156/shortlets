@@ -9,7 +9,7 @@ const ical = require('node-ical');
 const aws = require('aws-sdk');
 const config = require('./config/config.json');
 const propertyController = require('./controllers/PropertyController');
-const REDIS_URL = process.env.REDISCLOUD_URL || "redis://127.0.0.1:6379";
+const REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
 console.log(process.env.REDISCLOUD_URL)
 // const REDIS_URL = {
 //     redis: {
