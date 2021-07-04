@@ -106,7 +106,7 @@ exports.getAdminProperty = async function (req, res) {
     var cities = await getAllCities();
 
     var propertySyncs = await getPropertySyncsForProperty(id);
-    var ical = 'localhost:3000/syncListing?id=' + id;
+    var ical = req.rawHeaders[1] + '/syncListing?id=' + id;
     var amenities = await getAmenities();
 
     res.render('adminProperty', { user: req.user, propertyAmenities: propertyAmenities, amenities: amenities, property: property[0], cities: cities, success: success, propertySyncs: propertySyncs, ical: ical });
