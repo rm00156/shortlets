@@ -20,8 +20,18 @@ html(lang='en')
                   svg.svg-icon.text-secondary.w-2rem.h-2rem
                     use(xlink:href='#password-1')  
                 h5.card-title.mb-3
-                  a.text-decoration-none.text-dark.stretched-link(href='/accountDetails') Login & security
-                p.text-muted.card-text.text-sm Update your password and secure your account
+                  a.text-decoration-none.text-dark.stretched-link(href='/adminSearchAccount') Accounts
+                p.text-muted.card-text.text-sm Manage accounts in the system
+          
+          .col-6.col-md-4.mb-30px
+            .card.h-100.border-0.shadow.hover-animate
+              .card-body
+                .icon-rounded.bg-secondary-light.mb-3
+                  svg.svg-icon.text-secondary.w-2rem.h-2rem
+                    use(xlink:href='#diary-1')  
+                h5.card-title.mb-3
+                  a.text-decoration-none.text-dark.stretched-link(href='/adminSearchProperty') Properties
+                p.text-muted.card-text.text-sm Manage properties in the system
           .col-6.col-md-4.mb-30px
             .card.h-100.border-0.shadow.hover-animate
               .card-body
@@ -29,8 +39,8 @@ html(lang='en')
                   svg.svg-icon.text-secondary.w-2rem.h-2rem
                     use(xlink:href='#pay-by-card-1')  
                 h5.card-title.mb-3
-                  a.text-decoration-none.text-dark.stretched-link(href='/bookingHistory') Booking History
-                p.text-muted.card-text.text-sm Review payments, payouts, coupons, gift cards, and taxes
+                  a.text-decoration-none.text-dark.stretched-link(href='/adminSearchBooking') Bookings
+                p.text-muted.card-text.text-sm Manage bookings in the system
           //- .col-6.col-md-4.mb-30px
             .card.h-100.border-0.shadow.hover-animate
               .card-body

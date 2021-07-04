@@ -73,6 +73,7 @@ html(lang='en')
                             strong #{results.length}
                             |  results found
                 .list-group.shadow.mb-5
+                  if(results.length > 0)
                     each result in results
                         a.list-group-item.list-group-item-action.p-4(href='/adminProperty?id=' + result.id)
                             .row
@@ -108,7 +109,8 @@ html(lang='en')
                                             p.text-sm.fw-bold.mb-0 #{result.bedrooms}
                                             h6.label-heading Beds 
                                             p.text-sm.fw-bold.mb-0 #{result.beds}
-            
+                  else
+                    img(src="/img/illustration/undraw_airport_2581.svg")
     // Footer
     footer.position-relative.z-index-10.d-print-none
       // Main block - menus, subscribe form

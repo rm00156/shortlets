@@ -298,42 +298,44 @@ html(lang='en')
                 option(value='sortBy_4') Closest 
           .row
             // place item
-            each property in properties
-                .col-sm-6.col-xl-4.mb-5.hover-animate(data-marker-id='59c0c8e33b1527bfe2abaf92')
-                    .card.h-100.border-0.shadow
-                        .card-img-top.overflow-hidden.gradient-overlay(style="height:200px")
-                            img.img-fluid(src=property.displayImage1 alt=property.name)
-                            a.tile-link(href='/property?id=' + property.id)
-                            //- .card-img-overlay-bottom.z-index-20
-                            //-     .d-flex.text-white.text-sm.align-items-center
-                            //-         img.avatar.avatar-border-white.flex-shrink-0.me-2(src='img/avatar/avatar-0.jpg' alt='Pamela')
-                            //-         div Pamela
-                            //- .card-img-overlay-top.text-end
-                                a.card-fav-icon.position-relative.z-index-40(href='javascript: void();')
-                                    svg.svg-icon.text-white
-                                        use(xlink:href='#heart-1')  
-                        .card-body.d-flex.align-items-center
-                            .w-100
-                                h6.card-title
-                                  a.text-decoration-none.text-dark(href='/property?id=' + property.id) #{property.name} - #{property.town}
-                                
-                                .row
-                                  .col-lg-6
-                                    p.flex-grow-1.mb-0.text-muted.text-sm #{property.bedrooms} bedrooms
-                                  .col-lg-6
-                                    p.flex-grow-1.mb-0.text-muted.text-sm #{property.guests} guests     
-                                     
-                                .mb-3 
+            if(properties.length > 0)
+              each property in properties
+                  .col-sm-6.col-xl-4.mb-5.hover-animate(data-marker-id='59c0c8e33b1527bfe2abaf92')
+                      .card.h-100.border-0.shadow
+                          .card-img-top.overflow-hidden.gradient-overlay(style="height:200px")
+                              img.img-fluid(src=property.displayImage1 alt=property.name)
+                              a.tile-link(href='/property?id=' + property.id)
+                              //- .card-img-overlay-bottom.z-index-20
+                              //-     .d-flex.text-white.text-sm.align-items-center
+                              //-         img.avatar.avatar-border-white.flex-shrink-0.me-2(src='img/avatar/avatar-0.jpg' alt='Pamela')
+                              //-         div Pamela
+                              //- .card-img-overlay-top.text-end
+                                  a.card-fav-icon.position-relative.z-index-40(href='javascript: void();')
+                                      svg.svg-icon.text-white
+                                          use(xlink:href='#heart-1')  
+                          .card-body.d-flex.align-items-center
+                              .w-100
+                                  h6.card-title
+                                    a.text-decoration-none.text-dark(href='/property?id=' + property.id) #{property.name} - #{property.town}
+                                  
                                   .row
                                     .col-lg-6
-                                      p.flex-grow-1.mb-0.text-muted.text-sm #{property.bathrooms} bathrooms
+                                      p.flex-grow-1.mb-0.text-muted.text-sm #{property.bedrooms} bedrooms
                                     .col-lg-6
-                                      p.flex-grow-1.mb-0.text-muted.text-sm #{property.beds} beds      
-                                               
-                                p.card-text.text-muted
-                                    span.h4.text-primary £#{(parseFloat(property.pricePerDay)).toFixed(2)}
-                                    |  per night
-            
+                                      p.flex-grow-1.mb-0.text-muted.text-sm #{property.guests} guests     
+                                      
+                                  .mb-3 
+                                    .row
+                                      .col-lg-6
+                                        p.flex-grow-1.mb-0.text-muted.text-sm #{property.bathrooms} bathrooms
+                                      .col-lg-6
+                                        p.flex-grow-1.mb-0.text-muted.text-sm #{property.beds} beds      
+                                                
+                                  p.card-text.text-muted
+                                      span.h4.text-primary £#{(parseFloat(property.pricePerDay)).toFixed(2)}
+                                      |  per night
+            else
+              img(src="/img/illustration/undraw_airport_2581.svg")  
         //-   // Pagination
           nav(aria-label='Page navigation example')
             ul.pagination.pagination-template.d-flex.justify-content-center
