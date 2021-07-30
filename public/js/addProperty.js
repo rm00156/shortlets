@@ -388,24 +388,6 @@ function picture(e)
     };
 
     reader.readAsDataURL($('#picture' + index).prop('files')[0]);
-
-    // if($('#picture1').prop('files').length > 0)
-    // {
-    //     $('#picture1Error').text('File Selected');
-    // }
-
-    // if($('#picture2').prop('files').length > 0)
-    // {
-    //     $('#picture2Error').text('File Selected');
-    // }
-    // if($('#picture3').prop('files').length > 0)
-    // {
-    //     $('#picture3Error').text('File Selected');
-    // }
-    // if($('#picture4').prop('files').length > 0)
-    // {
-    //     $('#picture4Error').text('File Selected');
-    // }
     
 }
 

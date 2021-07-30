@@ -77,4 +77,5 @@ router.get('/yourInvoice', isLoggedIn, orderController.getYourInvoice);
 router.post('/cancelBooking',isLoggedIn, bookingController.cancelBooking);
 
 router.post('/refund', isAdmin, orderController.refund);
+router.get('/terms', homeController.terms);
 module.exports = router;

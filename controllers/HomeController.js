@@ -13,6 +13,11 @@ exports.getHome = async function(req,res){
     res.render('home', {user:req.user,cities:cities,towns:towns,properties:properties});
 }
 
+exports.terms = async function(req,res)
+{
+    res.render('terms', {user:req.user});
+}
+
 exports.getTestHome = async function(req,res){
 
     var cities = await propertyController.getAllCitiesWithProperties();
