@@ -4,7 +4,8 @@ html(lang='en')
   include common/header.pug 
   +head("Booking")
   link(rel='stylesheet' href='https://unpkg.com/leaflet@1.5.1/dist/leaflet.css' integrity='sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==' crossorigin='')
-    
+  link(rel='stylesheet' href='css/slider.css')
+
   body(style='padding-top: 72px;')
     include common/navbar.pug 
     +navbar(user)
@@ -13,7 +14,7 @@ html(lang='en')
         .col-lg-7.col-xl-5.px-4.pb-4.ps-xl-5.pe-xl-5
           section.mx-n4.mx-xl-n5.mb-4.mb-xl-5
             // Slider main container
-            .swiper-container.booking-detail-slider
+            .swiper-container.booking-detail-slider(style="height: 150px")
               // Additional required wrapper
               .swiper-wrapper
                 // Slides

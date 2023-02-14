@@ -14,9 +14,9 @@ const workerQueue = new Queue('worker', REDIS_URL);
 
 aws.config.update({
 
-    secretAccessKey: config.secretAccessKey,
-    accessKeyId: config.accessKeyId,
-    region: config.region
+    secretAccessKey: process.env.secretAccessKey,
+    accessKeyId: process.env.accessKeyId,
+    region: process.env.region
 });
 
 
@@ -320,7 +320,7 @@ async function savePictures(picture, index, now, propertyName) {
 
     const s3 = new aws.S3();
     var params = {
-        Bucket: config.bucketName,
+        Bucket: process.env.bucketName,
         Body: picture.data,
         Key: s3FileLocation,
         ACL: 'public-read'

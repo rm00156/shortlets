@@ -4,8 +4,16 @@ mixin navbar()
       nav.navbar.navbar-expand-lg.fixed-top.shadow.navbar-light.bg-white
         .container-fluid
           .d-flex.align-items-center
-            a.navbar-brand.py-1(href='/')
-              img(src='img/brand/hyde.jpg' style="width:192px" alt='Hyde logo')
+            if(user)
+              if(user.accountTypeFk == 1)
+                a.navbar-brand.py-1(href='/adminDashboard')
+                  img(src='img/brand/hyde.jpg' style="width:192px" alt='Hyde logo')
+              else 
+                a.navbar-brand.py-1(href='/myAccount')
+                  img(src='img/brand/hyde.jpg' style="width:192px" alt='Hyde logo')
+            else
+              a.navbar-brand.py-1(href='/')
+                img(src='img/brand/hyde.jpg' style="width:192px" alt='Hyde logo')
           button.navbar-toggler.navbar-toggler-right(type='button' data-bs-toggle='collapse' data-bs-target='#navbarCollapse' aria-controls='navbarCollapse' aria-expanded='false' aria-label='Toggle navigation')
             i.fa.fa-bars
           // Navbar Collapse

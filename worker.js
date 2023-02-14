@@ -33,9 +33,9 @@ const maxJobsPerWorker = 50;
 
 aws.config.update({
 
-    secretAccessKey: config.secretAccessKey,
-    accessKeyId:config.accessKeyId,
-    region: config.region
+    secretAccessKey: process.env.secretAccessKey,
+    accessKeyId:process.env.accessKeyId,
+    region: process.env.region
 });
 
 const start = function()
@@ -130,14 +130,14 @@ async function addProperty(job,body,propertyName,pricePerDay,bedroom,bathroom,gu
         advanceNotice:advanceNotice,
         bedrooms:bedroom,
         bathrooms:bathroom,
-        displayImage1:config.s3BucketPath + s3FileLocations[0],
-        displayImage2:s3FileLocations.length > 1 ? config.s3BucketPath + s3FileLocations[1] : null,
-        displayImage3:s3FileLocations.length > 2 ? config.s3BucketPath + s3FileLocations[2] : null,
-        displayImage4:s3FileLocations.length > 3 ? config.s3BucketPath + s3FileLocations[3] : null,
-        displayImage5:s3FileLocations.length > 4 ? config.s3BucketPath + s3FileLocations[4] : null,
-        displayImage6:s3FileLocations.length > 5 ? config.s3BucketPath + s3FileLocations[5] : null,
-        displayImage7:s3FileLocations.length > 6 ? config.s3BucketPath + s3FileLocations[6] : null,
-        displayImage8:s3FileLocations.length > 7 ? config.s3BucketPath + s3FileLocations[7] : null,
+        displayImage1:process.env.s3BucketPath + s3FileLocations[0],
+        displayImage2:s3FileLocations.length > 1 ? process.env.s3BucketPath + s3FileLocations[1] : null,
+        displayImage3:s3FileLocations.length > 2 ? process.env.s3BucketPath + s3FileLocations[2] : null,
+        displayImage4:s3FileLocations.length > 3 ? process.env.s3BucketPath + s3FileLocations[3] : null,
+        displayImage5:s3FileLocations.length > 4 ? process.env.s3BucketPath + s3FileLocations[4] : null,
+        displayImage6:s3FileLocations.length > 5 ? process.env.s3BucketPath + s3FileLocations[5] : null,
+        displayImage7:s3FileLocations.length > 6 ? process.env.s3BucketPath + s3FileLocations[6] : null,
+        displayImage8:s3FileLocations.length > 7 ? process.env.s3BucketPath + s3FileLocations[7] : null,
         deleteFl:false,
         versionNo:1
     });
@@ -204,7 +204,7 @@ async function savePictures(picture,index,now, propertyName)
     
     const s3 = new aws.S3();
     var params = {
-        Bucket:config.bucketName,
+        Bucket:process.env.bucketName,
         Body: Buffer.from(picture.data.data),
         Key: s3FileLocation,
         ACL:'public-read'
@@ -361,56 +361,56 @@ async function editProperty(job, body, files)
     var now = Date.now();
     if (files != null && files.picture1) 
     {
-        picture1 = config.s3BucketPath + await savePictures(files.picture1, 1, now, propertyName);
+        picture1 = process.env.s3BucketPath + await savePictures(files.picture1, 1, now, propertyName);
         processed++;
         job.progress(processed);
     }
 
     if (files != null && files.picture2) 
     {
-        picture2 = config.s3BucketPath + await savePictures(files.picture2, 2, now, propertyName);
+        picture2 = process.env.s3BucketPath + await savePictures(files.picture2, 2, now, propertyName);
         processed++;
         job.progress(processed);
     }
 
     if (files != null && files.picture3)
     {
-        picture3 = config.s3BucketPath + await savePictures(files.picture3, 3, now, propertyName);
+        picture3 = process.env.s3BucketPath + await savePictures(files.picture3, 3, now, propertyName);
         processed++;
         job.progress(processed);
     }
 
     if (files != null && files.picture4)
     {
-        picture4 = config.s3BucketPath + await savePictures(files.picture4, 4, now, propertyName);
+        picture4 = process.env.s3BucketPath + await savePictures(files.picture4, 4, now, propertyName);
         processed++;
         job.progress(processed);
     }
 
     if (files != null && files.picture5)
     {
-        picture5 = config.s3BucketPath + await savePictures(files.picture5, 5, now, propertyName);
+        picture5 = process.env.s3BucketPath + await savePictures(files.picture5, 5, now, propertyName);
         processed++;
         job.progress(processed);
     }
 
     if (files != null && files.picture6)
     {
-        picture6 = config.s3BucketPath + await savePictures(files.picture6, 6, now, propertyName);
+        picture6 = process.env.s3BucketPath + await savePictures(files.picture6, 6, now, propertyName);
         processed++;
         job.progress(processed);
     }
 
     if (files != null && files.picture7) 
     {
-        picture7 = config.s3BucketPath + await savePictures(files.picture7, 7, now, propertyName);
+        picture7 = process.env.s3BucketPath + await savePictures(files.picture7, 7, now, propertyName);
         processed++;
         job.progress(processed);
     }
 
     if (files != null && files.picture8) 
     {
-        picture8 = config.s3BucketPath + await savePictures(files.picture8, 8, now, propertyName);
+        picture8 = process.env.s3BucketPath + await savePictures(files.picture8, 8, now, propertyName);
         processed++;
         job.progress(processed);
     }

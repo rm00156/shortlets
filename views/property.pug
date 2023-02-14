@@ -3,7 +3,8 @@ html(lang='en')
   include common/header.pug 
   +head('Property')
   link(rel='stylesheet' href='https://unpkg.com/leaflet@1.5.1/dist/leaflet.css' integrity='sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==' crossorigin='')
-   
+  link(rel='stylesheet' href='css/slider.css')
+  
   body(style='padding-top: 72px;')
     include common/navbar.pug 
     +navbar(user)
@@ -19,30 +20,30 @@ html(lang='en')
         .swiper-wrapper
             // Slides
             .swiper-slide
-                img.img-fluid(src=property.displayImage1 alt='Our street')
+                img.img-fluid(src=property.displayImage1)
             if(property.displayImage2 != null)
                 .swiper-slide
-                    img.img-fluid(src=property.displayImage2 alt='Outside')
+                    img.img-fluid(src=property.displayImage2)
             if(property.displayImage3 != null)
                 .swiper-slide
-                    img.img-fluid(src=property.displayImage3 alt='Outside')
+                    img.img-fluid(src=property.displayImage3 )
             if(property.displayImage4 != null)
                 .swiper-slide
-                    img.img-fluid(src=property.displayImage4 alt='Outside')
+                    img.img-fluid(src=property.displayImage4 )
             if(property.displayImage5 != null)
               .swiper-slide
-                img.img-fluid(src=property.displayImage5 alt='Outside')
+                img.img-fluid(src=property.displayImage5 )
             if(property.displayImage6 != null)
               .swiper-slide
-                img.img-fluid(src=property.displayImage6 alt='Outside')
+                img.img-fluid(src=property.displayImage6 )
 
             if(property.displayImage7 != null)
               .swiper-slide
-                img.img-fluid(src=property.displayImage7 alt='Outside')
+                img.img-fluid(src=property.displayImage7 )
             
             if(property.displayImage8 != null)
               .swiper-slide
-                img.img-fluid(src=property.displayImage8 alt='Outside')
+                img.img-fluid(src=property.displayImage8 )
         .swiper-pagination.swiper-pagination-white
         .swiper-button-prev.swiper-button-white
         .swiper-button-next.swiper-button-white
@@ -169,38 +170,38 @@ html(lang='en')
             h5.mb-4 Gallery
             .row.gallery.mb-3.ms-n1.me-n1
 
-                .col-lg-4.col-6.px-1.mb-2
-                    a(href=property.displayImage1 data-fancybox='gallery' title='Our street')
-                        img.img-fluid(src=property.displayImage1 alt='...')
+                .col-lg-4.col-6.px-1.mb-2(style="height:150px;overflow: hidden" )
+                  a(href=property.displayImage1 data-fancybox='gallery' )
+                    img.img-fluid(src=property.displayImage1 style="object-fit:scale-down")
                 if(property.displayImage2 != null)
-                    .col-lg-4.col-6.px-1.mb-2
-                        a(href=property.displayImage2 data-fancybox='gallery' title='Outside')
-                            img.img-fluid(src=property.displayImage2  alt='...')
+                  .col-lg-4.col-6.px-1.mb-2(style="height:150px;overflow: hidden" )
+                    a(href=property.displayImage2 data-fancybox='gallery')
+                      img.img-fluid(src=property.displayImage2  style="object-fit:scale-down")
                 if(property.displayImage3 != null)
-                    .col-lg-4.col-6.px-1.mb-2
-                        a(href=property.displayImage3 data-fancybox='gallery' title='Outside')
-                            img.img-fluid(src=property.displayImage3  alt='...')
+                  .col-lg-4.col-6.px-1.mb-2(style="height:150px;overflow: hidden" )
+                    a(href=property.displayImage3 data-fancybox='gallery' )
+                      img.img-fluid(src=property.displayImage3  style="object-fit:scale-down")
                 if(property.displayImage4 != null)
-                    .col-lg-4.col-6.px-1.mb-2
-                        a(href=property.displayImage4 data-fancybox='gallery' title='Outside')
-                            img.img-fluid(src=property.displayImage4  alt='...')
+                  .col-lg-4.col-6.px-1.mb-2(style="height:150px;overflow: hidden" )
+                    a(href=property.displayImage4 data-fancybox='gallery' )
+                      img.img-fluid(src=property.displayImage4)
                 if(property.displayImage5 != null)
-                    .col-lg-4.col-6.px-1.mb-2
-                        a(href=property.displayImage5 data-fancybox='gallery' title='Outside')
-                            img.img-fluid(src=property.displayImage5  alt='...')
+                  .col-lg-4.col-6.px-1.mb-2(style="height:150px;overflow: hidden" )
+                    a(href=property.displayImage5 data-fancybox='gallery' )
+                      img.img-fluid(src=property.displayImage5  style="object-fit:scale-down")
                 if(property.displayImage6 != null)
-                    .col-lg-4.col-6.px-1.mb-2
-                        a(href=property.displayImage6 data-fancybox='gallery' title='Outside')
-                            img.img-fluid(src=property.displayImage6  alt='...')
+                  .col-lg-4.col-6.px-1.mb-2(style="height:150px;overflow: hidden" )
+                    a(href=property.displayImage6 data-fancybox='gallery' )
+                      img.img-fluid(src=property.displayImage6  style="object-fit:scale-down")
 
                 if(property.displayImage7 != null)
-                    .col-lg-4.col-6.px-1.mb-2
-                        a(href=property.displayImage7 data-fancybox='gallery' title='Outside')
-                            img.img-fluid(src=property.displayImage7  alt='...')
+                  .col-lg-4.col-6.px-1.mb-2(style="height:150px;overflow: hidden" )
+                    a(href=property.displayImage7 data-fancybox='gallery' )
+                      img.img-fluid(src=property.displayImage7  style="object-fit:scale-down")
                 if(property.displayImage8 != null)
-                    .col-lg-4.col-6.px-1.mb-2
-                        a(href=property.displayImage8 data-fancybox='gallery' title='Outside')
-                            img.img-fluid(src=property.displayImage8  alt='...')
+                  .col-lg-4.col-6.px-1.mb-2(style="height:150px;overflow: hidden" )
+                    a(href=property.displayImage8 data-fancybox='gallery' )
+                      img.img-fluid(src=property.displayImage8  style="object-fit:scale-down")
               
           //- .text-block
             p.subtitle.text-sm.text-primary Reviews    

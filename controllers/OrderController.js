@@ -84,7 +84,7 @@ exports.checkout = async function (req, res) {
     var lineItems = new Array();
     lineItems.push({ name: property.name, amount: ((parseFloat(totalCost)).toFixed(2) * 100), currency: 'gbp', quantity: 1 });
 
-    url = env == 'development' ? config.testUrl : config.prodUrl;
+    url = env == process.env.url;
 
     var confirmationCode = await generateNewConfirmationCode();
 

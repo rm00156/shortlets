@@ -4,7 +4,7 @@
  
         "username": "root",
  
-        "password": "amazing",
+        "password": "",
  
         "database": "michelle",
  
@@ -53,18 +53,6 @@
  
         "dialect": "mysql"
  
-    },
- 
-    "mailServer_email": "trainers4you1@outlook.com", 
-    "mailServer_password" :"Liverpool123",
-    "mailServer_host":"smtp-mail.outlook.com",
-
-    "secretAccessKey":"X7GewRTheMEei0qpIU5hGNKGjDOh8ZKj6HgHgmCq",
-    "accessKeyId":"AKIAIYL6YZXIPHSPOGHQ",
-    "region":"eu-west-2",
-    "s3BucketPath":"https://michelleshortlets.s3.eu-west-2.amazonaws.com/",
-    "bucketName":"michelleshortlets",
-    "testUrl":"http://localhost:3000",
-    "prodUrl":"https://shortlets.herokuapp.com"
+    }
 }
 
